@@ -1,0 +1,189 @@
+import { useState, useRef, useEffect } from 'react';
+import { Menu, X, ChevronDown } from 'lucide-react';
+import { useNav, type Page } from '../context/NavContext';
+
+const links: { label: string; page: Page }[] = [
+  { label: 'Contato', page: 'contato' },
+  { label: 'Soluções', page: 'solucoes' },
+  { label: 'Sobre', page: 'sobre' },
+  { label: 'Login', page: 'login' },
+  { label: 'Eventos', page: 'eventos' },
+  { label: 'Blog', page: 'blog' },
+  { label: 'Trabalhe Conosco', page: 'trabalhe-conosco' },
+];
+
+interface Props {
+  activePage: Page;
+  showConsultor?: boolean;
+  stackConsultor?: boolean;
+}
+
+export default function PageNav({ activePage, showConsultor = true, stackConsultor = false }: Props) {
+  const { navigate } = useNav();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const loginDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (loginDropdownRef.current && !loginDropdownRef.current.contains(e.target as Node)) {
+        setLoginOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  return (
+    <header className="relative flex items-center justify-center px-4 sm:px-8 py-4 sm:py-5 min-h-[5.5rem] sm:min-h-[6.5rem]">
+      <div className="w-full max-w-[110rem] flex items-center justify-center gap-4 relative">
+      <button onClick={() => navigate('home')} className="flex-shrink-0 absolute left-0 top-1/2 -translate-y-1/2">
+        <img src="/grupo-orcoma-logo.png" alt="Grupo Orcoma" className="h-12 sm:h-16 w-auto" style={{ transform: 'scale(1.4)' }} />
+      </button>
+
+      <nav className="hidden xl:flex items-center rounded-full px-4 py-0.5 gap-0.5" style={{ background: 'rgba(100, 160, 255, 0.3)' }}>
+        {links.map((item) => {
+          if (item.label === 'Login') {
+            return (
+              <div key={item.label} className="relative" ref={loginDropdownRef}>
+                <button
+                  onClick={() => setLoginOpen(!loginOpen)}
+                  className="px-4 py-1.5 text-[1.4rem] font-semibold rounded-full transition-colors hover:bg-white/10 relative flex items-center gap-1"
+                  style={{ color: 'white' }}
+                >
+                  {item.label}
+                  <ChevronDown size={22} className={`transition-transform ${loginOpen ? 'rotate-180' : ''}`} />
+                  {item.page === activePage && (
+                    <span
+                      className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-0.5 rounded-full"
+                      style={{ background: '#e8b800' }}
+                    />
+                  )}
+                </button>
+                {loginOpen && (
+                  <div
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 rounded-2xl shadow-2xl py-3 z-50"
+                    style={{ background: 'white', border: '1px solid #e5e7eb' }}
+                  >
+                    <style>{`
+                      @keyframes fadeSlideIn {
+                        from { opacity: 0; transform: translateY(-8px); }
+                        to { opacity: 1; transform: translateY(0); }
+                      }
+                      .sub-item {
+                        animation: fadeSlideIn 0.3s ease-out both;
+                      }
+                    `}</style>
+                    <button
+                      onClick={() => { navigate('academy-business'); setLoginOpen(false); }}
+                      className="sub-item w-full text-left px-5 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
+                    >
+                      Orcoma Academy Business
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          }
+          return (
+            <button
+              key={item.label}
+              onClick={() => navigate(item.page)}
+              className="px-4 py-1.5 text-[1.4rem] font-semibold rounded-full transition-colors hover:bg-white/10 relative"
+              style={{ color: 'white' }}
+            >
+              {item.label}
+              {item.page === activePage && (
+                <span
+                  className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-0.5 rounded-full"
+                  style={{ background: '#e8b800' }}
+                />
+              )}
+            </button>
+          );
+        })}
+      </nav>
+
+      <div className={`hidden xl:flex absolute right-0 top-1/2 -translate-y-1/2 ${stackConsultor ? 'flex-col items-end gap-1' : 'items-center gap-1'} flex-shrink-0`}>
+        <button
+          onClick={() => window.open('https://myorcoma-academy.vercel.app/', '_blank')}
+          className="px-5 py-2 rounded-full text-[1.4rem] font-semibold transition-all hover:brightness-110 relative"
+          style={{ background: 'rgba(100, 160, 255, 0.3)', color: 'white' }}
+        >
+          Orcoma Academy
+        </button>
+
+        {showConsultor && (
+          <button
+            onClick={() => navigate('contato')}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:brightness-110 hover:scale-105"
+            style={{ background: '#e8b800', color: '#000' }}
+          >
+            Falar com Consultor
+          </button>
+        )}
+      </div>
+
+      <button
+        className="xl:hidden text-white p-2 flex-shrink-0 absolute right-0 top-1/2 -translate-y-1/2"
+        onClick={() => setMobileOpen(!mobileOpen)}
+        aria-label="Menu"
+      >
+        {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+      </div>
+
+      {mobileOpen && (
+        <nav
+          className="xl:hidden absolute top-full left-0 right-0 flex flex-col items-center gap-2 pb-4 z-50"
+          style={{ background: 'rgba(10,10,180,0.97)' }}
+        >
+          {links.map((item) => (
+            item.label === 'Login' ? (
+              <div key={item.label} className="w-full flex flex-col items-center">
+                <button
+                  onClick={() => setLoginOpen(!loginOpen)}
+                  className="text-white text-[1.4rem] font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors w-full text-center flex items-center justify-center gap-1"
+                >
+                  {item.label}
+                  <ChevronDown size={22} className={`transition-transform ${loginOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {loginOpen && (
+                  <button
+                    onClick={() => { navigate('academy-business'); setMobileOpen(false); setLoginOpen(false); }}
+                    className="text-white/80 text-lg font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors"
+                  >
+                    Orcoma Academy Business
+                  </button>
+                )}
+              </div>
+            ) : (
+              <button
+                key={item.label}
+                onClick={() => { navigate(item.page); setMobileOpen(false); }}
+                className="text-white text-[1.4rem] font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors w-full text-center"
+              >
+                {item.label}
+              </button>
+            )
+          ))}
+          <button
+            onClick={() => { window.open('https://myorcoma-academy.vercel.app/', '_blank'); setMobileOpen(false); }}
+            className="mt-1 px-6 py-2 rounded-full text-white text-[1.4rem] font-semibold border border-white/30 hover:bg-white/10 transition-colors"
+          >
+            Orcoma Academy
+          </button>
+          {showConsultor && (
+            <button
+              onClick={() => { navigate('contato'); setMobileOpen(false); }}
+              className="px-6 py-2.5 rounded-full text-sm font-semibold transition-all hover:brightness-110"
+              style={{ background: '#e8b800', color: '#000' }}
+            >
+              Falar com Consultor
+            </button>
+          )}
+        </nav>
+      )}
+    </header>
+  );
+}
