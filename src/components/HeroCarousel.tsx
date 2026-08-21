@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import AutoCorrigirImagem from './AutoCorrigirImagem';
 import { useWhatsApp } from '../context/WhatsAppContext';
 import { useNav, type Page } from '../context/NavContext';
 
@@ -37,7 +36,7 @@ export default function HeroCarousel() {
       .then((res) => res.json())
       .then((data) => {
         const list: CarrosselSlide[] = (data.slides || [])
-          .filter((s: { imagem: string; foto: string }) => s.imagem || s.foto)
+          .filter((s: CarrosselSlide) => s.titulo || s.subtitulo || s.botao1?.texto || s.botao2?.texto)
           .map((s: CarrosselSlide) => ({
             id: s.id,
             titulo: s.titulo || '',
@@ -88,6 +87,13 @@ export default function HeroCarousel() {
     }
   }
 
+  function tamanhoTitulo(titulo: string) {
+    const len = Math.max(titulo.length, 1);
+    const pxQueCabeEmDuasLinhas = 2600 / len;
+    const px = Math.min(67.2, Math.max(33.6, pxQueCabeEmDuasLinhas));
+    return `${(px / 16).toFixed(2)}rem`;
+  }
+
   function renderConteudo(s: CarrosselSlide) {
     const temBotoes = (s.botao1.texto && s.botao1.tipo !== 'nenhum') || (s.botao2.texto && s.botao2.tipo !== 'nenhum');
     return (
@@ -95,13 +101,13 @@ export default function HeroCarousel() {
         {s.titulo && (
           <h2
             className="text-white font-extrabold leading-tight mb-2 sm:mb-3"
-            style={{ fontSize: 'clamp(1.5rem, 4vw, 3rem)', lineHeight: '1.15' }}
+            style={{ fontSize: tamanhoTitulo(s.titulo), lineHeight: '1.15', textWrap: 'balance' }}
           >
             {s.titulo}
           </h2>
         )}
         {s.subtitulo && (
-          <p className="text-white/85 leading-relaxed max-w-xl mb-4 sm:mb-6" style={{ fontSize: 'clamp(0.9rem, 2vw, 1.25rem)' }}>
+          <p className="text-white/85 leading-relaxed max-w-xl mb-4 sm:mb-6" style={{ fontSize: 'clamp(1.26rem, 2.8vw, 1.75rem)' }}>
             {s.subtitulo}
           </p>
         )}
@@ -133,40 +139,27 @@ export default function HeroCarousel() {
     );
   }
 
-  function renderSlide(s: CarrosselSlide, i: number) {
-    const temOverlay = Boolean(s.titulo || s.subtitulo || s.botao1.texto || s.botao2.texto);
-    return (
-      <div className="h-full relative">
-        <AutoCorrigirImagem src={s.imagem || s.foto} alt={s.titulo || `Slide ${i + 1}`} />
-        {temOverlay && (
-          <div className="absolute inset-0 z-10 flex items-end pointer-events-none">
-            <div
-              className="absolute inset-0"
-              style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 45%, transparent 70%)' }}
-            />
-            <div className="relative max-w-3xl p-4 sm:p-10 ml-4 sm:ml-6 md:ml-16 lg:ml-24 pointer-events-auto">
-              {renderConteudo(s)}
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-
   return (
     <div className="relative w-full overflow-hidden min-h-[400px] sm:min-h-[300px]" style={{ aspectRatio: '1950 / 700' }}>
-      <div
-        className="flex h-full transition-transform ease-in-out"
-        style={{ transform: `translateX(-${index * 100}%)`, transitionDuration: `${TRANSITION_MS}ms` }}
-      >
-        {slides.map((s, i) => (
+      <div className="flex h-full w-full flex-col">
+        {/* Carrossel de texto - largura total */}
+        <div className="relative z-10 flex items-center w-full flex-1">
           <div
-            key={`${s.id}-${s.imagem}-${i}`}
-            className={`w-full flex-shrink-0 h-full relative carousel-slide ${i === index ? 'ativo' : ''}`}
+            className="flex h-full transition-transform ease-in-out"
+            style={{ transform: `translateX(-${index * 100}%)`, transitionDuration: `${TRANSITION_MS}ms` }}
           >
-            {renderSlide(s, i)}
+            {slides.map((s, i) => (
+              <div
+                key={`${s.id}-${s.imagem}-${i}`}
+                className={`w-full flex-shrink-0 h-full flex items-center carousel-slide ${i === index ? 'ativo' : ''}`}
+              >
+                <div className="w-full max-w-3xl px-6 py-8 sm:p-10 mx-auto md:translate-x-16 lg:translate-x-28 xl:translate-x-36 text-center flex flex-col items-center">
+                  {renderConteudo(s)}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
 
       {slides.length > 0 && (

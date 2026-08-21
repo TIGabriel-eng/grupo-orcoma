@@ -107,9 +107,22 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* Hero */}
       <div className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #0c0ccc 0%, #1a1aff 40%, #0000b3 100%)' }}>
-        <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.5 }}>
-          <source src="/fundo-hero.mp4" type="video/mp4" />
-        </video>
+        {/* Vídeo de fundo (YouTube em loop infinito); o gradiente base acima mantém o visual enquanto carrega */}
+        <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+          <iframe
+            className="absolute left-1/2 top-1/2 pointer-events-none"
+            style={{
+              width: '100%',
+              height: '100%',
+              transform: 'translate(-50%, -50%) scale(1.75)',
+              border: 'none',
+            }}
+            src="https://www.youtube.com/embed/Nj6iZmF-h3w?autoplay=1&mute=1&loop=1&controls=0&playlist=Nj6iZmF-h3w&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0"
+            title=""
+            allow="autoplay; encrypted-media"
+            tabIndex={-1}
+          />
+        </div>
         <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, rgba(12,12,204,0.4) 0%, rgba(26,26,255,0.4) 40%, rgba(0,0,179,0.4) 100%)' }}></div>
         <div className="relative z-10">
           <Nav />

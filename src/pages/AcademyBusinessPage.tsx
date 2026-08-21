@@ -170,7 +170,7 @@ export default function AcademyBusinessPage() {
 
             <div className="flex justify-center">
               <video
-                src="/video informativo.mp4"
+                src="/video-informativo.mp4"
                 autoPlay
                 loop
                 muted

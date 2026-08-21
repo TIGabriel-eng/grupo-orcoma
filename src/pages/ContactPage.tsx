@@ -245,9 +245,7 @@ export default function ContactPage() {
     <div className="min-h-screen flex flex-col">
       {/* Blue hero */}
       <div className="relative overflow-hidden" style={{ background: BLUE }}>
-        <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover" style={{ opacity: 0.3 }}>
-          <source src="/fundo-hero.mp4" type="video/mp4" />
-        </video>
+        {/* fundo-hero.mp4 não existe em public/; o gradiente abaixo mantém o visual do hero */}
         <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, rgba(12,12,204,0.4) 0%, rgba(26,26,255,0.4) 50%, rgba(0,0,179,0.4) 100%)' }}></div>
         <div className="relative z-10">
           <Nav />

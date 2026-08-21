@@ -165,7 +165,7 @@ export default function SobrePage() {
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 sm:gap-12 items-center">
           <div className="w-full md:w-96 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg relative reveal" style={{ height: '480px', minHeight: '420px' }}>
             <img
-              src="/nossa historia.jpg"
+              src="/nossa-historia.jpg"
               alt="Nossa história"
               className="w-full h-full object-cover"
             />
@@ -512,7 +512,7 @@ export default function SobrePage() {
           <div className="grid md:grid-cols-2 gap-8 sm:gap-12 items-start reveal" style={{ '--reveal-delay': '160ms' } as React.CSSProperties}>
             <div className="hidden md:block">
               <img
-                src="/Imagem-6-1-sobre (1).jpg"
+                src="/imagem-6-1-sobre.jpg"
                 alt="Orcoma"
                 className="w-full h-auto rounded-2xl object-cover"
               />
