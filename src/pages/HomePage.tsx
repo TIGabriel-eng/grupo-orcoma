@@ -127,13 +127,8 @@ export default function HomePage() {
         <div className="relative z-10">
           <Nav />
 
-          <main className="flex items-center justify-center px-4 sm:px-6 pt-8 sm:pt-10 pb-20 sm:pb-36">
-            <div
-              className="w-full rounded-3xl overflow-hidden"
-              style={{ width: '1950px', maxWidth: '100%' }}
-            >
-              <HeroCarousel />
-            </div>
+          <main className="relative z-10 flex items-center justify-center px-4 sm:px-6 pt-10 sm:pt-16 pb-28 sm:pb-40">
+            <HeroCarousel />
           </main>
         </div>
       </div>

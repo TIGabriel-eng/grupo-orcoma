@@ -166,12 +166,13 @@ export default function SolucoesPage() {
             {areas.map(({ Icon, title, description, imagem, bullets, interesse, mensagemWhats }, index) => (
               <div
                 key={title}
-                className="bg-white border border-gray-100 rounded-2xl overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-shadow reveal"
+                className="solucao-card bg-white border border-gray-100 rounded-2xl overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-shadow reveal"
                 style={{ '--reveal-delay': `${(index % 3) * 90}ms` } as React.CSSProperties}
               >
                 {imagem && (
-                  <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
+                  <div className="solucao-photo relative w-full" style={{ aspectRatio: '4/3' }}>
                     <img src={imagem} alt={title} className="w-full h-full object-cover" />
+                    <span className="solucao-chevrão" aria-hidden="true" />
                   </div>
                 )}
                 <div className="p-5 sm:p-6 flex flex-col gap-4 flex-1">

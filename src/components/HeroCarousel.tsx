@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useWhatsApp } from '../context/WhatsAppContext';
 import { useNav, type Page } from '../context/NavContext';
+import StatusBar from './StatusBar';
 
 interface CarrosselBotao {
   texto: string;
@@ -87,38 +88,31 @@ export default function HeroCarousel() {
     }
   }
 
-  function tamanhoTitulo(titulo: string) {
-    const len = Math.max(titulo.length, 1);
-    const pxQueCabeEmDuasLinhas = 2600 / len;
-    const px = Math.min(67.2, Math.max(33.6, pxQueCabeEmDuasLinhas));
-    return `${(px / 16).toFixed(2)}rem`;
-  }
-
   function renderConteudo(s: CarrosselSlide) {
     const temBotoes = (s.botao1.texto && s.botao1.tipo !== 'nenhum') || (s.botao2.texto && s.botao2.tipo !== 'nenhum');
     return (
-      <>
+      <div className="w-full h-full flex flex-col items-center justify-center text-center px-3 py-3 sm:px-6 sm:py-6">
         {s.titulo && (
           <h2
-            className="text-white font-extrabold leading-tight mb-2 sm:mb-3"
-            style={{ fontSize: tamanhoTitulo(s.titulo), lineHeight: '1.15', textWrap: 'balance' }}
+            className="text-white font-extrabold leading-tight mb-2"
+            style={{ fontSize: 'calc(clamp(3.4cqi, 6cqi, 8cqi) - 3px)', lineHeight: '1.25', textWrap: 'balance' }}
           >
             {s.titulo}
           </h2>
         )}
         {s.subtitulo && (
-          <p className="text-white/85 leading-relaxed max-w-xl mb-4 sm:mb-6" style={{ fontSize: 'clamp(1.26rem, 2.8vw, 1.75rem)' }}>
+          <p className="text-white/85 leading-relaxed mb-3" style={{ fontSize: 'calc(clamp(2cqi, 3.4cqi, 4.6cqi) - 3px)' }}>
             {s.subtitulo}
           </p>
         )}
         {temBotoes && (
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-1.5 justify-center sm:gap-2">
             {s.botao1.texto && s.botao1.tipo !== 'nenhum' && (
               <button
                 type="button"
                 onClick={() => handleBotao(s.botao1)}
-                className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-bold tracking-widest uppercase transition-all hover:brightness-110 hover:scale-105 active:scale-100 cursor-pointer"
-                style={{ background: '#e8b800', color: '#000' }}
+                className="px-2 py-1 rounded-full sm:px-4 sm:py-1.5 font-bold tracking-widest uppercase transition-all hover:brightness-110 hover:scale-105 active:scale-100 cursor-pointer"
+                style={{ background: '#e8b800', color: '#000', fontSize: 'calc(clamp(1.9cqi, 3cqi, 3.8cqi) - 3px)' }}
               >
                 {s.botao1.texto}
               </button>
@@ -127,72 +121,55 @@ export default function HeroCarousel() {
               <button
                 type="button"
                 onClick={() => handleBotao(s.botao2)}
-                className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-xs sm:text-sm font-bold tracking-widest uppercase transition-all hover:scale-105 active:scale-100 cursor-pointer"
-                style={{ background: 'rgba(255,255,255,0.9)', color: '#0c0ccc' }}
+                className="px-2 py-1 rounded-full sm:px-4 sm:py-1.5 font-bold tracking-widest uppercase transition-all hover:scale-105 active:scale-100 cursor-pointer"
+                style={{ background: 'rgba(255,255,255,0.9)', color: '#0c0ccc', fontSize: 'calc(clamp(1.9cqi, 3cqi, 3.8cqi) - 3px)' }}
               >
                 {s.botao2.texto}
               </button>
             )}
           </div>
         )}
-      </>
+      </div>
     );
   }
 
   return (
-    <div className="relative w-full overflow-hidden min-h-[400px] sm:min-h-[300px]" style={{ aspectRatio: '1950 / 700' }}>
-      <div className="flex h-full w-full flex-col">
-        {/* Carrossel de texto - largura total */}
-        <div className="relative z-10 flex items-center w-full flex-1">
-          <div
-            className="flex h-full transition-transform ease-in-out"
-            style={{ transform: `translateX(-${index * 100}%)`, transitionDuration: `${TRANSITION_MS}ms` }}
-          >
-            {slides.map((s, i) => (
-              <div
-                key={`${s.id}-${s.imagem}-${i}`}
-                className={`w-full flex-shrink-0 h-full flex items-center carousel-slide ${i === index ? 'ativo' : ''}`}
-              >
-                <div className="w-full max-w-3xl px-6 py-8 sm:p-10 mx-auto md:translate-x-16 lg:translate-x-28 xl:translate-x-36 text-center flex flex-col items-center">
+    <div className="relative w-full flex items-center justify-center">
+      <div className="dm-width">
+        <div className="dm-device">
+          <div className="device"></div>
+          <div className="screen">
+            <StatusBar />
+            <div
+              className="slider"
+              style={{
+                transform: `translateX(-${index * 100}%)`,
+                transitionDuration: `${TRANSITION_MS}ms`,
+              }}
+            >
+              {slides.map((s, i) => (
+                <div key={`${s.id}-${s.imagem}-${i}`} className="slider__item">
                   {renderConteudo(s)}
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
       {slides.length > 0 && (
-        <>
-          <button
-            type="button"
-            aria-label="Anterior"
-            onClick={() => setIndex((index - 1 + slides.length) % slides.length)}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/40 text-white text-lg flex items-center justify-center hover:bg-black/70"
-          >
-            &#8249;
-          </button>
-          <button
-            type="button"
-            aria-label="Próximo"
-            onClick={() => setIndex((index + 1) % slides.length)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/40 text-white text-lg flex items-center justify-center hover:bg-black/70"
-          >
-            &#8250;
-          </button>
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                aria-label={`Ir para o slide ${i + 1}`}
-                onClick={() => setIndex(i)}
-                className="w-2.5 h-2.5 rounded-full transition-all"
-                style={{ background: i === index ? '#fff' : 'rgba(255,255,255,0.4)' }}
-              />
-            ))}
-          </div>
-        </>
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Ir para o slide ${i + 1}`}
+              onClick={() => setIndex(i)}
+              className="w-2.5 h-2.5 rounded-full transition-all"
+              style={{ background: i === index ? '#e8b800' : 'rgba(255,255,255,0.4)' }}
+            />
+          ))}
+        </div>
       )}
     </div>
   );
