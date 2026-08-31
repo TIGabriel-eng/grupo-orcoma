@@ -38,7 +38,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
     <header className="relative flex items-center justify-center px-4 sm:px-8 py-4 sm:py-5 min-h-[5.5rem] sm:min-h-[6.5rem]">
       <div className="w-full max-w-[110rem] flex items-center justify-center gap-4 relative">
       <button onClick={() => navigate('home')} className="flex-shrink-0 absolute left-0 top-1/2 -translate-y-1/2">
-        <img src="/grupo-orcoma-logo.png" alt="Grupo Orcoma" className="h-12 sm:h-16 w-auto" style={{ transform: 'scale(1.4)' }} />
+        <img src="/grupo-orcoma-logo.png" alt="Grupo Orcoma" className="h-12 sm:h-16 w-auto" style={{ transform: 'scale(1.26)' }} />
       </button>
 
       <nav className="hidden xl:flex items-center rounded-full px-4 py-0.5 gap-0.5" style={{ background: 'rgba(100, 160, 255, 0.3)' }}>
@@ -48,7 +48,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
               <div key={item.label} className="relative" ref={loginDropdownRef}>
                 <button
                   onClick={() => setLoginOpen(!loginOpen)}
-                  className="px-4 py-1.5 text-[1.4rem] font-semibold rounded-full transition-colors hover:bg-white/10 relative flex items-center gap-1"
+                  className="px-4 py-1.5 text-[1.26rem] font-semibold rounded-full transition-colors hover:bg-white/10 relative flex items-center gap-1"
                   style={{ color: 'white' }}
                 >
                   {item.label}
@@ -89,7 +89,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
             <button
               key={item.label}
               onClick={() => navigate(item.page)}
-              className="px-4 py-1.5 text-[1.4rem] font-semibold rounded-full transition-colors hover:bg-white/10 relative"
+              className="px-4 py-1.5 text-[1.26rem] font-semibold rounded-full transition-colors hover:bg-white/10 relative"
               style={{ color: 'white' }}
             >
               {item.label}
@@ -107,7 +107,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
       <div className={`hidden xl:flex absolute right-0 top-1/2 -translate-y-1/2 ${stackConsultor ? 'flex-col items-end gap-1' : 'items-center gap-1'} flex-shrink-0`}>
         <button
           onClick={() => window.open('https://myorcoma-academy.vercel.app/', '_blank')}
-          className="px-5 py-2 rounded-full text-[1.4rem] font-semibold transition-all hover:brightness-110 relative"
+          className="px-5 py-2 rounded-full text-[1.26rem] font-semibold transition-all hover:brightness-110 relative"
           style={{ background: 'rgba(100, 160, 255, 0.3)', color: 'white' }}
         >
           Orcoma Academy

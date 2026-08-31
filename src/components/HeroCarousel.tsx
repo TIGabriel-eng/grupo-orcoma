@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useWhatsApp } from '../context/WhatsAppContext';
 import { useNav, type Page } from '../context/NavContext';
-import StatusBar from './StatusBar';
 
 interface CarrosselBotao {
   texto: string;
@@ -91,28 +90,28 @@ export default function HeroCarousel() {
   function renderConteudo(s: CarrosselSlide) {
     const temBotoes = (s.botao1.texto && s.botao1.tipo !== 'nenhum') || (s.botao2.texto && s.botao2.tipo !== 'nenhum');
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center text-center px-3 py-3 sm:px-6 sm:py-6">
+      <div className="w-full h-full flex flex-col items-center justify-center text-center px-4 sm:px-8 py-6 sm:py-8">
         {s.titulo && (
           <h2
-            className="text-white font-extrabold leading-tight mb-2"
-            style={{ fontSize: 'calc(clamp(3.4cqi, 6cqi, 8cqi) - 3px)', lineHeight: '1.25', textWrap: 'balance' }}
+            className="text-white font-extrabold leading-tight max-w-3xl sm:mx-auto"
+            style={{ fontSize: 'clamp(1.8rem, 4.5vw, 3.5rem)', lineHeight: '1.18', textWrap: 'balance' }}
           >
             {s.titulo}
           </h2>
         )}
         {s.subtitulo && (
-          <p className="text-white/85 leading-relaxed mb-3" style={{ fontSize: 'calc(clamp(2cqi, 3.4cqi, 4.6cqi) - 3px)' }}>
+          <p className="text-white/85 leading-relaxed max-w-2xl sm:mx-auto mt-4" style={{ fontSize: 'clamp(1rem, 2vw, 1.35rem)' }}>
             {s.subtitulo}
           </p>
         )}
         {temBotoes && (
-          <div className="flex flex-wrap gap-1.5 justify-center sm:gap-2">
+          <div className="flex flex-wrap gap-2.5 sm:gap-3 justify-center mt-6">
             {s.botao1.texto && s.botao1.tipo !== 'nenhum' && (
               <button
                 type="button"
                 onClick={() => handleBotao(s.botao1)}
-                className="px-2 py-1 rounded-full sm:px-4 sm:py-1.5 font-bold tracking-widest uppercase transition-all hover:brightness-110 hover:scale-105 active:scale-100 cursor-pointer"
-                style={{ background: '#e8b800', color: '#000', fontSize: 'calc(clamp(1.9cqi, 3cqi, 3.8cqi) - 3px)' }}
+                className="px-6 sm:px-9 py-2.5 sm:py-3.5 rounded-full font-bold tracking-widest uppercase transition-all hover:brightness-110 hover:scale-105 active:scale-100 cursor-pointer text-sm sm:text-base"
+                style={{ background: '#e8b800', color: '#000' }}
               >
                 {s.botao1.texto}
               </button>
@@ -121,8 +120,8 @@ export default function HeroCarousel() {
               <button
                 type="button"
                 onClick={() => handleBotao(s.botao2)}
-                className="px-2 py-1 rounded-full sm:px-4 sm:py-1.5 font-bold tracking-widest uppercase transition-all hover:scale-105 active:scale-100 cursor-pointer"
-                style={{ background: 'rgba(255,255,255,0.9)', color: '#0c0ccc', fontSize: 'calc(clamp(1.9cqi, 3cqi, 3.8cqi) - 3px)' }}
+                className="px-6 sm:px-9 py-2.5 sm:py-3.5 rounded-full font-bold tracking-widest uppercase transition-all hover:scale-105 active:scale-100 cursor-pointer text-sm sm:text-base"
+                style={{ background: 'rgba(255,255,255,0.9)', color: '#0c0ccc' }}
               >
                 {s.botao2.texto}
               </button>
@@ -135,30 +134,24 @@ export default function HeroCarousel() {
 
   return (
     <div className="relative w-full flex items-center justify-center">
-      <div className="dm-width">
-        <div className="dm-device">
-          <div className="device"></div>
-          <div className="screen">
-            <StatusBar />
-            <div
-              className="slider"
-              style={{
-                transform: `translateX(-${index * 100}%)`,
-                transitionDuration: `${TRANSITION_MS}ms`,
-              }}
-            >
-              {slides.map((s, i) => (
-                <div key={`${s.id}-${s.imagem}-${i}`} className="slider__item">
-                  {renderConteudo(s)}
-                </div>
-              ))}
+      <div className="relative w-full max-w-5xl mx-auto min-h-[300px] sm:min-h-[360px] overflow-hidden">
+        <div
+          className="slider"
+          style={{
+            transform: `translateX(-${index * 100}%)`,
+            transitionDuration: `${TRANSITION_MS}ms`,
+          }}
+        >
+          {slides.map((s, i) => (
+            <div key={`${s.id}-${s.imagem}-${i}`} className="slider__item">
+              {renderConteudo(s)}
             </div>
-          </div>
+          ))}
         </div>
       </div>
 
       {slides.length > 0 && (
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        <div className="absolute bottom-1 left-1/2 -translate-x-1/2 z-20 flex gap-2">
           {slides.map((_, i) => (
             <button
               key={i}

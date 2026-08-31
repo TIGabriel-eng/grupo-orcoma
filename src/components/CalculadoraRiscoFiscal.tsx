@@ -331,10 +331,15 @@ export default function CalculadoraRiscoFiscal() {
               </div>
 
               <p className="text-[11px] text-gray-400 mt-6 leading-relaxed">
-                *Valores estimados com base em alíquotas médias e na legislação vigente (Lei 8.137/90 — crimes contra a ordem
-                tributária; RICMS estadual; LC 214/2025 — Reforma Tributária). Multas administrativas variam por estado e por
-                situação, e nem toda ocorrência resulta em autuação. Esta calculadora não substitui uma análise contábil ou
-                jurídica do seu caso específico.
+                *Valores estimados com base em alíquotas médias e na legislação vigente{' '}
+                <span className="font-semibold">
+                  (Lei 8.137/90 — crimes contra a ordem tributária; RICMS estadual; LC 214/2025 — Reforma Tributária).
+                </span>{' '}
+                Multas administrativas variam por estado e por
+                situação, e nem toda ocorrência resulta em autuação.{' '}
+                <span className="text-red-500">
+                  Esta calculadora não substitui uma análise contábil ou jurídica do seu caso específico.
+                </span>
               </p>
             </div>
 

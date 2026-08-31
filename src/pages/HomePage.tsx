@@ -106,7 +106,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Hero */}
-      <div className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #0c0ccc 0%, #1a1aff 40%, #0000b3 100%)' }}>
+      <div className="relative overflow-hidden min-h-screen flex flex-col" style={{ background: 'linear-gradient(160deg, #0c0ccc 0%, #1a1aff 40%, #0000b3 100%)' }}>
         {/* Vídeo de fundo (YouTube em loop infinito); o gradiente base acima mantém o visual enquanto carrega */}
         <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
           <iframe
@@ -127,7 +127,7 @@ export default function HomePage() {
         <div className="relative z-10">
           <Nav />
 
-          <main className="relative z-10 flex items-center justify-center px-4 sm:px-6 pt-10 sm:pt-16 pb-28 sm:pb-40">
+          <main className="relative z-10 flex-1 flex items-center justify-center px-4 sm:px-6 pt-10 sm:pt-16 pb-24 sm:pb-40">
             <HeroCarousel />
           </main>
         </div>
@@ -144,29 +144,29 @@ export default function HomePage() {
             </p>
             <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
               {serviceCards.map((card, index) => (
-                <div
-                  key={card.title}
-                  className={`rounded-xl p-5 sm:p-6 flex flex-col gap-4 reveal ${index === 1 ? 'md:-mt-8' : 'bg-gray-200'}`}
-                  style={{
-                    ...(index === 1 ? { background: '#0c0ccc' } : {}),
-                    '--reveal-delay': `${index * 100}ms`,
-                  } as React.CSSProperties}
-                >
-                  <h3 className={`font-bold text-base text-center ${index === 1 ? 'text-white' : 'text-gray-900'}`}>{card.title}</h3>
-                  <p className={`text-sm leading-relaxed flex-1 ${index === 1 ? 'text-white' : 'text-gray-500'}`}>{card.description}</p>
-                  {index === 1 ? (
-                    <button
-                      onClick={openWhatsApp}
-                      className="self-center px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all hover:brightness-110"
-                      style={{ background: '#fff', color: '#0c0ccc' }}
-                    >
-                      Saiba mais
-                    </button>
-                  ) : (
-                    <a href="#" className="self-center px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all hover:brightness-110" style={{ background: '#0c0ccc', color: '#fff' }}>
-                      Saiba mais
-                    </a>
-                  )}
+                <div key={card.title} className={`reveal ${index === 1 ? 'md:-mt-8' : ''}`}>
+                  <div
+                    className={`rounded-xl p-5 sm:p-6 flex flex-col gap-4 h-full transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl ${index === 1 ? 'bg-[#0c0ccc]' : 'bg-gray-200'}`}
+                    style={{
+                      '--reveal-delay': `${index * 100}ms`,
+                    } as React.CSSProperties}
+                  >
+                    <h3 className={`font-bold text-base text-center ${index === 1 ? 'text-white' : 'text-gray-900'}`}>{card.title}</h3>
+                    <p className={`text-sm leading-relaxed flex-1 ${index === 1 ? 'text-white' : 'text-gray-500'}`}>{card.description}</p>
+                    {index === 1 ? (
+                      <button
+                        onClick={openWhatsApp}
+                        className="self-center px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all hover:brightness-110"
+                        style={{ background: '#fff', color: '#0c0ccc' }}
+                      >
+                        Saiba mais
+                      </button>
+                    ) : (
+                      <a href="#" className="self-center px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all hover:brightness-110" style={{ background: '#0c0ccc', color: '#fff' }}>
+                        Saiba mais
+                      </a>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
