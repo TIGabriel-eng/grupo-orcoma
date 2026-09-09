@@ -37,7 +37,7 @@ const areas: Area[] = [
     imagem: '/abertura.jpg',
     bullets: ['Análise de enquadramento tributário', 'Registro e licenciamento'],
     interesse: 'abrir_empresa',
-    mensagemWhats: 'Olá! Tenho interesse em abrir uma empresa e gostaria de falar com um consultor da Orcoma.',
+    mensagemWhats: 'Olá! Tenho interesse em abrir uma empresa e gostaria de falar com a Ana da Orcoma.',
   },
   {
     Icon: ArrowLeftRight,
@@ -46,7 +46,7 @@ const areas: Area[] = [
     imagem: '/migra%C3%A7%C3%A3o-contabilidade.jpg',
     bullets: ['Transferência de responsabilidade', 'Organização documental'],
     interesse: 'migracao_contabilidade',
-    mensagemWhats: 'Olá! Tenho interesse em migrar minha contabilidade para a Orcoma e gostaria de falar com um consultor.',
+    mensagemWhats: 'Olá! Tenho interesse em migrar minha contabilidade para a Orcoma e gostaria de falar com a Ana.',
   },
   {
     Icon: TrendingUp,
@@ -55,7 +55,7 @@ const areas: Area[] = [
     imagem: '/migracao-mei-me.jpg',
     bullets: ['Planejamento da migração', 'Nova estrutura tributária'],
     interesse: 'migracao_mei_me',
-    mensagemWhats: 'Olá! Cresci e preciso migrar de MEI para ME. Gostaria de falar com um consultor da Orcoma.',
+    mensagemWhats: 'Olá! Cresci e preciso migrar de MEI para ME. Gostaria de falar com a Ana da Orcoma.',
   },
   {
     Icon: FileText,
@@ -276,7 +276,7 @@ export default function SolucoesPage() {
               className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-full text-sm font-bold transition-all hover:brightness-110 hover:scale-[1.02]"
               style={{ background: '#e8b800', color: '#000' }}
             >
-              Falar com um Consultor
+              Falar com a Ana
             </button>
           </div>
         </div>

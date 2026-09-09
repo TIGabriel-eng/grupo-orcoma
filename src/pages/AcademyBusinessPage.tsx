@@ -126,7 +126,7 @@ export default function AcademyBusinessPage() {
     setEnviando(false);
 
     const mensagem = [
-      'Olá, Gilton! Vim pela página da Orcoma Academy Business e quero ficar por dentro dos conteúdos.',
+      'Olá! Vim pela página da Orcoma Academy Business e quero ficar por dentro dos conteúdos.',
       '',
       `Nome: ${nome.trim()}`,
       `E-mail: ${email.trim()}`,

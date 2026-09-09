@@ -1,10 +1,46 @@
 export const attendantConfig = {
-  name: 'Gilton Comercial',
-  whatsappUrl: 'https://wa.me/557399747460?text=Ol%C3%A1%2C%20gostaria%20de%20falar%20com%20um%20consultor',
+  name: 'Ana',
+  whatsappUrl: 'https://wa.me/557399747460?text=Ol%C3%A1%2C%20gostaria%20de%20conversar%20com%20a%20Ana',
 };
 
 export const buildWhatsAppUrl = (text: string) =>
   `https://wa.me/557399747460?text=${encodeURIComponent(text)}`;
+
+// Lista de unidades/regiões atendidas pela Orcoma
+export const unidadesAtendidas = [
+  { nome: 'Salvador', estado: 'BA', keywords: ['salvador', 'ssa'] },
+  { nome: 'Feira de Santana', estado: 'BA', keywords: ['feira', 'feira de santana', 'fsa'] },
+  { nome: 'Jequié', estado: 'BA', keywords: ['jequié', 'jequie'] },
+  { nome: 'Seabra', estado: 'BA', keywords: ['seabra'] },
+  { nome: 'Jaguaquara', estado: 'BA', keywords: ['jaguaquara'] },
+  { nome: 'Várzea Nova', estado: 'BA', keywords: ['várzea nova', 'varzea nova'] },
+  { nome: 'Maracás', estado: 'BA', keywords: ['maracás', 'maracas'] },
+  { nome: 'Utinga', estado: 'BA', keywords: ['utinga'] },
+  { nome: 'Itaberaba', estado: 'BA', keywords: ['itaberaba'] },
+  { nome: 'Jiquiriçá', estado: 'BA', keywords: ['jiquiriçá', 'jiquirica'] },
+  { nome: 'Campo Formoso', estado: 'BA', keywords: ['campo formoso'] },
+  { nome: 'São Paulo', estado: 'SP', keywords: ['são paulo', 'sao paulo', 'sp'] },
+];
+
+// Função para encontrar a unidade mais próxima com base na região informada
+export function findNearestUnit(region: string): { nome: string; estado: string } | null {
+  const normalizedRegion = region.toLowerCase().trim();
+  
+  // Se mencionar SP (São Paulo), redireciona automaticamente para São Paulo
+  if (normalizedRegion.includes('sp') || normalizedRegion.includes('são paulo') || normalizedRegion.includes('sao paulo')) {
+    return { nome: 'São Paulo', estado: 'SP' };
+  }
+  
+  for (const unidade of unidadesAtendidas) {
+    for (const keyword of unidade.keywords) {
+      if (normalizedRegion.includes(keyword) || keyword.includes(normalizedRegion)) {
+        return { nome: unidade.nome, estado: unidade.estado };
+      }
+    }
+  }
+  
+  return null;
+}
 
 export type InteresseKey =
   | 'geral'

@@ -34,7 +34,7 @@ export default function WhatsAppToggle() {
           </div>
 
           <p className="text-sm text-gray-600 leading-relaxed mb-4">
-            Precisa de ajuda? Nosso time de consultores está aqui para te ajudar!
+            Precisa de ajuda? A Ana, nossa assistente virtual, está aqui para te ajudar!
           </p>
 
           <a
@@ -55,7 +55,7 @@ export default function WhatsAppToggle() {
         onClick={() => setOpen(!open)}
         className="w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110"
         style={{ background: '#25D366' }}
-        aria-label={open ? 'Fechar' : 'Falar com consultor no WhatsApp'}
+        aria-label={open ? 'Fechar' : 'Falar com a Ana no WhatsApp'}
       >
         {open ? <X size={26} className="text-white" /> : <Headset size={26} className="text-white" />}
       </button>

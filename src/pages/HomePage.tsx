@@ -109,21 +109,46 @@ export default function HomePage() {
       <div className="relative overflow-hidden min-h-screen flex flex-col" style={{ background: 'linear-gradient(160deg, #0c0ccc 0%, #1a1aff 40%, #0000b3 100%)' }}>
         {/* Vídeo de fundo (YouTube em loop infinito); o gradiente base acima mantém o visual enquanto carrega */}
         <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+          <style>{`
+            .hero-video-iframe {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              width: 100vw;
+              height: 56.25vw;
+              min-height: 100vh;
+              min-width: 177.78vh;
+              transform: translate(-50%, -50%) scale(1.4);
+              border: none;
+              pointer-events: none;
+            }
+            /* Portrait / mobile estreito (ex: 366x690): garante cobertura total da altura */
+            @media (max-aspect-ratio: 16/9) {
+              .hero-video-iframe {
+                width: 177.78vh;
+                height: 100vh;
+              }
+            }
+            /* Ajuste fino para celulares pequenos: um pouco mais de zoom para cortar bordas do player */
+            @media (max-width: 480px) {
+              .hero-video-iframe {
+                width: 200vh;
+                min-width: 200vh;
+                height: 100vh;
+                min-height: 100vh;
+                transform: translate(-50%, -50%) scale(1.15);
+              }
+            }
+          `}</style>
           <iframe
-            className="absolute left-1/2 top-1/2 pointer-events-none"
-            style={{
-              width: '100%',
-              height: '100%',
-              transform: 'translate(-50%, -50%) scale(1.75)',
-              border: 'none',
-            }}
-            src="https://www.youtube.com/embed/Nj6iZmF-h3w?autoplay=1&mute=1&loop=1&controls=0&playlist=Nj6iZmF-h3w&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0"
+            className="hero-video-iframe"
+            src="https://www.youtube.com/embed/mdF72LEmGhU?autoplay=1&mute=1&loop=1&controls=0&playlist=mdF72LEmGhU&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0"
             title=""
             allow="autoplay; encrypted-media"
             tabIndex={-1}
           />
         </div>
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, rgba(12,12,204,0.4) 0%, rgba(26,26,255,0.4) 40%, rgba(0,0,179,0.4) 100%)' }}></div>
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, rgba(12,12,204,0.3) 0%, rgba(26,26,255,0.3) 40%, rgba(0,0,179,0.3) 100%)' }}></div>
         <div className="relative z-10">
           <Nav />
 

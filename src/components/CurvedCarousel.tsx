@@ -9,9 +9,9 @@ interface SobreNosFoto {
 
 // ─── CONFIG ─────────────────────────────────────────────────────────────────
 // Card width in em units (deve bater com o --w usado no .card no CSS)
-const CARD_WIDTH_DESKTOP = '21.875em';
-const CARD_WIDTH_TABLET = '12em';
-const CARD_WIDTH_MOBILE = '8em';
+const CARD_WIDTH_DESKTOP = '38.06em';
+const CARD_WIDTH_TABLET = '20.88em';
+const CARD_WIDTH_MOBILE = '13.92em';
 
 function getCardWidth(): string {
   const vw = window.innerWidth;

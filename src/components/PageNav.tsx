@@ -2,14 +2,16 @@ import { useState, useRef, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { useNav, type Page } from '../context/NavContext';
 
-const links: { label: string; page: Page }[] = [
+type PageNavEntry = { label: string; page: Page } | { label: string; external: string };
+
+const links: PageNavEntry[] = [
   { label: 'Contato', page: 'contato' },
   { label: 'Soluções', page: 'solucoes' },
   { label: 'Sobre', page: 'sobre' },
   { label: 'Login', page: 'login' },
   { label: 'Eventos', page: 'eventos' },
   { label: 'Blog', page: 'blog' },
-  { label: 'Trabalhe Conosco', page: 'trabalhe-conosco' },
+  { label: 'Reforma Tributária', external: 'https://diagnostico.orcomacontabilidade.com.br/' },
 ];
 
 interface Props {
@@ -22,12 +24,17 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
   const { navigate } = useNav();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
+  const [contatoOpen, setContatoOpen] = useState(false);
   const loginDropdownRef = useRef<HTMLDivElement>(null);
+  const contatoDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (loginDropdownRef.current && !loginDropdownRef.current.contains(e.target as Node)) {
         setLoginOpen(false);
+      }
+      if (contatoDropdownRef.current && !contatoDropdownRef.current.contains(e.target as Node)) {
+        setContatoOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -43,6 +50,69 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
 
       <nav className="hidden xl:flex items-center rounded-full px-4 py-0.5 gap-0.5" style={{ background: 'rgba(100, 160, 255, 0.3)' }}>
         {links.map((item) => {
+          if ('external' in item) {
+            return (
+              <button
+                key={item.label}
+                onClick={() => window.open(item.external, '_blank')}
+                className="px-4 py-1.5 text-[1.26rem] font-semibold rounded-full transition-colors hover:bg-white/10 relative"
+                style={{ color: 'white' }}
+              >
+                {item.label}
+              </button>
+            );
+          }
+          if (item.label === 'Contato') {
+            const isContatoActive = item.page === activePage || activePage === 'trabalhe-conosco';
+            return (
+              <div key={item.label} className="relative" ref={contatoDropdownRef}>
+                <button
+                  onClick={() => setContatoOpen(!contatoOpen)}
+                  className="px-4 py-1.5 text-[1.26rem] font-semibold rounded-full transition-colors hover:bg-white/10 relative flex items-center gap-1"
+                  style={{ color: 'white' }}
+                >
+                  {item.label}
+                  <ChevronDown size={22} className={`transition-transform ${contatoOpen ? 'rotate-180' : ''}`} />
+                  {isContatoActive && (
+                    <span
+                      className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-0.5 rounded-full"
+                      style={{ background: '#e8b800' }}
+                    />
+                  )}
+                </button>
+                {contatoOpen && (
+                  <div
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 rounded-2xl shadow-2xl py-3 z-50"
+                    style={{ background: 'white', border: '1px solid #e5e7eb' }}
+                  >
+                    <style>{`
+                      @keyframes fadeSlideIn {
+                        from { opacity: 0; transform: translateY(-8px); }
+                        to { opacity: 1; transform: translateY(0); }
+                      }
+                      .sub-item {
+                        animation: fadeSlideIn 0.3s ease-out both;
+                      }
+                    `}</style>
+                    <button
+                      onClick={() => { navigate('contato'); setContatoOpen(false); }}
+                      className="sub-item w-full text-left px-5 py-2.5 text-lg font-medium transition-colors hover:bg-gray-100"
+                      style={{ color: '#1f2937' }}
+                    >
+                      Contato
+                    </button>
+                    <button
+                      onClick={() => { navigate('trabalhe-conosco'); setContatoOpen(false); }}
+                      className="sub-item w-full text-left px-5 py-2.5 text-lg font-medium transition-colors hover:bg-gray-100"
+                      style={{ color: '#1f2937', animationDelay: '0.1s' }}
+                    >
+                      Trabalhe Conosco
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          }
           if (item.label === 'Login') {
             return (
               <div key={item.label} className="relative" ref={loginDropdownRef}>
@@ -74,7 +144,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
                         animation: fadeSlideIn 0.3s ease-out both;
                       }
                     `}</style>
-                    <button
+                                        <button
                       onClick={() => { navigate('academy-business'); setLoginOpen(false); }}
                       className="sub-item w-full text-left px-5 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
                     >
@@ -106,7 +176,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
 
       <div className={`hidden xl:flex absolute right-0 top-1/2 -translate-y-1/2 ${stackConsultor ? 'flex-col items-end gap-1' : 'items-center gap-1'} flex-shrink-0`}>
         <button
-          onClick={() => window.open('https://myorcoma-academy.vercel.app/', '_blank')}
+          onClick={() => window.open('https://academy.orcomacontabilidade.com.br/login', '_blank')}
           className="px-5 py-2 rounded-full text-[1.26rem] font-semibold transition-all hover:brightness-110 relative"
           style={{ background: 'rgba(100, 160, 255, 0.3)', color: 'white' }}
         >
@@ -119,7 +189,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
             className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:brightness-110 hover:scale-105"
             style={{ background: '#e8b800', color: '#000' }}
           >
-            Falar com Consultor
+            Falar com a Ana
           </button>
         )}
       </div>
@@ -138,8 +208,49 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
           className="xl:hidden absolute top-full left-0 right-0 flex flex-col items-center gap-2 pb-4 z-50"
           style={{ background: 'rgba(10,10,180,0.97)' }}
         >
-          {links.map((item) => (
-            item.label === 'Login' ? (
+          {links.map((item) => {
+            if ('external' in item) {
+              return (
+                <button
+                  key={item.label}
+                  onClick={() => { window.open(item.external, '_blank'); setMobileOpen(false); }}
+                  className="text-white text-[1.4rem] font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors w-full text-center"
+                >
+                  {item.label}
+                </button>
+              );
+            }
+            if (item.label === 'Contato') {
+              return (
+              <div key={item.label} className="w-full flex flex-col items-center">
+                <button
+                  onClick={() => setContatoOpen(!contatoOpen)}
+                  className="text-white text-[1.4rem] font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors w-full text-center flex items-center justify-center gap-1"
+                >
+                  {item.label}
+                  <ChevronDown size={22} className={`transition-transform ${contatoOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {contatoOpen && (
+                  <>
+                    <button
+                      onClick={() => { navigate('contato'); setMobileOpen(false); setContatoOpen(false); }}
+                      className="text-white/80 text-lg font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors"
+                    >
+                      Contato
+                    </button>
+                    <button
+                      onClick={() => { navigate('trabalhe-conosco'); setMobileOpen(false); setContatoOpen(false); }}
+                      className="text-white/80 text-lg font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors"
+                    >
+                      Trabalhe Conosco
+                    </button>
+                  </>
+                )}
+              </div>
+            );
+            }
+            if (item.label === 'Login') {
+              return (
               <div key={item.label} className="w-full flex flex-col items-center">
                 <button
                   onClick={() => setLoginOpen(!loginOpen)}
@@ -157,7 +268,9 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
                   </button>
                 )}
               </div>
-            ) : (
+            );
+            }
+            return (
               <button
                 key={item.label}
                 onClick={() => { navigate(item.page); setMobileOpen(false); }}
@@ -165,10 +278,10 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
               >
                 {item.label}
               </button>
-            )
-          ))}
+            );
+          })}
           <button
-            onClick={() => { window.open('https://myorcoma-academy.vercel.app/', '_blank'); setMobileOpen(false); }}
+            onClick={() => { window.open('https://academy.orcomacontabilidade.com.br/login', '_blank'); setMobileOpen(false); }}
             className="mt-1 px-6 py-2 rounded-full text-white text-[1.4rem] font-semibold border border-white/30 hover:bg-white/10 transition-colors"
           >
             Orcoma Academy
@@ -179,7 +292,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
               className="px-6 py-2.5 rounded-full text-sm font-semibold transition-all hover:brightness-110"
               style={{ background: '#e8b800', color: '#000' }}
             >
-              Falar com Consultor
+              Falar com a Ana
             </button>
           )}
         </nav>

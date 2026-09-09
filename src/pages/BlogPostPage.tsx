@@ -187,7 +187,7 @@ export default function BlogPostPage() {
               className="px-8 py-3.5 rounded-full text-sm font-bold uppercase tracking-wider transition-all hover:brightness-110 hover:scale-105"
               style={{ background: GOLD, color: '#000' }}
             >
-              Falar com Consultor
+              Falar com a Ana
             </button>
             <button
               onClick={() => navigate('blog')}

@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Phone, Mail } from 'lucide-react';
+import { Phone, Mail, MapPin, Star } from 'lucide-react';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { formatCelular } from '../utils/phone';
 import { buildWhatsAppUrl } from '../config/attendant';
+import { unidades, telefoneParaLink } from '../data/unidades';
 
 const BLUE = 'linear-gradient(160deg, #0c0ccc 0%, #1a1aff 50%, #0000b3 100%)';
 
@@ -255,43 +256,14 @@ export default function ContactPage() {
             {/* Left */}
             <div className="flex-1 pt-2 sm:pt-4">
               <h1 className="font-extrabold leading-tight mb-4" style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)' }}>
-                <span className="text-white">Entre em </span>
-                <span style={{ color: '#e8b800' }}>Contato.</span>
+                <span className="text-white">Preencha o formulário e aguarde o contato de nossos </span>
+                <span style={{ color: '#e8b800' }}>especialistas.</span>
               </h1>
               <p className="text-white/65 text-sm leading-relaxed mb-6 sm:mb-8 max-w-xs">
-                Estamos prontos para transformar a gestão da sua empresa com inteligência e estratégia contábil.
+                Todo empreendedor de sucesso depende de uma contabilidade que seja capaz de fornecer serviços que atendam às necessidades do dia a dia de forma única, prestando consultoria e sendo útil no que for preciso para o sucesso empresarial, e a Orcoma sabe como fazer isso. Preencha nosso formulário e aguarde o contato de um dos nossos especialistas.
               </p>
 
               <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
-                    style={{ background: '#e8b800' }}
-                  >
-                    <Phone size={18} color="#000" />
-                  </div>
-                  <div>
-                    <p className="text-white/50 text-xs">Telefone</p>
-                    <a href="tel:+557399747460" className="text-white text-sm font-semibold hover:text-yellow-300 transition-colors">
-                      (73) 9974-7460
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
-                    style={{ background: '#e8b800' }}
-                  >
-                    <Mail size={18} color="#000" />
-                  </div>
-                  <div>
-                    <p className="text-white/50 text-xs">E-mail</p>
-                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=gilton.novaes@orcoma.com.br" target="_blank" rel="noopener noreferrer" className="text-white text-sm font-semibold hover:text-yellow-300 transition-colors break-all">
-                      gilton.novaes@orcoma.com.br
-                    </a>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -303,6 +275,70 @@ export default function ContactPage() {
       </div>
 
       <CTABar />
+
+      {/* Nossas Unidades */}
+      <section className="px-4 sm:px-6 py-12 sm:py-16 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 reveal">
+              Nossas <span style={{ color: '#0c0ccc' }}>Unidades</span>
+            </h2>
+            <p className="text-gray-500 text-base sm:text-lg max-w-2xl mx-auto reveal" style={{ '--reveal-delay': '80ms' } as React.CSSProperties}>
+              Encontre a unidade Orcoma mais próxima de você. Estamos prontos para atender sua empresa.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            {unidades.map((unidade, index) => (
+              <div
+                key={unidade.nome}
+                className="reveal bg-white rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col gap-3 relative"
+                style={{ '--reveal-delay': `${(index % 3) * 80}ms` } as React.CSSProperties}
+              >
+                {unidade.matriz && (
+                  <span
+                    className="absolute top-3 right-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide"
+                    style={{ background: '#e8b800', color: '#000' }}
+                    title="Unidade matriz"
+                  >
+                    <Star size={12} fill="#000" color="#000" />
+                    Matriz
+                  </span>
+                )}
+                <h3 className="font-bold text-base sm:text-lg text-gray-900 pr-20">{unidade.nome}</h3>
+                <div className="flex items-start gap-2.5">
+                  <MapPin size={16} className="flex-shrink-0 mt-0.5" style={{ color: '#0c0ccc' }} />
+                  <p className="text-gray-500 text-sm leading-relaxed">{unidade.endereco}</p>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Phone size={16} className="flex-shrink-0" style={{ color: '#0c0ccc' }} />
+                  <a
+                    href={telefoneParaLink(unidade.telefone)}
+                    className="text-gray-700 text-sm font-semibold transition-colors"
+                    onMouseOver={(e) => (e.currentTarget.style.color = '#0c0ccc')}
+                    onMouseOut={(e) => (e.currentTarget.style.color = '')}
+                  >
+                    {unidade.telefone}
+                  </a>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Mail size={16} className="flex-shrink-0" style={{ color: '#0c0ccc' }} />
+                  <a
+                    href={`https://mail.google.com/mail/?view=cm&fs=1&to=${unidade.email}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-700 text-sm font-semibold break-all transition-colors"
+                    onMouseOver={(e) => (e.currentTarget.style.color = '#0c0ccc')}
+                    onMouseOut={(e) => (e.currentTarget.style.color = '')}
+                  >
+                    {unidade.email}
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );

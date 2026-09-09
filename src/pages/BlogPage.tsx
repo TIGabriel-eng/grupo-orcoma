@@ -99,7 +99,7 @@ function PostCard({
 export default function BlogPage() {
   const { openPost, navigate } = useNav();
   const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [novidadesAtivo, setNovidadesAtivo] = useState(true);
+  const [novidadesAtivo, setNovidadesAtivo] = useState(false);
   const [query, setQuery] = useState('');
   const [newsNome, setNewsNome] = useState('');
   const [newsCelular, setNewsCelular] = useState('');

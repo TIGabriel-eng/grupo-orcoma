@@ -43,7 +43,7 @@
 }
 
 .a3d {
-  place-self: center;
+  align-self: start;
   transform-style: preserve-3d;
   animation: ry 32s linear infinite
 }
