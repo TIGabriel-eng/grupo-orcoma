@@ -24,10 +24,33 @@ const PAGE_KEYS: Page[] = ['home', 'contato', 'solucoes', 'sobre', 'login', 'eve
 const AUTOPLAY_MS = 8000;
 const TRANSITION_MS = 800;
 
+const FALLBACK_SLIDES: CarrosselSlide[] = [
+  {
+    id: 0,
+    titulo: 'Apoio especializado para uma gestão mais tranquila',
+    subtitulo: 'Nossa parceria mostra como o dinheiro público é usado, com transparência.',
+    imagem: '',
+    foto: '',
+    ordem: 0,
+    botao1: { texto: 'Agende sua Reunião', tipo: 'contato', link: '' },
+    botao2: { texto: 'Mais Informações', tipo: 'pagina', link: 'sobre' },
+  },
+  {
+    id: 0,
+    titulo: 'Somos especializados na contabilidade pública',
+    subtitulo: 'Tenha registros, controles, geração de demonstrativos orçamentários e suporte relacionado às atividades da administração pública.',
+    imagem: '',
+    foto: '',
+    ordem: 0,
+    botao1: { texto: 'Solicitar proposta', tipo: 'contato', link: '' },
+    botao2: { texto: 'Saiba mais', tipo: 'pagina', link: 'solucoes' },
+  },
+];
+
 export default function HeroCarousel() {
   const { open: openWhatsApp } = useWhatsApp();
   const { navigate } = useNav();
-  const [slides, setSlides] = useState<CarrosselSlide[]>([]);
+  const [slides, setSlides] = useState<CarrosselSlide[]>(FALLBACK_SLIDES);
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
