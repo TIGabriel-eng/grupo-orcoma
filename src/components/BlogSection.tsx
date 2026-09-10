@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Calendar } from 'lucide-react';
 import { useNav } from '../context/NavContext';
+import { apiUrl } from '../config/api';
 
 interface BlogPost {
   date: string;
@@ -16,7 +17,7 @@ export default function BlogSection() {
 
   useEffect(() => {
     let active = true;
-    fetch('/api/posts/')
+    fetch(apiUrl('/api/posts/'))
       .then((res) => {
         if (!res.ok) throw new Error('Erro ao carregar posts');
         return res.json();
@@ -36,7 +37,9 @@ export default function BlogSection() {
           setPosts(apiPosts);
         }
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.error('[BlogSection] Erro ao carregar posts:', err);
+      });
     return () => {
       active = false;
     };

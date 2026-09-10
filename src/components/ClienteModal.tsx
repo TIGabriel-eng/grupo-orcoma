@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { X, Loader2, Lock } from 'lucide-react';
 import { formatCelular } from '../utils/phone';
 import type { ClienteInfo } from '../context/ClienteContext';
+import { apiUrl } from '../config/api';
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '';
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -145,7 +146,7 @@ export default function ClienteModal({
         recaptchaWidgetIdRef.current !== undefined
           ? window.grecaptcha?.getResponse(recaptchaWidgetIdRef.current) || ''
           : '';
-      const res = await fetch('/api/cliente/login/', {
+      const res = await fetch(apiUrl('/api/cliente/login/'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

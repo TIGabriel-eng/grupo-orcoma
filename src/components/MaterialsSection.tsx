@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { apiUrl } from '../config/api';
 import { X } from 'lucide-react';
 import OrcomaLogo from './OrcomaLogo';
 
@@ -16,10 +17,12 @@ export default function MaterialsSection() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    fetch('/api/ebooks/')
+    fetch(apiUrl('/api/ebooks/'))
       .then((res) => res.json())
       .then((data) => setEbooks(Array.isArray(data.ebooks) ? data.ebooks : []))
-      .catch(() => {});
+      .catch((err) => {
+        console.error('[MaterialsSection] Erro ao carregar ebooks:', err);
+      });
   }, []);
 
   useEffect(() => {
@@ -221,7 +224,7 @@ export default function MaterialsSection() {
                       </p>
                     </div>
                     <a
-                      href={`/api/ebooks/${eb.slug}/download/`}
+                      href={apiUrl(`/api/ebooks/${eb.slug}/download/`)}
                       className="flex-shrink-0 px-4 py-2 rounded-lg text-xs font-bold text-white transition-all hover:brightness-110"
                       style={{ background: '#16a34a' }}
                     >

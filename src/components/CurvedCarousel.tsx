@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { apiUrl } from '../config/api';
 
 interface SobreNosFoto {
   id: number;
@@ -34,7 +35,7 @@ export default function CurvedCarousel() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch('/api/sobre-nos-fotos/')
+    fetch(apiUrl('/api/sobre-nos-fotos/'))
       .then((res) => res.json())
       .then((data) => {
         const list: SobreNosFoto[] = (data.fotos || []).filter(
@@ -44,7 +45,9 @@ export default function CurvedCarousel() {
           setFotos(list);
         }
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.error('[CurvedCarousel] Erro ao carregar fotos do Sobre Nós:', err);
+      });
     return () => {
       cancelled = true;
     };

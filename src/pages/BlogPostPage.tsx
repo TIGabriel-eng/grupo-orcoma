@@ -8,6 +8,7 @@ import BlogCtaCard from '../components/BlogCtaCard';
 import BlogPostIndex from '../components/BlogPostIndex';
 import { prepararConteudo } from '../utils/blogContent';
 import { useNav } from '../context/NavContext';
+import { apiUrl } from '../config/api';
 
 interface PostDetalhe {
   titulo: string;
@@ -46,7 +47,7 @@ export default function BlogPostPage() {
     setLoading(true);
     setNotFound(false);
 
-    fetch(`/api/posts/${activePostSlug}/`)
+    fetch(apiUrl(`/api/posts/${activePostSlug}/`))
       .then((res) => {
         if (!res.ok) throw new Error('Post não encontrado');
         return res.json();
@@ -59,7 +60,8 @@ export default function BlogPostPage() {
           setNotFound(true);
         }
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error('[BlogPostPage] Erro ao carregar o post:', err);
         if (active) setNotFound(true);
       })
       .finally(() => {

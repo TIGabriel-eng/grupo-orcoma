@@ -5,6 +5,7 @@ import {
 import PageNav from '../components/PageNav';
 import Footer from '../components/Footer';
 import WhatsAppToggle from '../components/WhatsAppToggle';
+import { apiUrl } from '../config/api';
 
 const BLUE = 'linear-gradient(160deg, #0c0ccc 0%, #1a1aff 50%, #0000b3 100%)';
 
@@ -30,7 +31,7 @@ export default function EventosPage() {
       setNewsletterStatus('error');
       return;
     }
-    fetch('/api/newsletter/', {
+    fetch(apiUrl('/api/newsletter/'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: email.trim(), origem: 'eventos' }),
@@ -49,7 +50,7 @@ export default function EventosPage() {
 
   useEffect(() => {
     let active = true;
-    fetch('/api/eventos/')
+    fetch(apiUrl('/api/eventos/'))
       .then((res) => {
         if (!res.ok) throw new Error('Erro ao carregar eventos');
         return res.json();
@@ -70,7 +71,9 @@ export default function EventosPage() {
           setEvents(apiEvents);
         }
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.error('[EventosPage] Erro ao carregar eventos:', err);
+      });
     return () => {
       active = false;
     };

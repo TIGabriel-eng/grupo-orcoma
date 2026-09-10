@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { apiUrl } from '../config/api';
 
 const PRECISA_OPTIONS = ['Quero abrir minha empresa', 'Quero trocar de contador'];
 
@@ -98,7 +99,7 @@ export default function BlogLeadForm() {
 
     setEnviando(true);
     try {
-      const res = await fetch('/api/contact/', {
+      const res = await fetch(apiUrl('/api/contact/'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { MapPin, ArrowRight } from 'lucide-react';
+import { apiUrl } from '../config/api';
 import { useNav } from '../context/NavContext';
 
 interface CityInfo {
@@ -96,13 +97,16 @@ export default function SpecialistsSection() {
   }, [autoPlay]);
 
   useEffect(() => {
-    fetch('/api/especialidades/')
+    fetch(apiUrl('/api/especialidades/'))
       .then(res => res.json())
       .then(data => {
         setEspecialidades(data.especialidades || []);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch((err) => {
+        console.error('[SpecialistsSection] Erro ao carregar especialidades:', err);
+        setLoading(false);
+      });
   }, []);
 
   return (

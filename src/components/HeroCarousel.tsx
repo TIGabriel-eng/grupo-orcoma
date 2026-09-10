@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiUrl } from '../config/api';
 import { useWhatsApp } from '../context/WhatsAppContext';
 import { useNav, type Page } from '../context/NavContext';
 
@@ -55,7 +56,7 @@ export default function HeroCarousel() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch('/api/carrossel/')
+    fetch(apiUrl('/api/carrossel/'))
       .then((res) => res.json())
       .then((data) => {
         const list: CarrosselSlide[] = (data.slides || [])
@@ -75,7 +76,9 @@ export default function HeroCarousel() {
           setIndex(0);
         }
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.error('[HeroCarousel] Erro ao carregar carrossel:', err);
+      });
     return () => {
       cancelled = true;
     };

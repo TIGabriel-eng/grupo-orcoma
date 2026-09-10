@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
+import { apiUrl } from '../config/api';
 
 const MAX_CURRICULO_BYTES = 5 * 1024 * 1024;
 const CURRICULO_EXTS = ['.pdf', '.doc', '.docx'];
@@ -104,7 +105,7 @@ export default function TrabalheConoscoPage() {
       if (recaptchaToken) data.append('g-recaptcha-response', recaptchaToken);
       if (curriculo) data.append('curriculo', curriculo);
 
-      const res = await fetch('/api/job-application/', {
+      const res = await fetch(apiUrl('/api/job-application/'), {
         method: 'POST',
         body: data,
       });

@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useState, type ReactNode } from 'react';
+import { apiUrl } from '../config/api';
 
 export interface ClienteInfo {
   nome: string;
@@ -76,14 +77,17 @@ export function ClienteProvider({ children }: { children: ReactNode }) {
     const t = readToken();
     if (!t) return;
     try {
-      fetch('/api/cliente/acesso/', {
+      fetch(apiUrl('/api/cliente/acesso/'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: t, interesse }),
         keepalive: true,
-      }).catch(() => {});
-    } catch {
-      // silencioso — nunca bloqueia a abertura do WhatsApp
+      }).catch((err) => {
+        console.warn('[ClienteContext] Falha ao registrar acesso do cliente:', err);
+      });
+    } catch (err) {
+      // Nunca bloqueia o fluxo do cliente
+      console.warn('[ClienteContext] Falha ao registrar acesso do cliente:', err);
     }
   }, []);
 

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Phone, Mail, MapPin, Star } from 'lucide-react';
+import { apiUrl } from '../config/api';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
 import { formatCelular } from '../utils/phone';
@@ -81,7 +82,7 @@ function ContactForm() {
     const interesse = interessesValidos.includes(interesseParam || '') ? interesseParam : 'geral';
 
     try {
-      const res = await fetch('/api/contact/', {
+      const res = await fetch(apiUrl('/api/contact/'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, origem: 'pagina_contato', interesse }),
@@ -89,9 +90,11 @@ function ContactForm() {
       if (res.ok) {
         setEnviado(true);
         setForm({ nome: '', celular: '', email: '', mensagem: '' });
+      } else {
+        console.error('[ContactPage] Erro no envio do formulário:', res.status);
       }
-    } catch {
-      // silencioso
+    } catch (err) {
+      console.error('[ContactPage] Falha de rede ao enviar formulário:', err);
     }
   };
 

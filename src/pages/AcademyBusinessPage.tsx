@@ -3,6 +3,7 @@ import { CheckCircle2, GraduationCap, LineChart, ShieldCheck, Target, Users } fr
 import PageNav from '../components/PageNav';
 import Footer from '../components/Footer';
 import WhatsAppToggle from '../components/WhatsAppToggle';
+import { apiUrl } from '../config/api';
 
 const BLUE = 'linear-gradient(160deg, #0c0ccc 0%, #1a1aff 50%, #0000b3 100%)';
 const WHATSAPP_NUMBER = '557399747460';
@@ -128,7 +129,7 @@ export default function AcademyBusinessPage() {
     };
 
     try {
-      const res = await fetch('/api/contact/', {
+      const res = await fetch(apiUrl('/api/contact/'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -139,7 +140,8 @@ export default function AcademyBusinessPage() {
         setEnviando(false);
         return;
       }
-    } catch {
+    } catch (err) {
+      console.error('[AcademyBusinessPage] Falha ao enviar formulário:', err);
       setErro('Não foi possível registrar seus dados. Tente novamente.');
       setEnviando(false);
       return;

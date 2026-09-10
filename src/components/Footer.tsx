@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Instagram } from 'lucide-react';
+import { apiUrl } from '../config/api';
 import { useNav, type Page } from '../context/NavContext';
 
 const unidades = [
@@ -34,7 +35,7 @@ export default function Footer() {
       setNewsStatus('error');
       return;
     }
-    fetch('/api/newsletter/', {
+    fetch(apiUrl('/api/newsletter/'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: newsEmail.trim(), origem: 'footer' }),

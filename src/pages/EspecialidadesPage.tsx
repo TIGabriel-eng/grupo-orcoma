@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import WhatsAppToggle from '../components/WhatsAppToggle';
 import { useNav } from '../context/NavContext';
 import { useWhatsApp } from '../context/WhatsAppContext';
+import { apiUrl } from '../config/api';
 
 interface Especialidade {
   id: number;
@@ -72,7 +73,7 @@ export default function EspecialidadesPage() {
 
     if (activeEspecialidadeSlug) {
       setDetalhe(null);
-      fetch(`/api/especialidades/${activeEspecialidadeSlug}/`)
+      fetch(apiUrl(`/api/especialidades/${activeEspecialidadeSlug}/`))
         .then((res) => {
           if (!res.ok) throw new Error('Especialidade não encontrada');
           return res.json();
@@ -85,14 +86,17 @@ export default function EspecialidadesPage() {
             setNotFound(true);
           }
         })
-        .catch(() => {
-          if (active) setNotFound(true);
+        .catch((err) => {
+          if (active) {
+            console.error('[EspecialidadesPage] Erro ao carregar especialidade:', err);
+            setNotFound(true);
+          }
         })
         .finally(() => {
           if (active) setLoading(false);
         });
     } else {
-      fetch('/api/especialidades/')
+      fetch(apiUrl('/api/especialidades/'))
         .then((res) => {
           if (!res.ok) throw new Error('Erro ao carregar especialidades');
           return res.json();
@@ -101,7 +105,9 @@ export default function EspecialidadesPage() {
           if (!active) return;
           setEspecialidades(Array.isArray(data.especialidades) ? data.especialidades : []);
         })
-        .catch(() => {})
+        .catch((err) => {
+          console.error('[EspecialidadesPage] Erro ao carregar especialidades:', err);
+        })
         .finally(() => {
           if (active) setLoading(false);
         });

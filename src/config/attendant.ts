@@ -1,3 +1,5 @@
+import { apiUrl } from './api';
+
 export const attendantConfig = {
   name: 'Ana',
   whatsappUrl: 'https://wa.me/557399747460?text=Ol%C3%A1%2C%20gostaria%20de%20conversar%20com%20a%20Ana',
@@ -51,14 +53,17 @@ export type InteresseKey =
 
 export function trackWhatsAppClick(origemPagina: string, interesse: InteresseKey = 'geral'): void {
   try {
-    fetch('/api/whatsapp-click/', {
+    fetch(apiUrl('/api/whatsapp-click/'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ origem_pagina: origemPagina, interesse }),
       keepalive: true,
-    }).catch(() => {});
-  } catch {
-    // silencioso — nunca bloqueia a abertura do WhatsApp
+    }).catch((err) => {
+      console.warn('[attendant] Falha ao registrar clique de WhatsApp:', err);
+    });
+  } catch (err) {
+    // Nunca bloqueia a abertura do WhatsApp
+    console.warn('[attendant] Falha ao registrar clique de WhatsApp:', err);
   }
 }
 

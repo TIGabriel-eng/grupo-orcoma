@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import WhatsAppToggle from '../components/WhatsAppToggle';
 import BlogCtaCard from '../components/BlogCtaCard';
 import { useNav } from '../context/NavContext';
+import { apiUrl } from '../config/api';
 
 interface BlogPost {
   titulo: string;
@@ -113,7 +114,7 @@ export default function BlogPage() {
       setNewsStatus('error');
       return;
     }
-    fetch('/api/newsletter/', {
+    fetch(apiUrl('/api/newsletter/'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -141,7 +142,7 @@ export default function BlogPage() {
 
   useEffect(() => {
     let active = true;
-    fetch('/api/posts/')
+    fetch(apiUrl('/api/posts/'))
       .then((res) => {
         if (!res.ok) throw new Error('Erro ao carregar posts');
         return res.json();
@@ -162,7 +163,9 @@ export default function BlogPage() {
           setPosts(apiPosts);
         }
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.error('[BlogPage] Erro ao carregar posts:', err);
+      });
     return () => {
       active = false;
     };

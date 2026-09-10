@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Handshake } from 'lucide-react';
+import { apiUrl } from '../config/api';
 import { attendantConfig, trackWhatsAppClick } from '../config/attendant';
 import { formatCelular } from '../utils/phone';
 
@@ -18,7 +19,7 @@ export default function ContactSection() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('/api/contact/', {
+      const res = await fetch(apiUrl('/api/contact/'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, origem: 'home_form', interesse: 'geral' }),
@@ -26,9 +27,11 @@ export default function ContactSection() {
       if (res.ok) {
         setEnviado(true);
         setForm({ nome: '', celular: '', email: '', cnpj: '' });
+      } else {
+        console.error('[ContactSection] Erro no envio do formulário:', res.status);
       }
-    } catch {
-      // silencioso
+    } catch (err) {
+      console.error('[ContactSection] Falha de rede ao enviar formulário:', err);
     }
   };
 
