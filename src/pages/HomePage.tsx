@@ -13,6 +13,7 @@ import BlogSection from '../components/BlogSection';
 import CalculadoraRiscoFiscal from '../components/CalculadoraRiscoFiscal';
 import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
+import YouTubePlayer from '../components/YouTubePlayer';
 
 const serviceCards = [
   {
@@ -112,13 +113,13 @@ export default function HomePage() {
           <style>{`
             .hero-video-iframe {
               position: absolute;
-              top: 50%;
-              left: 50%;
+              top: 60%;
+              left: 55%;
               width: 100vw;
               height: 56.25vw;
               min-height: 100vh;
               min-width: 177.78vh;
-              transform: translate(-50%, -50%) scale(1.4);
+              transform: translate(-50%, -50%) scale(1.25);
               border: none;
               pointer-events: none;
             }
@@ -127,6 +128,8 @@ export default function HomePage() {
               .hero-video-iframe {
                 width: 177.78vh;
                 height: 100vh;
+                top: 55%;
+                left: 50%;
               }
             }
             /* Ajuste fino para celulares pequenos: um pouco mais de zoom para cortar bordas do player */
@@ -137,15 +140,20 @@ export default function HomePage() {
                 height: 100vh;
                 min-height: 100vh;
                 transform: translate(-50%, -50%) scale(1.15);
+                top: 55%;
+                left: 50%;
               }
             }
           `}</style>
-          <iframe
-            className="hero-video-iframe"
-            src="https://www.youtube.com/embed/mdF72LEmGhU?autoplay=1&mute=1&loop=1&controls=0&playlist=mdF72LEmGhU&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&fs=0"
-            title=""
-            allow="autoplay; encrypted-media"
-            tabIndex={-1}
+          <YouTubePlayer
+            videoId="mdF72LEmGhU"
+            autoplay
+            loop
+            muted
+            controls={false}
+            rel={false}
+            modestBranding
+            iframeClassName="hero-video-iframe"
           />
         </div>
         <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, rgba(12,12,204,0.3) 0%, rgba(26,26,255,0.3) 40%, rgba(0,0,179,0.3) 100%)' }}></div>

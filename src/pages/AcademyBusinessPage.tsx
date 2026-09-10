@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { CheckCircle2, GraduationCap, LineChart, ShieldCheck, Target, Users } from 'lucide-react';
 import PageNav from '../components/PageNav';
 import Footer from '../components/Footer';
@@ -80,6 +80,28 @@ export default function AcademyBusinessPage() {
   const [autorizacao, setAutorizacao] = useState(false);
   const [erro, setErro] = useState('');
   const [enviando, setEnviando] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            video.preload = 'auto';
+            video.load();
+            observer.disconnect();
+            return;
+          }
+        }
+      },
+      { rootMargin: '200px 0px' }
+    );
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -170,12 +192,13 @@ export default function AcademyBusinessPage() {
 
             <div className="flex justify-center">
               <video
+                ref={videoRef}
                 src="/video-informativo.mp4"
                 autoPlay
                 loop
                 muted
                 playsInline
-                preload="auto"
+                preload="none"
                 className="w-[490px] h-[280px] max-w-full rounded-2xl shadow-2xl"
                 style={{ border: 'none' }}
               />

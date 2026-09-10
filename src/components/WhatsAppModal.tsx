@@ -6,7 +6,7 @@ import { attendantConfig, getAttendantStatus, findNearestUnit, buildWhatsAppUrl 
 const BUBBLE_MESSAGES = [
   'Tem alguma dúvida? Posso ajudar!',
   'Oi! Se precisar, eu estou aqui, viu?',
-  'Temos prazer em te atender!',
+  'Temos o prazer em te atender!',
 ];
 const INTERACTED_KEY = 'orcoma_chat_interacted';
 const BUBBLE_INITIAL_DELAY = 2000;
