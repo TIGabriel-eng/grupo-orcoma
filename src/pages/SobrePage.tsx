@@ -40,9 +40,9 @@ const diferenciais = [
 ];
 
 const diretores = [
-  { nome: 'João Albino Mascarenhas', cargo: 'Presidente', local: 'Orcoma Itaberaba', imagem: '/Joao-Albino.jpg' },
+  { nome: 'João Albino Mascarenhas', cargo: 'Presidente', local: 'Orcoma Itaberaba', imagem: '/Joao-Albino.png' },
   { nome: 'Jacson Mascarenhas', cargo: 'Vice-presidente | Diretor', local: 'Orcoma Maracás', imagem: '/jackson.png' },
-  { nome: 'Marcelo Mascarenhas', cargo: 'Diretor', local: 'Orcoma Maracás', imagem: '/marcelo.png' },
+  { nome: 'Marcelo Mascarenhas', cargo: 'Diretor', local: 'Orcoma Itaberaba', imagem: '/marcelo.png' },
   { nome: 'Jaciane', cargo: 'Diretora jurídica', local: 'Geral', imagem: '/jaciane.png' },
   { nome: 'Caio Vivas', cargo: 'Diretor', local: 'Orcoma Feira de Santana', imagem: '/caio.png' },
   { nome: 'Salvador Rios', cargo: 'Diretor', local: 'Orcoma', imagem: '/Salvador.png' },
@@ -679,9 +679,9 @@ export default function SobrePage() {
     <div className="relative reveal">
       <div className="marquee-track py-4">
         {[...diretores, ...diretores].map((d, i) => (
-          <div key={i} className="flex flex-col items-center w-[13rem] sm:w-[17.25rem] md:w-[20.7rem] mx-2 sm:mx-4 flex-shrink-0">
-            <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden mb-3 bg-gray-100 shadow-lg">
-              <img src={d.imagem} alt={d.nome} className="w-full h-full object-cover" loading="lazy" />
+          <div key={i} className="flex flex-col items-center w-[16.9rem] sm:w-[22.425rem] md:w-[26.91rem] mx-2 sm:mx-4 flex-shrink-0">
+            <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden mb-3">
+              <img src={d.imagem} alt={d.nome} className="w-full h-full object-cover" loading="lazy" style={d.nome === 'Jaciane' ? { transform: 'translateY(1.5rem)' } : undefined} />
             </div>
             <div className="w-full rounded-xl p-3 sm:p-[1.15rem] text-center" style={{ background: '#0924a7' }}>
               <p className="font-bold text-white text-[0.95rem] sm:text-[1.15rem]">{d.nome}</p>

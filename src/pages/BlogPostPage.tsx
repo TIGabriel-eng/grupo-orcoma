@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Calendar, ArrowLeft, User } from 'lucide-react';
 import PageNav from '../components/PageNav';
 import Footer from '../components/Footer';
 import WhatsAppToggle from '../components/WhatsAppToggle';
 import BlogLeadForm from '../components/BlogLeadForm';
 import BlogCtaCard from '../components/BlogCtaCard';
+import BlogPostIndex from '../components/BlogPostIndex';
+import { prepararConteudo } from '../utils/blogContent';
 import { useNav } from '../context/NavContext';
 
 interface PostDetalhe {
@@ -21,18 +23,17 @@ interface PostDetalhe {
 const BLUE = 'linear-gradient(160deg, #0c0ccc 0%, #1a1aff 50%, #0000b3 100%)';
 const GOLD = '#e8b800';
 
-function formatarConteudo(conteudo: string): string {
-  return conteudo
-    .split('\n\n')
-    .map((paragrafo) => `<p>${paragrafo.replace(/\n/g, '<br/>')}</p>`)
-    .join('');
-}
-
 export default function BlogPostPage() {
   const { activePostSlug, navigate } = useNav();
   const [post, setPost] = useState<PostDetalhe | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [ativoId, setAtivoId] = useState<string | null>(null);
+
+  const { indice, html } = useMemo(
+    () => (post ? prepararConteudo(post.conteudo) : { indice: [], html: '' }),
+    [post],
+  );
 
   useEffect(() => {
     if (!activePostSlug) {
@@ -69,6 +70,27 @@ export default function BlogPostPage() {
       active = false;
     };
   }, [activePostSlug]);
+
+  useEffect(() => {
+    if (!post) return;
+    const artigo = document.getElementById('artigo-conteudo');
+    if (!artigo) return;
+
+    const titulos = artigo.querySelectorAll<HTMLElement>('h1[id], h2[id], h3[id]');
+    if (titulos.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setAtivoId(entry.target.id);
+        });
+      },
+      { rootMargin: '-30% 0px -62% 0px' },
+    );
+
+    titulos.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [post]);
 
   if (loading) {
     return (
@@ -149,7 +171,13 @@ export default function BlogPostPage() {
 
       {/* ── Conteúdo do artigo ── */}
       <section className="bg-white py-14 sm:py-20 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-10 lg:gap-14 items-start">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[240px_minmax(0,1fr)_280px] gap-8 lg:gap-10 items-start">
+          <aside className="w-full max-w-md mx-auto lg:max-w-none lg:shrink-0">
+            <div className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
+              <BlogPostIndex indice={indice} ativoId={ativoId} />
+            </div>
+          </aside>
+
           <div className="min-w-0">
             {post.imagem && (
               <div className="rounded-2xl overflow-hidden shadow-lg mb-10 reveal">
@@ -158,9 +186,10 @@ export default function BlogPostPage() {
             )}
 
             <article
-              className="text-gray-700 leading-relaxed"
+              id="artigo-conteudo"
+              className="blog-article text-gray-700 leading-relaxed"
               style={{ fontSize: '1.0625rem' }}
-              dangerouslySetInnerHTML={{ __html: formatarConteudo(post.conteudo) }}
+              dangerouslySetInnerHTML={{ __html: html }}
             />
 
             <div className="mt-12">
@@ -168,7 +197,11 @@ export default function BlogPostPage() {
             </div>
           </div>
 
-          <BlogCtaCard />
+          <aside className="w-full max-w-md mx-auto lg:max-w-none lg:w-[280px] lg:shrink-0">
+            <div className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
+              <BlogCtaCard />
+            </div>
+          </aside>
         </div>
       </section>
 
