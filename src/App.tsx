@@ -14,7 +14,9 @@ import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
 import EspecialidadesPage from './pages/EspecialidadesPage';
 import AcademyBusinessPage from './pages/AcademyBusinessPage';
+import PoliticaPrivacidadePage from './pages/PoliticaPrivacidadePage';
 import WhatsAppModal from './components/WhatsAppModal';
+import CookieConsentBanner from './components/CookieConsentBanner';
 
 function Router() {
   const { page } = useNav();
@@ -30,6 +32,7 @@ function Router() {
   if (page === 'blog-post') return <BlogPostPage />;
   if (page === 'especialidades') return <EspecialidadesPage />;
   if (page === 'academy-business') return <AcademyBusinessPage />;
+  if (page === 'politica-privacidade') return <PoliticaPrivacidadePage />;
   return <HomePage />;
 }
 
@@ -40,6 +43,7 @@ export default function App() {
         <ClienteProvider>
           <Router />
           <WhatsAppModal />
+          <CookieConsentBanner />
         </ClienteProvider>
       </WhatsAppProvider>
     </NavProvider>

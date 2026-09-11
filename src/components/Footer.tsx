@@ -175,7 +175,7 @@ export default function Footer() {
           <span className="text-gray-300 hidden sm:inline">|</span>
           <span className="text-gray-500 text-xs">Todos os direitos reservados</span>
           <span className="text-gray-300 hidden sm:inline">|</span>
-          <a href="#" className="text-gray-500 text-xs hover:text-gray-800 transition-colors">Política de Privacidade</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); navigate('politica-privacidade'); }} className="text-gray-500 text-xs hover:text-gray-800 transition-colors">Política de Privacidade</a>
           <span className="text-gray-300 hidden sm:inline">|</span>
           <span className="text-gray-500 text-xs">Criado com 💙 por</span>
           <span className="relative inline-block">

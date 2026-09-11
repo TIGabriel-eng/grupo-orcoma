@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 
-export type Page = 'home' | 'contato' | 'solucoes' | 'sobre' | 'login' | 'eventos' | 'trabalhe-conosco' | 'blog' | 'blog-post' | 'especialidades' | 'academy-business';
+export type Page = 'home' | 'contato' | 'solucoes' | 'sobre' | 'login' | 'eventos' | 'trabalhe-conosco' | 'blog' | 'blog-post' | 'especialidades' | 'academy-business' | 'politica-privacidade';
 
 interface NavContextValue {
   page: Page;
@@ -22,7 +22,7 @@ const NavContext = createContext<NavContextValue>({
   navigateToEspecialidades: () => {},
 });
 
-const ALL_PAGES: Page[] = ['home', 'contato', 'solucoes', 'sobre', 'login', 'eventos', 'trabalhe-conosco', 'blog', 'blog-post', 'especialidades', 'academy-business'];
+const ALL_PAGES: Page[] = ['home', 'contato', 'solucoes', 'sobre', 'login', 'eventos', 'trabalhe-conosco', 'blog', 'blog-post', 'especialidades', 'academy-business', 'politica-privacidade'];
 
 function isPage(value: string): value is Page {
   return (ALL_PAGES as string[]).includes(value);
