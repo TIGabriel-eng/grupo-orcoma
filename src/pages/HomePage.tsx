@@ -92,6 +92,7 @@ const diferenciais = [
     icon: UserCheck,
     title: 'Atendimento humanizado',
     description: 'Pessoas reais cuidando da sua gestão. Priorizamos o relacionamento próximo e personalizado para entender e resolver cada situação.',
+    destaque: true,
   },
   {
     icon: Shield,
@@ -254,13 +255,13 @@ export default function HomePage() {
             </h2>
             <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
               {diferenciais.map((item) => (
-                <div key={item.title} className="bg-gray-100 rounded-2xl p-5 sm:p-6 flex gap-4 items-start reveal" style={{ '--reveal-delay': `${diferenciais.indexOf(item) * 90}ms` } as React.CSSProperties}>
+                <div key={item.title} className={`rounded-2xl p-5 sm:p-6 flex gap-4 items-start reveal ${item.destaque ? 'bg-[#0f0fd8]' : 'bg-gray-100'}`} style={{ '--reveal-delay': `${diferenciais.indexOf(item) * 90}ms` } as React.CSSProperties}>
                   <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#e8b800' }}>
                     <item.icon size={20} color="#000" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 mb-1 text-sm sm:text-base">{item.title}</h3>
-                    <p className="text-gray-500 text-xs sm:text-sm leading-relaxed">{item.description}</p>
+                    <h3 className={`font-bold mb-1 text-sm sm:text-base ${item.destaque ? 'text-[#e8b800]' : 'text-gray-900'}`}>{item.title}</h3>
+                    <p className={`text-xs sm:text-sm leading-relaxed ${item.destaque ? 'text-white' : 'text-gray-500'}`}>{item.description}</p>
                   </div>
                 </div>
               ))}
