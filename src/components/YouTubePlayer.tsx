@@ -127,13 +127,14 @@ export default function YouTubePlayer({
           title=""
           allow="autoplay; encrypted-media"
           tabIndex={-1}
-          style={iframeClassName ? { border: 'none' } : {
+          style={iframeClassName ? { border: 'none', pointerEvents: 'none' } : {
             position: 'absolute',
             top: 0,
             left: 0,
             width: '100%',
             height: '100%',
             border: 'none',
+            pointerEvents: 'none',
           }}
         />
       )}
