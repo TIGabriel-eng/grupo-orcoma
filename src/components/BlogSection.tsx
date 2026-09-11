@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Calendar } from 'lucide-react';
 import { useNav } from '../context/NavContext';
 import { apiUrl } from '../config/api';
+import { Skeleton } from './Skeleton';
+import SlowLoadingHint from './SlowLoadingHint';
 
 interface BlogPost {
   date: string;
@@ -13,6 +15,7 @@ interface BlogPost {
 
 export default function BlogSection() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
   const { openPost, navigate } = useNav();
 
   useEffect(() => {
@@ -39,6 +42,9 @@ export default function BlogSection() {
       })
       .catch((err) => {
         console.error('[BlogSection] Erro ao carregar posts:', err);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
       });
     return () => {
       active = false;
@@ -67,7 +73,21 @@ export default function BlogSection() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {posts.length === 0 ? (
+            {loading ? (
+              <>
+                {[0, 1, 2].map((i) => (
+                  <div key={i} className="flex flex-col gap-3">
+                    <Skeleton className="h-40 w-full rounded-xl" />
+                    <Skeleton className="h-3 w-24" />
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-3 w-full" />
+                  </div>
+                ))}
+                <div className="col-span-full">
+                  <SlowLoadingHint />
+                </div>
+              </>
+            ) : posts.length === 0 ? (
               <div className="col-span-full text-center py-12">
                 <p className="text-gray-500">Nenhum artigo publicado ainda.</p>
               </div>

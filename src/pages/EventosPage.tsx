@@ -6,6 +6,8 @@ import PageNav from '../components/PageNav';
 import Footer from '../components/Footer';
 import WhatsAppToggle from '../components/WhatsAppToggle';
 import { apiUrl } from '../config/api';
+import { Skeleton } from '../components/Skeleton';
+import SlowLoadingHint from '../components/SlowLoadingHint';
 
 const BLUE = 'linear-gradient(160deg, #0c0ccc 0%, #1a1aff 50%, #0000b3 100%)';
 
@@ -16,6 +18,7 @@ interface Evento {
   location: string;
   description: string;
   image: string;
+  link_inscricao: string;
 }
 
 export default function EventosPage() {
@@ -24,6 +27,7 @@ export default function EventosPage() {
   const [newsletterMsg, setNewsletterMsg] = useState<string | null>(null);
   const [newsletterStatus, setNewsletterStatus] = useState<'ok' | 'error' | null>(null);
   const [events, setEvents] = useState<Evento[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const handleNewsletter = () => {
     if (!email.trim()) {
@@ -58,13 +62,14 @@ export default function EventosPage() {
       .then((data) => {
         if (!active) return;
         const apiEvents: Evento[] = (Array.isArray(data.eventos) ? data.eventos : []).map(
-          (ev: { titulo: string; descricao: string; local: string; data: string; imagem: string }) => ({
+          (ev: { titulo: string; descricao: string; local: string; data: string; imagem: string; link_inscricao: string }) => ({
             title: ev.titulo,
             description: ev.descricao,
             location: ev.local,
             date: ev.data,
             dateColor: '#e8b800',
             image: ev.imagem,
+            link_inscricao: ev.link_inscricao || '',
           }),
         );
         if (apiEvents.length > 0) {
@@ -73,6 +78,9 @@ export default function EventosPage() {
       })
       .catch((err) => {
         console.error('[EventosPage] Erro ao carregar eventos:', err);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
       });
     return () => {
       active = false;
@@ -146,7 +154,24 @@ export default function EventosPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-            {visibleEvents.length === 0 ? (
+            {loading ? (
+              <>
+                {[0, 1, 2].map((i) => (
+                  <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col">
+                    <Skeleton className="h-40 w-full rounded-none" />
+                    <div className="p-4 sm:p-5 flex flex-col gap-3 flex-1">
+                      <Skeleton className="h-4 w-3/4" />
+                      <Skeleton className="h-3 w-1/2" />
+                      <Skeleton className="h-3 w-full" />
+                      <Skeleton className="h-9 w-full rounded-xl mt-1" />
+                    </div>
+                  </div>
+                ))}
+                <div className="col-span-full">
+                  <SlowLoadingHint />
+                </div>
+              </>
+            ) : visibleEvents.length === 0 ? (
               <div className="col-span-full text-center py-16">
                 <p className="text-gray-500">Nenhum evento agendado no momento.</p>
               </div>
@@ -175,12 +200,15 @@ export default function EventosPage() {
                     <span className="text-xs">{ev.location}</span>
                   </div>
                   <p className="text-gray-500 text-xs leading-relaxed flex-1">{ev.description}</p>
-                  <button
-                    className="w-full mt-2 py-2.5 rounded-xl text-white text-xs font-bold transition-all hover:brightness-110"
-                    style={{ background: '#0c0ccc' }}
-                  >
-                    Inscrever-se
-                  </button>
+                  {ev.link_inscricao && (
+                    <button
+                      onClick={() => window.open(ev.link_inscricao, '_blank', 'noopener,noreferrer')}
+                      className="w-full mt-2 py-2.5 rounded-xl text-white text-xs font-bold transition-all hover:brightness-110"
+                      style={{ background: '#0c0ccc' }}
+                    >
+                      Inscrever-se
+                    </button>
+                  )}
                 </div>
               </div>
               ))

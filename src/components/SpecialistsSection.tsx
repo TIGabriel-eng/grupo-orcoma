@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { MapPin, ArrowRight } from 'lucide-react';
 import { apiUrl } from '../config/api';
 import { useNav } from '../context/NavContext';
+import { Skeleton } from './Skeleton';
+import SlowLoadingHint from './SlowLoadingHint';
 
 interface CityInfo {
   name: string;
@@ -125,9 +127,19 @@ export default function SpecialistsSection() {
 
           <div className="bg-white rounded-2xl shadow-sm p-4 sm:p-8">
             {loading ? (
-              <div className="text-center py-12">
-                <p className="text-gray-500">Carregando especialidades...</p>
-              </div>
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 sm:gap-6">
+                  {[0, 1, 2, 3, 4, 5].map((i) => (
+                    <div key={i} className="flex flex-col gap-3">
+                      <Skeleton className="h-40 w-full rounded-xl" />
+                      <Skeleton className="h-4 w-3/4" />
+                      <Skeleton className="h-3 w-full" />
+                      <Skeleton className="h-3 w-2/3" />
+                    </div>
+                  ))}
+                </div>
+                <SlowLoadingHint />
+              </>
             ) : especialidades.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-gray-500">Nenhuma especialidade cadastrada no momento.</p>

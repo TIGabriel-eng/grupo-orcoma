@@ -6,6 +6,8 @@ import WhatsAppToggle from '../components/WhatsAppToggle';
 import BlogCtaCard from '../components/BlogCtaCard';
 import { useNav } from '../context/NavContext';
 import { apiUrl } from '../config/api';
+import { Skeleton } from '../components/Skeleton';
+import SlowLoadingHint from '../components/SlowLoadingHint';
 
 interface BlogPost {
   titulo: string;
@@ -100,6 +102,7 @@ function PostCard({
 export default function BlogPage() {
   const { openPost, navigate } = useNav();
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
   const [novidadesAtivo, setNovidadesAtivo] = useState(false);
   const [query, setQuery] = useState('');
   const [newsNome, setNewsNome] = useState('');
@@ -165,6 +168,9 @@ export default function BlogPage() {
       })
       .catch((err) => {
         console.error('[BlogPage] Erro ao carregar posts:', err);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
       });
     return () => {
       active = false;
@@ -240,7 +246,39 @@ export default function BlogPage() {
       <main className="max-w-[1440px] mx-auto px-6 py-12">
         <div className="lg:grid lg:grid-cols-[1fr_auto] lg:gap-16">
           <div className="min-w-0">
-            {filtered.length === 0 ? (
+            {loading ? (
+              <>
+                <div className="mb-10">
+                  <div className="bg-white rounded-2xl overflow-hidden flex flex-col md:flex-row" style={{ border: '1px solid #E9E9F2' }}>
+                    <Skeleton className="md:w-1/2 w-full rounded-none" style={{ minHeight: '260px' }} />
+                    <div className="flex flex-col gap-3 p-6 md:w-1/2 md:p-8">
+                      <Skeleton className="h-3 w-24" />
+                      <Skeleton className="h-6 w-full" />
+                      <Skeleton className="h-6 w-3/4" />
+                      <Skeleton className="h-4 w-full mt-1" />
+                      <Skeleton className="h-4 w-5/6" />
+                      <Skeleton className="h-9 w-32 rounded-full" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[0, 1, 2].map((i) => (
+                    <div key={i} className="bg-white rounded-2xl overflow-hidden flex flex-col" style={{ border: '1px solid #E9E9F2' }}>
+                      <Skeleton className="w-full rounded-none" style={{ aspectRatio: '16/11' }} />
+                      <div className="flex flex-col gap-3 p-6">
+                        <Skeleton className="h-3 w-24" />
+                        <Skeleton className="h-5 w-full" />
+                        <Skeleton className="h-4 w-full" />
+                        <Skeleton className="h-9 w-28 rounded-full" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <SlowLoadingHint />
+              </>
+            ) : filtered.length === 0 ? (
               <div className="text-center py-24" style={{ color: '#6B6B85' }}>
                 <p className="font-semibold mb-1">Nenhum artigo encontrado.</p>
                 <p className="text-sm">Tente outra busca.</p>

@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { apiUrl } from '../config/api';
 import { X } from 'lucide-react';
 import OrcomaLogo from './OrcomaLogo';
+import { Skeleton } from './Skeleton';
+import SlowLoadingHint from './SlowLoadingHint';
 
 interface Ebook {
   titulo: string;
@@ -14,6 +16,7 @@ export default function MaterialsSection() {
   const [expanded, setExpanded] = useState(false);
   const [showEbooks, setShowEbooks] = useState(false);
   const [ebooks, setEbooks] = useState<Ebook[]>([]);
+  const [loading, setLoading] = useState(true);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -22,7 +25,8 @@ export default function MaterialsSection() {
       .then((data) => setEbooks(Array.isArray(data.ebooks) ? data.ebooks : []))
       .catch((err) => {
         console.error('[MaterialsSection] Erro ao carregar ebooks:', err);
-      });
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -210,7 +214,21 @@ export default function MaterialsSection() {
               </button>
             </div>
 
-            {ebooks.length === 0 ? (
+            {loading ? (
+              <div className="flex flex-col gap-3">
+                {[0, 1, 2].map((i) => (
+                  <div key={i} className="flex items-center gap-3 p-3 rounded-xl border border-gray-100">
+                    <div className="flex-1 min-w-0">
+                      <Skeleton className="h-4 w-2/3" />
+                      <Skeleton className="h-3 w-full mt-2" />
+                      <Skeleton className="h-3 w-1/3 mt-2" />
+                    </div>
+                    <Skeleton className="h-8 w-20 rounded-lg flex-shrink-0" />
+                  </div>
+                ))}
+                <SlowLoadingHint />
+              </div>
+            ) : ebooks.length === 0 ? (
               <p className="text-sm text-gray-500 py-8 text-center">Nenhum ebook disponível no momento.</p>
             ) : (
               <div className="flex flex-col gap-3">

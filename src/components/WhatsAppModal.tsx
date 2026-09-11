@@ -389,7 +389,7 @@ export default function WhatsAppModal() {
         onClick={() => (isOpen ? handleClose() : handleOpen())}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110"
         style={{ background: '#25D366' }}
-        aria-label={isOpen ? 'Fechar' : 'Falar com a Ana'}
+        aria-label={isOpen ? 'Fechar' : 'Falar com um Consultor(a)'}
       >
         {isOpen ? <X size={26} className="text-white" /> : <Headset size={26} className="text-white" />}
       </button>

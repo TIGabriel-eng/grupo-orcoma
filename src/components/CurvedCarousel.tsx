@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { apiUrl } from '../config/api';
+import { Skeleton } from './Skeleton';
+import SlowLoadingHint from './SlowLoadingHint';
 
 interface SobreNosFoto {
   id: number;
@@ -24,6 +26,7 @@ function getCardWidth(): string {
 
 export default function CurvedCarousel() {
   const [fotos, setFotos] = useState<SobreNosFoto[]>([]);
+  const [loading, setLoading] = useState(true);
   const [cardWidth, setCardWidth] = useState(CARD_WIDTH_DESKTOP);
 
   useEffect(() => {
@@ -47,11 +50,29 @@ export default function CurvedCarousel() {
       })
       .catch((err) => {
         console.error('[CurvedCarousel] Erro ao carregar fotos do Sobre Nós:', err);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
       });
     return () => {
       cancelled = true;
     };
   }, []);
+
+  if (loading) {
+    return (
+      <div className="scene">
+        <div className="flex flex-col items-center py-10">
+          <div className="flex gap-4">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <Skeleton key={i} className="w-40 h-56 rounded-2xl" />
+            ))}
+          </div>
+          <SlowLoadingHint />
+        </div>
+      </div>
+    );
+  }
 
   if (fotos.length === 0) return null;
 

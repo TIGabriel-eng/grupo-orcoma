@@ -55,7 +55,7 @@ export default function WhatsAppToggle() {
         onClick={() => setOpen(!open)}
         className="w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110"
         style={{ background: '#25D366' }}
-        aria-label={open ? 'Fechar' : 'Falar com a Ana no WhatsApp'}
+        aria-label={open ? 'Fechar' : 'Falar com um Consultor(a) no WhatsApp'}
       >
         {open ? <X size={26} className="text-white" /> : <Headset size={26} className="text-white" />}
       </button>

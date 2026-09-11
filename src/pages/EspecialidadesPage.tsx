@@ -6,6 +6,8 @@ import WhatsAppToggle from '../components/WhatsAppToggle';
 import { useNav } from '../context/NavContext';
 import { useWhatsApp } from '../context/WhatsAppContext';
 import { apiUrl } from '../config/api';
+import { Skeleton } from '../components/Skeleton';
+import SlowLoadingHint from '../components/SlowLoadingHint';
 
 interface Especialidade {
   id: number;
@@ -122,11 +124,19 @@ export default function EspecialidadesPage() {
     return (
       <div className="min-h-screen" style={{ background: BLUE }}>
         <PageNav activePage="especialidades" showConsultor={false} />
-        <div className="min-h-[60vh] flex items-center justify-center">
-          <div
-            className="w-12 h-12 rounded-full border-4 border-t-transparent animate-spin"
-            style={{ borderColor: GOLD, borderTopColor: 'transparent' }}
-          />
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 sm:gap-6">
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="flex flex-col gap-3">
+                <Skeleton className="h-40 w-full rounded-xl" />
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-3 w-full" />
+              </div>
+            ))}
+          </div>
+          <div className="mt-6">
+            <SlowLoadingHint />
+          </div>
         </div>
         <Footer />
         <WhatsAppToggle />
@@ -213,7 +223,7 @@ export default function EspecialidadesPage() {
                 className="px-8 py-3.5 rounded-full text-sm font-bold uppercase tracking-wider transition-all hover:brightness-110 hover:scale-105"
                 style={{ background: GOLD, color: '#000' }}
               >
-                Falar com a Ana
+                Falar com um Consultor(a)
               </button>
             </div>
           </div>

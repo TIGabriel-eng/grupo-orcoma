@@ -2,7 +2,7 @@ import { apiUrl } from './api';
 
 export const attendantConfig = {
   name: 'Ana',
-  whatsappUrl: 'https://wa.me/557399747460?text=Ol%C3%A1%2C%20gostaria%20de%20conversar%20com%20a%20Ana',
+  whatsappUrl: 'https://wa.me/557399747460?text=Ol%C3%A1%2C%20gostaria%20de%20conversar%20com%20um%20Consultor(a)%20Orcoma%21',
 };
 
 export const buildWhatsAppUrl = (text: string) =>

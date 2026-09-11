@@ -189,7 +189,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
             className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:brightness-110 hover:scale-105"
             style={{ background: '#e8b800', color: '#000' }}
           >
-            Falar com a Ana
+            Falar com um Consultor(a)
           </button>
         )}
       </div>
@@ -292,7 +292,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
               className="px-6 py-2.5 rounded-full text-sm font-semibold transition-all hover:brightness-110"
               style={{ background: '#e8b800', color: '#000' }}
             >
-              Falar com a Ana
+              Falar com um Consultor(a)
             </button>
           )}
         </nav>

@@ -9,6 +9,8 @@ import BlogPostIndex from '../components/BlogPostIndex';
 import { prepararConteudo } from '../utils/blogContent';
 import { useNav } from '../context/NavContext';
 import { apiUrl } from '../config/api';
+import { Skeleton } from '../components/Skeleton';
+import SlowLoadingHint from '../components/SlowLoadingHint';
 
 interface PostDetalhe {
   titulo: string;
@@ -98,11 +100,20 @@ export default function BlogPostPage() {
     return (
       <div className="min-h-screen" style={{ background: BLUE }}>
         <PageNav activePage="blog-post" showConsultor={false} />
-        <div className="min-h-[60vh] flex items-center justify-center">
-          <div
-            className="w-12 h-12 rounded-full border-4 border-t-transparent animate-spin"
-            style={{ borderColor: GOLD, borderTopColor: 'transparent' }}
-          />
+        <div className="min-h-[60vh] flex items-start justify-center px-4 py-12">
+          <div className="w-full max-w-3xl bg-white rounded-2xl p-8 sm:p-10 flex flex-col gap-4 shadow-lg">
+            <Skeleton className="h-9 w-3/4" />
+            <Skeleton className="h-4 w-44" />
+            <div className="flex flex-col gap-3 mt-4">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-2/3" />
+            </div>
+            <Skeleton className="h-64 w-full rounded-xl mt-2" />
+            <SlowLoadingHint />
+          </div>
         </div>
         <Footer />
         <WhatsAppToggle />
@@ -222,7 +233,7 @@ export default function BlogPostPage() {
               className="px-8 py-3.5 rounded-full text-sm font-bold uppercase tracking-wider transition-all hover:brightness-110 hover:scale-105"
               style={{ background: GOLD, color: '#000' }}
             >
-              Falar com a Ana
+              Falar com um Consultor(a)
             </button>
             <button
               onClick={() => navigate('blog')}
