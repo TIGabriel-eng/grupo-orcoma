@@ -180,7 +180,7 @@ export default function HomePage() {
               {serviceCards.map((card, index) => (
                 <div key={card.title} className={`reveal ${index === 1 ? 'md:-mt-8' : ''}`}>
                   <div
-                    className={`rounded-xl p-5 sm:p-6 flex flex-col gap-4 h-full transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl ${index === 1 ? 'bg-[#0c0ccc]' : 'bg-gray-200'}`}
+                    className={`rounded-xl p-5 sm:p-6 flex flex-col gap-4 h-full transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl ${index === 1 ? 'bg-[linear-gradient(160deg,rgb(12,12,204)_0%,rgb(26,26,255)_50%,rgb(0,0,179)_100%)]' : 'bg-gray-200'}`}
                     style={{
                       '--reveal-delay': `${index * 100}ms`,
                     } as React.CSSProperties}
@@ -196,7 +196,7 @@ export default function HomePage() {
                         Saiba mais
                       </button>
                     ) : (
-                      <a href="#" className="self-center px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all hover:brightness-110" style={{ background: '#0c0ccc', color: '#fff' }}>
+                      <a href="#" className="self-center px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all hover:brightness-110" style={{ background: 'linear-gradient(160deg, rgb(12, 12, 204) 0%, rgb(26, 26, 255) 50%, rgb(0, 0, 179) 100%)', color: '#fff' }}>
                         Saiba mais
                       </a>
                     )}
@@ -255,7 +255,7 @@ export default function HomePage() {
             </h2>
             <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
               {diferenciais.map((item) => (
-                <div key={item.title} className={`rounded-2xl p-5 sm:p-6 flex gap-4 items-start reveal ${item.destaque ? 'bg-[#0f0fd8]' : 'bg-gray-100'}`} style={{ '--reveal-delay': `${diferenciais.indexOf(item) * 90}ms` } as React.CSSProperties}>
+                <div key={item.title} className={`rounded-2xl p-5 sm:p-6 flex gap-4 items-start reveal ${item.destaque ? 'bg-[linear-gradient(160deg,rgb(12,12,204)_0%,rgb(26,26,255)_50%,rgb(0,0,179)_100%)]' : 'bg-gray-100'}`} style={{ '--reveal-delay': `${diferenciais.indexOf(item) * 90}ms` } as React.CSSProperties}>
                   <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#e8b800' }}>
                     <item.icon size={20} color="#000" />
                   </div>
@@ -276,7 +276,7 @@ export default function HomePage() {
       <ServicesOrbital />
       <SpecialistsSection />
       <ReviewsSection />
-      <div style={{ background: 'rgb(5, 16, 102)' }}>
+      <div style={{ background: 'linear-gradient(160deg, rgb(12, 12, 204) 0%, rgb(26, 26, 255) 50%, rgb(0, 0, 179) 100%)' }}>
         <MaterialsSection />
         <BlogSection />
         <CalculadoraRiscoFiscal />

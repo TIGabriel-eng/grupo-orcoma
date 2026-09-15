@@ -180,7 +180,7 @@ export default function CalculadoraRiscoFiscal() {
   return (
     <section
       className="py-14 sm:py-20 px-4 sm:px-6"
-      style={{ background: 'linear-gradient(to bottom, #051066 0%, #051066 56%, #FFFFFF 56%, #FFFFFF 100%)' }}
+      style={{ background: 'linear-gradient(to bottom, rgb(12, 12, 204) 0%, rgb(26, 26, 255) 28%, rgb(0, 0, 179) 56%, #FFFFFF 56%, #FFFFFF 100%)' }}
     >
       <style>{`
         .risk-slider {
@@ -347,7 +347,7 @@ export default function CalculadoraRiscoFiscal() {
             <div className="flex flex-col gap-4 md:col-span-1">
               <div
                 className="rounded-2xl text-center py-8 px-5"
-                style={{ background: 'linear-gradient(135deg, #1e3a5f 0%, #2a5298 100%)' }}
+                style={{ background: 'linear-gradient(160deg, rgb(12, 12, 204) 0%, rgb(26, 26, 255) 50%, rgb(0, 0, 179) 100%)' }}
               >
                 <span className="block text-[11px] font-bold tracking-[2px] text-white/60 uppercase mb-3">
                   Exposição Estimada / Mês
