@@ -45,13 +45,144 @@ const diretores = [
   { nome: 'Marcelo Mascarenhas', cargo: 'Diretor', local: 'Orcoma Itaberaba', imagem: '/marcelo.png' },
   { nome: 'Jaciane', cargo: 'Diretora jurídica', local: 'Geral', imagem: '/jaciane.png' },
   { nome: 'Caio Vivas', cargo: 'Diretor', local: 'Orcoma Feira de Santana', imagem: '/caio.png' },
-  { nome: 'Salvador Rios', cargo: 'Diretor', local: 'Orcoma', imagem: '/Salvador.png' },
+  { nome: 'Salvador Rios', cargo: 'Diretor', local: 'Orcoma Jequié', imagem: '/Salvador.png' },
   { nome: 'Megali', cargo: 'Diretora', local: 'Orcoma', imagem: '/magali.png' },
-  { nome: 'Sidnéia', cargo: 'Diretora', local: 'Orcoma', imagem: '/Sidneia.png' },
-  { nome: 'Michela', cargo: 'Diretora', local: 'Orcoma Jaguaquara', imagem: '/Michele.png' },
-  { nome: 'Edmilson', cargo: 'Diretor', local: 'Orcoma Jequié', imagem: '/edmilson.png' },
-  { nome: 'Rodrigo', cargo: 'Diretor', local: 'Orcoma', imagem: '/Rodrigo.png' },
+  { nome: 'Sidnéia', cargo: 'Diretora', local: 'Orcoma Seabra', imagem: '/Sidneia.png' },
+  { nome: 'Michele', cargo: 'Diretora', local: 'Orcoma Jaguaquara', imagem: '/Michele.png' },
+  { nome: 'Edmilson', cargo: 'Diretor', local: 'Orcoma Jequié 2', imagem: '/edmilson.png' },
+  { nome: 'Rodrigo', cargo: 'Diretor', local: 'Orcoma Campo Formoso', imagem: '/Rodrigo.png' },
 ];
+
+const IDLE_RESUME_MS = 3000;
+const AUTO_SPEED_PX_S = 113;
+
+function DiretoresMarquee() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [dragging, setDragging] = useState(false);
+  const draggingRef = useRef(false);
+
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+
+    let paused = false;
+    let dragStartX = 0;
+    let dragStartScroll = 0;
+    let idleTimer: ReturnType<typeof setTimeout> | undefined;
+    let raf = 0;
+    let last = performance.now();
+
+    const resume = () => {
+      paused = false;
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = undefined;
+    };
+
+    const pause = (resumeAfter = IDLE_RESUME_MS) => {
+      paused = true;
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = setTimeout(resume, resumeAfter);
+    };
+
+    const half = () => el.scrollWidth / 2;
+
+    const loop = (t: number) => {
+      const dt = t - last;
+      last = t;
+      if (!paused && !draggingRef.current) {
+        el.scrollLeft += (dt / 1000) * AUTO_SPEED_PX_S;
+      }
+      if (!draggingRef.current) {
+        if (el.scrollLeft >= half()) el.scrollLeft -= half();
+        else if (el.scrollLeft <= 0) el.scrollLeft += half();
+      }
+      raf = requestAnimationFrame(loop);
+    };
+
+    const onPointerDown = (e: PointerEvent) => {
+      draggingRef.current = true;
+      setDragging(true);
+      dragStartX = e.clientX;
+      dragStartScroll = el.scrollLeft;
+      el.setPointerCapture(e.pointerId);
+      pause();
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (!draggingRef.current) return;
+      el.scrollLeft = dragStartScroll - (e.clientX - dragStartX);
+    };
+
+    const onPointerUpOrCancel = () => {
+      draggingRef.current = false;
+      setDragging(false);
+      if (el.scrollLeft >= half()) el.scrollLeft -= half();
+      else if (el.scrollLeft <= 0) el.scrollLeft += half();
+      pause();
+    };
+
+    const onWheel = () => pause();
+    const onTouchStart = () => pause();
+
+    raf = requestAnimationFrame(loop);
+    el.addEventListener('pointerdown', onPointerDown);
+    el.addEventListener('pointermove', onPointerMove);
+    el.addEventListener('pointerup', onPointerUpOrCancel);
+    el.addEventListener('pointercancel', onPointerUpOrCancel);
+    el.addEventListener('wheel', onWheel);
+    el.addEventListener('touchstart', onTouchStart);
+    el.addEventListener('mouseenter', () => pause());
+
+    return () => {
+      cancelAnimationFrame(raf);
+      if (idleTimer) clearTimeout(idleTimer);
+      el.removeEventListener('pointerdown', onPointerDown);
+      el.removeEventListener('pointermove', onPointerMove);
+      el.removeEventListener('pointerup', onPointerUpOrCancel);
+      el.removeEventListener('pointercancel', onPointerUpOrCancel);
+      el.removeEventListener('wheel', onWheel);
+      el.removeEventListener('touchstart', onTouchStart);
+    };
+  }, []);
+
+  return (
+    <div className="relative reveal">
+      <div
+        ref={trackRef}
+        className="marquee-track py-4"
+        style={{
+          display: 'flex',
+          width: '100%',
+          overflowX: 'auto',
+          overflowY: 'hidden',
+          scrollbarWidth: 'none',
+          cursor: dragging ? 'grabbing' : 'grab',
+          touchAction: 'manipulate',
+          WebkitOverflowScrolling: 'touch',
+        }}
+      >
+        {[...diretores, ...diretores].map((d, i) => (
+          <div key={i} className="flex flex-col items-center w-[16.9rem] sm:w-[22.425rem] md:w-[26.91rem] mx-2 sm:mx-4 flex-shrink-0" style={{ userSelect: 'none' }}>
+            <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden mb-3">
+              <img src={d.imagem} alt={d.nome} className="w-full h-full object-cover" loading="lazy" draggable={false} style={d.nome === 'Jaciane' ? { transform: 'translateY(1.5rem)' } : undefined} />
+            </div>
+            <div className="w-full rounded-xl p-3 sm:p-[1.15rem] text-center" style={{ background: '#0924a7' }}>
+              <p className="font-bold text-white text-[0.95rem] sm:text-[1.15rem]">{d.nome}</p>
+              <p className="text-[0.85rem] sm:text-[1.01rem] mt-0.5" style={{ color: 'rgba(255,255,255,0.7)' }}>{d.cargo}</p>
+              <p className="text-[0.85rem] sm:text-[1.01rem] mt-0.5 font-semibold" style={{ color: '#e8b800' }}>{d.local}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <style>{`
+        .marquee-track::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+    </div>
+  );
+}
 
 function CurtainCard({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -564,24 +695,7 @@ export default function SobrePage() {
 
       {/* ── GRUPO ORCOMA Animado ── */}
       <section className="relative pt-10 sm:pt-14 pb-4 sm:pb-8 px-4 sm:px-6 flex items-center justify-center bg-white overflow-hidden">
-        <div
-          className="absolute inset-0 flex items-center justify-center select-none pointer-events-none"
-          style={{ zIndex: 0 }}
-        >
-          <span
-            className="font-extrabold leading-none"
-            style={{
-              fontSize: 'clamp(5rem, 20vw, 14rem)',
-              color: '#060660',
-              opacity: 0.1,
-              letterSpacing: '0.15em',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            TIME
-          </span>
-        </div>
-        <div className="text-center relative" style={{ zIndex: 1 }}>
+        <div className="text-center relative">
           <h2
             className="font-extrabold leading-none tracking-tight mb-6"
             style={{
@@ -600,24 +714,13 @@ export default function SobrePage() {
             >
               Diretoria
             </span>
+          </div>
+          <div className="mt-6 flex justify-center">
             <span
-              className="absolute left-1/2 top-1/2 select-none pointer-events-none"
-              style={{
-                fontFamily: "'Great Vibes', cursive",
-                background: 'linear-gradient(90deg, #0924a7 0%, #6f87e0 45%, #ffffff 100%)',
-                backgroundSize: '100% auto',
-                WebkitBackgroundClip: 'text',
-                backgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                color: 'transparent',
-                fontSize: 'clamp(4.2rem, 11.1vw, 7.6rem)',
-                lineHeight: 1,
-                transform: 'translate(-50%, -5%)',
-                whiteSpace: 'nowrap',
-                textShadow: '0 1px 3px rgba(9, 36, 167, 0.35)',
-              }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold select-none"
+              style={{ background: 'rgba(9,36,167,0.08)', color: '#0924a7', border: '1px solid rgba(9,36,167,0.2)' }}
             >
-              Orcoma
+              Arraste com o mouse/touch
             </span>
           </div>
           <style>{`
@@ -657,42 +760,8 @@ export default function SobrePage() {
       </section>
       
       {/* ── Diretoria Orcoma ── */}
-<section className="pt-0 sm:pt-0 pb-14 sm:pb-20 px-4 sm:px-6 bg-white overflow-hidden">
-  <div className="max-w-5xl mx-auto">
-
-    <style>{`
-      @keyframes marquee-diretoria {
-        from { transform: translateX(0); }
-        to { transform: translateX(-50%); }
-      }
-      .marquee-track {
-        display: flex;
-        width: max-content;
-        animation: marquee-diretoria 45s linear infinite;
-      }
-      .marquee-track:hover {
-        animation-play-state: paused;
-      }
-    `}</style>
-
-    {/* Carrossel contínuo de diretores */}
-    <div className="relative reveal">
-      <div className="marquee-track py-4">
-        {[...diretores, ...diretores].map((d, i) => (
-          <div key={i} className="flex flex-col items-center w-[16.9rem] sm:w-[22.425rem] md:w-[26.91rem] mx-2 sm:mx-4 flex-shrink-0">
-            <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden mb-3">
-              <img src={d.imagem} alt={d.nome} className="w-full h-full object-cover" loading="lazy" style={d.nome === 'Jaciane' ? { transform: 'translateY(1.5rem)' } : undefined} />
-            </div>
-            <div className="w-full rounded-xl p-3 sm:p-[1.15rem] text-center" style={{ background: '#0924a7' }}>
-              <p className="font-bold text-white text-[0.95rem] sm:text-[1.15rem]">{d.nome}</p>
-              <p className="text-[0.85rem] sm:text-[1.01rem] mt-0.5" style={{ color: 'rgba(255,255,255,0.7)' }}>{d.cargo}</p>
-              <p className="text-[0.85rem] sm:text-[1.01rem] mt-0.5 font-semibold" style={{ color: '#e8b800' }}>{d.local}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
+<section className="pt-0 sm:pt-0 pb-14 sm:pb-20 bg-white overflow-hidden">
+  <DiretoresMarquee />
 </section>
 
       <Footer />

@@ -157,7 +157,7 @@ export default function ServicesOrbital() {
               </clipPath>
             </defs>
             <image
-              href="/3.png"
+              href="/3-yellow.png"
               x={CX - CENTER_R * 1.9}
               y={CY - CENTER_R * 1.9}
               width={CENTER_R * 3.8}
