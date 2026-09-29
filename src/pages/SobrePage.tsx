@@ -42,11 +42,11 @@ const diferenciais = [
 const diretores = [
   { nome: 'João Albino Mascarenhas', cargo: 'Presidente', local: 'Orcoma Itaberaba', imagem: '/Joao-Albino.png' },
   { nome: 'Jacson Mascarenhas', cargo: 'Vice-presidente | Diretor', local: 'Orcoma Maracás', imagem: '/jackson.png' },
-  { nome: 'Marcelo Mascarenhas', cargo: 'Diretor', local: 'Orcoma Itaberaba', imagem: '/marcelo.png' },
+  { nome: 'Marcelo Mascarenhas', cargo: 'Diretor', local: 'Orcoma Itaberaba Pública', imagem: '/marcelo.png' },
   { nome: 'Jaciane', cargo: 'Diretora jurídica', local: 'Geral', imagem: '/jaciane.png' },
   { nome: 'Caio Vivas', cargo: 'Diretor', local: 'Orcoma Feira de Santana', imagem: '/caio.png' },
   { nome: 'Salvador Rios', cargo: 'Diretor', local: 'Orcoma Jequié', imagem: '/Salvador.png' },
-  { nome: 'Megali', cargo: 'Diretora', local: 'Orcoma', imagem: '/magali.png' },
+  { nome: 'Magali', cargo: 'Diretora', local: 'Orcoma Várzea Nova', imagem: '/magali.png' },
   { nome: 'Sidnéia', cargo: 'Diretora', local: 'Orcoma Seabra', imagem: '/Sidneia.png' },
   { nome: 'Michele', cargo: 'Diretora', local: 'Orcoma Jaguaquara', imagem: '/Michele.png' },
   { nome: 'Edmilson', cargo: 'Diretor', local: 'Orcoma Jequié 2', imagem: '/edmilson.png' },
@@ -163,8 +163,8 @@ function DiretoresMarquee() {
       >
         {[...diretores, ...diretores].map((d, i) => (
           <div key={i} className="flex flex-col items-center w-[16.9rem] sm:w-[22.425rem] md:w-[26.91rem] mx-2 sm:mx-4 flex-shrink-0" style={{ userSelect: 'none' }}>
-            <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden mb-3">
-              <img src={d.imagem} alt={d.nome} className="w-full h-full object-cover" loading="lazy" draggable={false} style={d.nome === 'Jaciane' ? { transform: 'translateY(1.5rem)' } : undefined} />
+            <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden mb-3 bg-white">
+              <img src={d.imagem} alt={d.nome} className="w-full h-full object-cover" loading="lazy" draggable={false} style={d.nome === 'Jaciane' ? { transform: 'translateY(1.5rem)' } : d.imagem === '/Joao-Albino.png' ? { transform: 'translateY(7%) scale(0.94, 0.94)' } : undefined} />
             </div>
             <div className="w-full rounded-xl p-3 sm:p-[1.15rem] text-center" style={{ background: '#0924a7' }}>
               <p className="font-bold text-white text-[0.95rem] sm:text-[1.15rem]">{d.nome}</p>
