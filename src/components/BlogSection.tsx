@@ -101,7 +101,7 @@ export default function BlogSection() {
               >
                 <div className="rounded-xl overflow-hidden bg-gray-100" style={{ height: '160px' }}>
                   {post.image ? (
-                    <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <img src={post.image} alt={post.title} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs font-semibold uppercase tracking-wider">
                       Grupo Orcoma

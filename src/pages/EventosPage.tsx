@@ -180,7 +180,7 @@ export default function EventosPage() {
               <div key={ev.title} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col reveal" style={{ '--reveal-delay': `${index * 90}ms` } as React.CSSProperties}>
                 <div className="relative" style={{ height: '160px' }}>
                   {ev.image ? (
-                    <img src={ev.image} alt={ev.title} className="w-full h-full object-cover" />
+                    <img src={ev.image} alt={ev.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs font-semibold uppercase tracking-wider bg-gray-100">
                       Grupo Orcoma

@@ -171,7 +171,7 @@ export default function SolucoesPage() {
               >
                 {imagem && (
                   <div className="solucao-photo relative w-full" style={{ aspectRatio: '4/3' }}>
-                    <img src={imagem} alt={title} className="w-full h-full object-cover" />
+                    <img src={imagem} alt={title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                     <span className="solucao-chevrão" aria-hidden="true" />
                   </div>
                 )}
