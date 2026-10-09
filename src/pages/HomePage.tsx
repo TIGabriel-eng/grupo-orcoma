@@ -270,9 +270,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Espaçador azul para overlapping inferior */}
-      <div style={{ background: 'linear-gradient(160deg, #0c0ccc 0%, #1a1aff 40%, #0000b3 100%)' }} className="h-16 sm:h-24"></div>
-
       <ServicesOrbital />
       <SpecialistsSection />
       <ReviewsSection />

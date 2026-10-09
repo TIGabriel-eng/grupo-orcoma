@@ -3,39 +3,39 @@ export default function OrcomaLogo() {
     <div className="flex justify-center -mt-40 mb-2">
       <style>{`
         @keyframes orbit-pulse {
-          0% { transform: scale(1); opacity: 0.6; }
-          50% { transform: scale(1.15); opacity: 0; }
-          100% { transform: scale(1); opacity: 0.6; }
+          0% { transform: scale(1); opacity: 0.5; }
+          50% { transform: scale(1.1); opacity: 0; }
+          100% { transform: scale(1); opacity: 0.5; }
         }
         @keyframes orbit-pulse2 {
-          0% { transform: scale(1); opacity: 0.5; }
-          50% { transform: scale(1.25); opacity: 0; }
-          100% { transform: scale(1); opacity: 0.5; }
+          0% { transform: scale(1); opacity: 0.45; }
+          50% { transform: scale(1.15); opacity: 0; }
+          100% { transform: scale(1); opacity: 0.45; }
         }
         @keyframes orbit-pulse3 {
           0% { transform: scale(1); opacity: 0.4; }
-          50% { transform: scale(1.35); opacity: 0; }
+          50% { transform: scale(1.2); opacity: 0; }
           100% { transform: scale(1); opacity: 0.4; }
         }
         @keyframes orbit-pulse4 {
           0% { transform: scale(1); opacity: 0.35; }
-          50% { transform: scale(1.45); opacity: 0; }
+          50% { transform: scale(1.25); opacity: 0; }
           100% { transform: scale(1); opacity: 0.35; }
         }
         @keyframes orbit-pulse5 {
           0% { transform: scale(1); opacity: 0.3; }
-          50% { transform: scale(1.5); opacity: 0; }
+          50% { transform: scale(1.3); opacity: 0; }
           100% { transform: scale(1); opacity: 0.3; }
         }
         @keyframes orbit-pulse6 {
-          0% { transform: scale(1); opacity: 0.25; }
-          50% { transform: scale(1.55); opacity: 0; }
-          100% { transform: scale(1); opacity: 0.25; }
+          0% { transform: scale(1); opacity: 0.28; }
+          50% { transform: scale(1.35); opacity: 0; }
+          100% { transform: scale(1); opacity: 0.28; }
         }
         @keyframes orbit-pulse7 {
-          0% { transform: scale(1); opacity: 0.2; }
-          50% { transform: scale(1.6); opacity: 0; }
-          100% { transform: scale(1); opacity: 0.2; }
+          0% { transform: scale(1); opacity: 0.25; }
+          50% { transform: scale(1.4); opacity: 0; }
+          100% { transform: scale(1); opacity: 0.25; }
         }
         .orbit-ring1 { animation: orbit-pulse 2s ease-in-out infinite; }
         .orbit-ring2 { animation: orbit-pulse2 2.5s ease-in-out infinite 0.3s; }
@@ -53,12 +53,12 @@ export default function OrcomaLogo() {
       `}</style>
       <div className="relative" style={{ zIndex: 20 }}>
         <div className="absolute inset-0 rounded-full orbit-ring1" style={{ border: '2px solid rgba(255,255,255,0.5)' }} />
-        <div className="absolute inset-0 rounded-full orbit-ring2" style={{ border: '2px solid rgba(255,255,255,0.4)' }} />
-        <div className="absolute inset-0 rounded-full orbit-ring3" style={{ border: '2px solid rgba(255,255,255,0.35)' }} />
-        <div className="absolute inset-0 rounded-full orbit-ring4" style={{ border: '2px solid rgba(255,255,255,0.3)' }} />
-        <div className="absolute inset-0 rounded-full orbit-ring5" style={{ border: '2px solid rgba(255,255,255,0.25)' }} />
-        <div className="absolute inset-0 rounded-full orbit-ring6" style={{ border: '2px solid rgba(255,255,255,0.2)' }} />
-        <div className="absolute inset-0 rounded-full orbit-ring7" style={{ border: '2px solid rgba(255,255,255,0.15)' }} />
+        <div className="absolute inset-0 rounded-full orbit-ring2" style={{ border: '2px solid rgba(255,255,255,0.45)' }} />
+        <div className="absolute inset-0 rounded-full orbit-ring3" style={{ border: '2px solid rgba(255,255,255,0.4)' }} />
+        <div className="absolute inset-0 rounded-full orbit-ring4" style={{ border: '2px solid rgba(255,255,255,0.35)' }} />
+        <div className="absolute inset-0 rounded-full orbit-ring5" style={{ border: '2px solid rgba(255,255,255,0.3)' }} />
+        <div className="absolute inset-0 rounded-full orbit-ring6" style={{ border: '2px solid rgba(255,255,255,0.28)' }} />
+        <div className="absolute inset-0 rounded-full orbit-ring7" style={{ border: '2px solid rgba(255,255,255,0.25)' }} />
         <div className="w-52 h-52 rounded-full overflow-hidden relative" style={{ zIndex: 20 }}>
           <img src="/icon3.png" alt="Logo" className="w-full h-full object-cover icon-pulse" />
         </div>

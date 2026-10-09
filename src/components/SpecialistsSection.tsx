@@ -113,9 +113,6 @@ export default function SpecialistsSection() {
 
   return (
     <section id="especialidades" className="relative z-10 -mt-12 sm:-mt-20 pt-14 sm:pt-20">
-      {/* Espaçador azul para overlapping */}
-      <div style={{ background: 'linear-gradient(160deg, #0c0ccc 0%, #1a1aff 40%, #0000b3 100%)' }} className="h-16 sm:h-24"></div>
-      
       <div className="bg-gray-50 py-14 sm:py-20 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
           <p className="text-sm sm:text-base font-bold tracking-widest uppercase mb-2 text-center" style={{ color: '#0c0ccc' }}>

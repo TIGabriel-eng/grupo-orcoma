@@ -164,7 +164,7 @@ function DiretoresMarquee() {
         {[...diretores, ...diretores].map((d, i) => (
           <div key={i} className="flex flex-col items-center w-[16.9rem] sm:w-[22.425rem] md:w-[26.91rem] mx-2 sm:mx-4 flex-shrink-0" style={{ userSelect: 'none' }}>
             <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden mb-3 bg-white">
-              <img src={d.imagem} alt={d.nome} className="w-full h-full object-cover" loading="lazy" draggable={false} style={d.nome === 'Jaciane' ? { transform: 'translateY(1.5rem)' } : d.imagem === '/Joao-Albino.png' ? { transform: 'translateY(7%) scale(0.94, 0.94)' } : undefined} />
+              <img src={d.imagem} alt={d.nome} className="w-full h-full object-cover" loading="lazy" draggable={false} style={d.nome === 'Jaciane' ? { transform: 'translateY(1.5rem)' } : d.imagem === '/Joao-Albino.png' ? { transform: 'translateY(7%) scale(0.91, 0.94)' } : undefined} />
             </div>
             <div className="w-full rounded-xl p-3 sm:p-[1.15rem] text-center" style={{ background: '#0924a7' }}>
               <p className="font-bold text-white text-[0.95rem] sm:text-[1.15rem]">{d.nome}</p>

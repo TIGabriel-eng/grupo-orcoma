@@ -77,6 +77,7 @@ export default function CurvedCarousel() {
   if (fotos.length === 0) return null;
 
   return (
+    <div className="-mt-24 sm:-mt-40">
     <div className="scene">
       <div
         className="a3d"
@@ -98,6 +99,7 @@ export default function CurvedCarousel() {
           />
         ))}
       </div>
+    </div>
     </div>
   );
 }
