@@ -22,7 +22,7 @@ interface CarrosselSlide {
 
 const PAGE_KEYS: Page[] = ['home', 'contato', 'solucoes', 'sobre', 'login', 'eventos', 'trabalhe-conosco', 'blog', 'blog-post', 'especialidades'];
 
-const AUTOPLAY_MS = 8000;
+const AUTOPLAY_MS = 18000;
 const TRANSITION_MS = 800;
 
 const FALLBACK_SLIDES: CarrosselSlide[] = [
@@ -48,10 +48,36 @@ const FALLBACK_SLIDES: CarrosselSlide[] = [
   },
 ];
 
+// Slides fixos no código: aparecem antes dos slides vindos do /admin (API)
+const SLIDES_CODIGO: CarrosselSlide[] = [
+  {
+    id: -1,
+    titulo: 'Venha abrir a sua empresa agora!',
+    subtitulo:
+      'Cansado de adiar o sonho de ter o seu CNPJ? Leis, taxas, documentos... a gente sabe que parece um labirinto. Na Orcoma Contabilidade, consultores especialistas te acompanham em cada etapa!',
+    imagem: '/abertura.jpg',
+    foto: '',
+    ordem: -1,
+    botao1: { texto: 'Abra sua empresa agora!', tipo: 'whatsapp', link: '' },
+    botao2: { texto: '', tipo: 'nenhum', link: '' },
+  },
+  {
+    id: -2,
+    titulo: 'Chega de dor de cabeça: trocar de contabilidade ficou simples',
+    subtitulo:
+      'Contador que some, resposta que não vem, guia que atrasa... se você já passou por isso, sabe como cansa. Mas muita gente deixa de trocar por achar que dá trabalho. Na Orcoma, nossos consultores cuidam da migração e te acompanham em cada etapa. Você só precisa dar o primeiro passo.',
+    imagem: '',
+    foto: '',
+    ordem: -2,
+    botao1: { texto: 'Venha conversar com a gente!', tipo: 'whatsapp', link: '' },
+    botao2: { texto: '', tipo: 'nenhum', link: '' },
+  },
+];
+
 export default function HeroCarousel() {
   const { open: openWhatsApp } = useWhatsApp();
   const { navigate } = useNav();
-  const [slides, setSlides] = useState<CarrosselSlide[]>(FALLBACK_SLIDES);
+  const [slides, setSlides] = useState<CarrosselSlide[]>([...SLIDES_CODIGO, ...FALLBACK_SLIDES]);
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -72,7 +98,7 @@ export default function HeroCarousel() {
             botao2: { texto: s.botao2?.texto || '', tipo: s.botao2?.tipo || 'nenhum', link: s.botao2?.link || '' },
           }));
         if (!cancelled && list.length > 0) {
-          setSlides(list);
+          setSlides([...SLIDES_CODIGO, ...list]);
           setIndex(0);
         }
       })

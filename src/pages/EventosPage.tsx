@@ -107,15 +107,6 @@ export default function EventosPage() {
           <p className="text-white/65 text-[1.225rem] leading-relaxed max-w-md mb-8 px-2">
             Capacite sua equipe e mantenha sua empresa atualizada com os treinamentos e eventos exclusivos da Orcoma Academy. Conhecimento que impulsiona resultados.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <button
-              className="flex items-center justify-center gap-2 px-7 py-3 rounded-full text-sm font-bold transition-all hover:brightness-110"
-              style={{ background: '#e8b800', color: '#000' }}
-            >
-              Ver Eventos Próximos
-            </button>
-          </div>
-
           <div
             className="mt-10 w-14 h-14 rounded-full flex items-center justify-center shadow-xl"
             style={{ background: '#e8b800' }}

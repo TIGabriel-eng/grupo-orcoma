@@ -43,18 +43,18 @@ const diretores = [
   { nome: 'João Albino Mascarenhas', cargo: 'Presidente', local: 'Orcoma Itaberaba', imagem: '/Joao-Albino.png' },
   { nome: 'Jacson Mascarenhas', cargo: 'Vice-presidente | Diretor', local: 'Orcoma Maracás', imagem: '/jackson.png' },
   { nome: 'Marcelo Mascarenhas', cargo: 'Diretor', local: 'Orcoma Itaberaba Pública', imagem: '/marcelo.png' },
-  { nome: 'Jaciane', cargo: 'Diretora jurídica', local: 'Geral', imagem: '/jaciane.png' },
+  { nome: 'Jaciane Mascarenhas', cargo: 'Diretora jurídica', local: 'Geral', imagem: '/jaciane.png' },
   { nome: 'Caio Vivas', cargo: 'Diretor', local: 'Orcoma Feira de Santana', imagem: '/caio.png' },
   { nome: 'Salvador Rios', cargo: 'Diretor', local: 'Orcoma Jequié', imagem: '/Salvador.png' },
-  { nome: 'Magali', cargo: 'Diretora', local: 'Orcoma Várzea Nova', imagem: '/magali.png' },
-  { nome: 'Sidnéia', cargo: 'Diretora', local: 'Orcoma Seabra', imagem: '/Sidneia.png' },
-  { nome: 'Michele', cargo: 'Diretora', local: 'Orcoma Jaguaquara', imagem: '/Michele.png' },
+  { nome: 'Magali Leal', cargo: 'Diretora', local: 'Orcoma Várzea Nova', imagem: '/magali.png' },
+  { nome: 'Sidnéia Caetano', cargo: 'Diretora', local: 'Orcoma Seabra', imagem: '/Sidneia.png' },
+  { nome: 'Michele Oliveira', cargo: 'Diretora', local: 'Orcoma Jaguaquara', imagem: '/Michele.png' },
   { nome: 'Edmilson', cargo: 'Diretor', local: 'Orcoma Jequié 2', imagem: '/edmilson.png' },
   { nome: 'Rodrigo', cargo: 'Diretor', local: 'Orcoma Campo Formoso', imagem: '/Rodrigo.png' },
 ];
 
 const IDLE_RESUME_MS = 3000;
-const AUTO_SPEED_PX_S = 113;
+const AUTO_SPEED_PX_S = 170;
 
 function DiretoresMarquee() {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -164,7 +164,7 @@ function DiretoresMarquee() {
         {[...diretores, ...diretores].map((d, i) => (
           <div key={i} className="flex flex-col items-center w-[16.9rem] sm:w-[22.425rem] md:w-[26.91rem] mx-2 sm:mx-4 flex-shrink-0" style={{ userSelect: 'none' }}>
             <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden mb-3 bg-white">
-              <img src={d.imagem} alt={d.nome} className="w-full h-full object-cover" loading="lazy" draggable={false} style={d.nome === 'Jaciane' ? { transform: 'translateY(1.5rem)' } : d.imagem === '/Joao-Albino.png' ? { transform: 'translateY(7%) scale(0.91, 0.94)' } : undefined} />
+              <img src={d.imagem} alt={d.nome} className="w-full h-full object-cover" loading="lazy" draggable={false} style={d.nome === 'Jaciane Mascarenhas' ?{ transform: 'translateY(1.5rem)' } : d.imagem === '/Joao-Albino.png' ? { transform: 'translateY(7%) scale(0.91, 0.94)' } : undefined} />
             </div>
             <div className="w-full rounded-xl p-3 sm:p-[1.15rem] text-center" style={{ background: '#0924a7' }}>
               <p className="font-bold text-white text-[0.95rem] sm:text-[1.15rem]">{d.nome}</p>
@@ -320,18 +320,11 @@ export default function SobrePage() {
             </p>
             <div
               className="hidden md:block absolute -top-4 -right-72 w-[16.8rem] h-[16.8rem] z-10"
+              style={{ filter: 'drop-shadow(0 18px 24px rgba(9,36,167,0.35))' }}
             >
-              <div
-                className="absolute inset-0 rounded-full"
-                style={{
-                  background: 'radial-gradient(circle, rgba(20,60,255,0.5) 0%, rgba(20,60,255,0.2) 40%, transparent 60%)',
-                  animation: 'haloPulse 6s ease-in-out infinite',
-                }}
-              />
               <div
                 className="relative w-full h-full"
                 style={{
-                  background: 'linear-gradient(100deg, #0924a7 0%, #0924a7 42%, #2c4fd0 48%, #9db6ec 50%, #2c4fd0 52%, #0924a7 58%, #0924a7 100%)',
                   WebkitMaskImage: 'url(/ball.png)',
                   maskImage: 'url(/ball.png)',
                   WebkitMaskSize: '100% 100%',
@@ -342,7 +335,17 @@ export default function SobrePage() {
                   maskPosition: 'center',
                   animation: 'spin 8s linear infinite',
                 }}
-              />
+              >
+                {/* Esfera com luz vinda do alto à esquerda e sombra na parte de baixo à direita */}
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      'radial-gradient(circle at 32% 28%, #8fb0ff 0%, #3a63e6 18%, #1734b8 45%, #0a1f7a 75%, #050f45 100%)',
+                    boxShadow: 'inset -18px -22px 40px rgba(0,0,0,0.45), inset 14px 12px 26px rgba(160,190,255,0.35)',
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -480,7 +483,7 @@ export default function SobrePage() {
               <Highlight text="Buscando sempre inovar e otimizar a sua experiência conosco, criamos o BINO, a nova mascote da ORCOMA." />
             </p>
           </div>
-          <div className="w-full md:w-80 lg:w-96 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg reveal" style={{ '--reveal-delay': '120ms' } as React.CSSProperties}>
+          <div className="w-full md:w-[25rem] lg:w-[29rem] flex-shrink-0 reveal relative top-10 z-10" style={{ '--reveal-delay': '120ms' } as React.CSSProperties}>
             <img
               src="/bino.png"
               alt="Mascote Bino"

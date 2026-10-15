@@ -1,7 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { Headset, User, X, Send } from 'lucide-react';
 import { useWhatsApp } from '../context/WhatsAppContext';
-import { attendantConfig, getAttendantStatus, findNearestUnit, buildWhatsAppUrl } from '../config/attendant';
+import { servicos, trocaContador, listaServicos, todosItens, buscarConhecimento } from '../config/chatKnowledge';
+import { apiUrl } from '../config/api';
+import {
+  attendantConfig,
+  getAttendantStatus,
+  findNearestUnit,
+  buildWhatsAppUrl,
+  isAttendantOnline,
+  horarioAtendimento,
+  trackWhatsAppClick,
+} from '../config/attendant';
 
 const BUBBLE_MESSAGES = [
   'Tem alguma dúvida? Posso ajudar!',
@@ -36,7 +46,31 @@ function markInteracted(): void {
   }
 }
 
-type ChatTurn = 'options' | 'await_region' | 'region_resolved';
+// options: botões iniciais · topico: escolha do assunto · faq: perguntas sobre o assunto escolhido
+// coleta_*: pedido de nome, telefone e e-mail para a troca de contador
+type ChatTurn =
+  | 'options'
+  | 'topico'
+  | 'faq'
+  | 'await_region'
+  | 'region_resolved'
+  | 'coleta_nome'
+  | 'coleta_telefone'
+  | 'coleta_email';
+
+interface DadosLead {
+  nome: string;
+  celular: string;
+  email: string;
+}
+
+const TOPICOS = [
+  { key: 'servicos', label: 'Serviços prestados' },
+  { key: 'troca', label: 'Troca de contador' },
+  { key: 'outros', label: 'Outros assuntos' },
+] as const;
+
+type TopicoKey = (typeof TOPICOS)[number]['key'];
 
 export default function WhatsAppModal() {
   const { isOpen, open, close } = useWhatsApp();
@@ -47,6 +81,10 @@ export default function WhatsAppModal() {
   const [bubbleIndex, setBubbleIndex] = useState(0);
   const [status, setStatus] = useState(getAttendantStatus);
   const [chatTurn, setChatTurn] = useState<ChatTurn>('options');
+  const [regionAttempts, setRegionAttempts] = useState(0);
+  const [lead, setLead] = useState<DadosLead>({ nome: '', celular: '', email: '' });
+  // Link do WhatsApp exibido como botão: o clique do usuário evita o bloqueio de pop-up
+  const [whatsappLink, setWhatsappLink] = useState<string | null>(null);
   const prevOpenRef = useRef(isOpen);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const bubbleContainerRef = useRef<HTMLDivElement>(null);
@@ -77,16 +115,29 @@ export default function WhatsAppModal() {
     if (isOpen && !prevOpenRef.current) {
       markInteracted();
       setBubbleVisible(false);
+      // Reinicia o fluxo: sem isso, reabrir depois de um encaminhamento deixava o chat sem botões
+      setChatTurn('options');
+      setRegionAttempts(0);
+      setWhatsappLink(null);
       // Mostra mensagem de boas-vindas da Ana ao abrir
-      setMessages([
+      const boasVindas: Message[] = [
         {
           id: Date.now(),
-          text: 'Oi! Como podemos te ajudar? :D',
+          text: 'Olá! Seja bem-vindo(a)! Eu me chamo Ana, sou a atendente virtual do grupo Orcoma Contabilidade. Como podemos te ajudar hoje?',
           sender: 'ana',
           timestamp: new Date(),
           isOptions: true,
         },
-      ]);
+      ];
+      if (!isAttendantOnline()) {
+        boasVindas.push({
+          id: Date.now() + 1,
+          text: `No momento estamos fora do horário de atendimento (${horarioAtendimento}). Pode deixar sua mensagem que retornaremos no próximo horário.`,
+          sender: 'ana',
+          timestamp: new Date(),
+        });
+      }
+      setMessages(boasVindas);
     } else if (!isOpen && prevOpenRef.current) {
       setBubbleVisible(true);
     }
@@ -142,52 +193,99 @@ export default function WhatsAppModal() {
         // Se está aguardando a região do usuário
     if (chatTurn === 'await_region') {
       const foundUnit = findNearestUnit(regionInput);
+
+      // Não reconheceu a cidade: pede de novo uma vez antes de encaminhar ao consultor geral
+      if (!foundUnit && regionAttempts < 1) {
+        setRegionAttempts(1);
+        setTimeout(() => {
+          const anaMessage: Message = {
+            id: Date.now() + 1,
+            text: 'Não consegui identificar sua cidade. Pode digitar no formato "Cidade - UF"? Por exemplo: Jequié - BA',
+            sender: 'ana',
+            timestamp: new Date(),
+          };
+          setMessages((prev) => [...prev, anaMessage]);
+        }, 500);
+        return;
+      }
+
       const whatsappUrl = buildWhatsAppUrl(
         `Olá, gostaria de conversar com um consultor(a). Vim do site Orcoma e sou da região ${regionInput}.`
       );
 
       setTimeout(() => {
-        if (foundUnit) {
-          const anaMessage: Message = {
-            id: Date.now() + 1,
-            text: `Perfeito! Temos atendentes em ${foundUnit.nome} - ${foundUnit.estado}. Vou redirecionar você para nosso WhatsApp.`,
-            sender: 'ana',
-            timestamp: new Date(),
-          };
-          setMessages((prev) => [...prev, anaMessage]);
-          setChatTurn('region_resolved');
-
-          // Redireciona para o WhatsApp após 1.5 segundo
-          setTimeout(() => {
-            window.open(whatsappUrl, '_blank');
-          }, 1500);
+        let texto: string;
+        if (!foundUnit) {
+          texto = 'Não consegui identificar sua região. Vou te conectar com nosso consultor, que orienta sobre a melhor opção para você. Clique no botão abaixo para continuar no WhatsApp.';
+        } else if (foundUnit.exata) {
+          texto = `Perfeito! Temos atendentes em ${foundUnit.nome} - ${foundUnit.estado}. Clique no botão abaixo para continuar no WhatsApp.`;
         } else {
-          const anaMessage: Message = {
-            id: Date.now() + 1,
-            text: `Não encontramos uma unidade próxima a "${regionInput}" no momento. De qualquer forma, vou te conectar com nosso consultor que irá orientar sobre a melhor opção para sua região.`,
-            sender: 'ana',
-            timestamp: new Date(),
-          };
-          setMessages((prev) => [...prev, anaMessage]);
-          setChatTurn('region_resolved');
-
-          // Redireciona para o WhatsApp após 1.5 segundo
-          setTimeout(() => {
-            window.open(whatsappUrl, '_blank');
-          }, 1500);
+          texto = `Ainda não temos unidade física em "${regionInput}", mas atendemos à distância! A unidade mais próxima é ${foundUnit.nome} - ${foundUnit.estado}. Clique no botão abaixo para continuar no WhatsApp.`;
         }
+        // Fora do horário, avisa que a resposta não é imediata (em vez de prometer retorno rápido)
+        if (!isAttendantOnline()) {
+          texto += ` Nossa equipe está fora do horário agora (${horarioAtendimento}), mas sua mensagem fica registrada no WhatsApp.`;
+        }
+
+        const anaMessage: Message = {
+          id: Date.now() + 1,
+          text: texto,
+          sender: 'ana',
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, anaMessage]);
+        setChatTurn('region_resolved');
+        setWhatsappLink(whatsappUrl);
+      }, 500);
+      return;
+    }
+
+    // Pergunta digitada "tirar dúvidas": abre o mesmo seletor de assuntos do botão
+    if (chatTurn === 'options' && /tirar d[uú]vida/i.test(regionInput)) {
+      iniciarDuvidas();
+      return;
+    }
+
+    // Coleta de nome, telefone e e-mail da troca de contador
+    if (chatTurn === 'coleta_nome' || chatTurn === 'coleta_telefone' || chatTurn === 'coleta_email') {
+      handleColeta(regionInput);
+      return;
+    }
+
+    // Dúvida livre dentro do fluxo de assuntos (sem palavra de consultor)
+    if ((chatTurn === 'topico' || chatTurn === 'faq') && !/consultor|atendente/i.test(regionInput)) {
+      handleDuvidaLivre(regionInput);
+      return;
+    }
+
+    // Pedido de consultor digitado (ex.: "quero um consultor"): mesmo fluxo do botão
+    if (/consultor|atendente/i.test(regionInput) && chatTurn !== 'region_resolved') {
+      setChatTurn('await_region');
+      setTimeout(() => {
+        const anaMessage: Message = {
+          id: Date.now() + 1,
+          text: 'Perfeito! De qual cidade e estado você é? Assim conseguimos direcioná-lo para um especialista mais próximo da sua localidade.',
+          sender: 'ana',
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, anaMessage]);
       }, 500);
       return;
     }
 
     // Resposta padrão para outras mensagens
     setTimeout(() => {
-      const anaResponses = [
-        'Obrigada pela mensagem! Um de nossos especialistas entrará em contato em breve.',
-        'Entendido! Vou encaminhar sua mensagem para nossa equipe.',
-        'Ótimo! Como posso te ajudar com isso?',
-        'Certo! Estamos aqui para ajudar. Mais alguma dúvida?',
-      ];
+      const anaResponses = isAttendantOnline()
+        ? [
+            'Obrigada pela mensagem! Um de nossos especialistas entrará em contato em breve.',
+            'Entendido! Vou encaminhar sua mensagem para nossa equipe.',
+            'Ótimo! Como posso te ajudar com isso?',
+            'Certo! Estamos aqui para ajudar. Mais alguma dúvida?',
+          ]
+        : [
+            `Obrigada pela mensagem! Nossa equipe está fora do horário (${horarioAtendimento}) e responderá no próximo horário de atendimento.`,
+            'Entendido! Sua mensagem fica registrada e nossa equipe responde no próximo horário de atendimento.',
+          ];
       const randomResponse = anaResponses[Math.floor(Math.random() * anaResponses.length)];
       
       const anaMessage: Message = {
@@ -200,24 +298,141 @@ export default function WhatsAppModal() {
     }, 1000);
   };
 
-  const handleOptionDuvidas = () => {
-    const userMessage: Message = {
-      id: Date.now(),
-      text: 'Quero apenas tirar dúvidas',
-      sender: 'user',
-      timestamp: new Date(),
-    };
-    setMessages((prev) => [...prev, userMessage]);
+  const adicionarUsuario = (texto: string) => {
+    setMessages((prev) => [...prev, { id: Date.now(), text: texto, sender: 'user', timestamp: new Date() }]);
+  };
 
+  // Resposta da Ana com pequeno atraso
+  const responderAna = (texto: string) => {
     setTimeout(() => {
-      const anaMessage: Message = {
-        id: Date.now() + 1,
-        text: 'Ótimo! Estou aqui para ajudar. Qual é a sua dúvida?',
-        sender: 'ana',
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, anaMessage]);
+      setMessages((prev) => [...prev, { id: Date.now() + 1, text: texto, sender: 'ana', timestamp: new Date() }]);
     }, 500);
+  };
+
+  const iniciarDuvidas = () => {
+    setChatTurn('topico');
+    responderAna('Claro! Sobre qual assunto você quer tirar dúvidas?');
+  };
+
+  const handleOptionDuvidas = () => {
+    adicionarUsuario('Quero apenas tirar dúvidas');
+    iniciarDuvidas();
+  };
+
+  const handleTopico = (key: TopicoKey) => {
+    setChatTurn('faq');
+    if (key === 'servicos') {
+      adicionarUsuario('Serviços prestados');
+      responderAna(listaServicos.resposta);
+    } else if (key === 'troca') {
+      adicionarUsuario('Troca de contador');
+      iniciarColeta();
+    } else {
+      adicionarUsuario('Outros assuntos');
+      responderAna('Pode me dizer qual assunto você gostaria de tratar?');
+    }
+  };
+
+  // Troca de contador: a Ana pede nome, telefone e e-mail, um por vez
+  const iniciarColeta = () => {
+    setLead({ nome: '', celular: '', email: '' });
+    setChatTurn('coleta_nome');
+    responderAna(
+      'Perfeito! Preciso que você me informe:\n\nNome:\nTelefone p/ contato (com DDD):\nE-mail:\n\nAssim conseguimos encaminhar essas informações para os nossos consultores para seguir com o seu atendimento.',
+    );
+  };
+
+  const handleColeta = (texto: string) => {
+    if (chatTurn === 'coleta_nome') {
+      if (texto.length < 2) {
+        responderAna('Pode me informar seu nome completo?');
+        return;
+      }
+      setLead((prev) => ({ ...prev, nome: texto }));
+      setChatTurn('coleta_telefone');
+      responderAna('Obrigado! Agora, qual é o telefone para contato, com DDD?');
+      return;
+    }
+
+    if (chatTurn === 'coleta_telefone') {
+      const digitos = texto.replace(/\D/g, '');
+      if (digitos.length < 10 || digitos.length > 13) {
+        responderAna('Não consegui validar esse número. Informe com DDD, por exemplo: (71) 99999-9999.');
+        return;
+      }
+      setLead((prev) => ({ ...prev, celular: texto }));
+      setChatTurn('coleta_email');
+      responderAna('Por último, qual é o seu e-mail?');
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(texto)) {
+      responderAna('Esse e-mail não parece válido. Pode conferir? Exemplo: nome@empresa.com.br');
+      return;
+    }
+    const dados = { ...lead, email: texto };
+    setLead(dados);
+    enviarLead(dados);
+  };
+
+  // Envia o pedido pelo mesmo endpoint de contato do site, para aparecer no painel de leads
+  const enviarLead = async (dados: DadosLead) => {
+    setChatTurn('faq');
+    try {
+      const res = await fetch(apiUrl('/api/contact/'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...dados,
+          mensagem: 'Pedido de troca de contador (chat da Ana)',
+          origem: 'whatsapp_modal',
+          interesse: 'migracao_contabilidade',
+        }),
+      });
+      if (res.ok) {
+        responderAna(
+          'Perfeito! Recebemos seus dados e vamos encaminhar para nossos consultores, que darão seguimento ao seu atendimento.',
+        );
+        return;
+      }
+      console.error('[WhatsAppModal] Erro ao enviar pedido de troca:', res.status);
+    } catch (err) {
+      console.error('[WhatsAppModal] Falha de rede ao enviar pedido de troca:', err);
+    }
+    responderAna(
+      'Não conseguimos registrar seus dados agora. Você pode escrever "consultor" para falar com a equipe pelo WhatsApp.',
+    );
+  };
+
+  // Pergunta livre dentro do fluxo de dúvidas: responde pela base ou admite que não sabe
+  const handleDuvidaLivre = (pergunta: string) => {
+    setChatTurn('faq');
+    const encontrado = buscarConhecimento(pergunta, todosItens);
+
+    // Troca de contador: começa a coleta de dados em vez de só explicar
+    if (encontrado?.id === 'troca-contador') {
+      iniciarColeta();
+      return;
+    }
+
+    // Cidade ou estado citado (ex.: "Minas", "Jequié - BA"): indica a unidade mais próxima
+    if (!encontrado || encontrado.id === 'unidades') {
+      const unidade = findNearestUnit(pergunta);
+      if (unidade) {
+        responderAna(
+          unidade.exata
+            ? `Temos atendentes em ${unidade.nome} - ${unidade.estado}. Se quiser falar com a equipe, escreva "consultor".`
+            : `Ainda não temos unidade física em "${pergunta}", mas atendemos à distância! A unidade mais próxima é ${unidade.nome} - ${unidade.estado}.`,
+        );
+        return;
+      }
+    }
+
+    responderAna(
+      encontrado
+        ? encontrado.resposta
+        : 'Sinto muito, não tenho essa informação. Posso direcionar seu atendimento para um humano: escreva "consultor" que um especialista te atende.',
+    );
   };
 
   const handleOptionConsultor = () => {
@@ -233,7 +448,7 @@ export default function WhatsAppModal() {
     setTimeout(() => {
             const anaMessage: Message = {
         id: Date.now() + 1,
-        text: 'Perfeito! De qual cidade e estado vocêé? Pois assim, conseguimos direcioná-lo para um especialista mais próximo da sua localidade.',
+        text: 'Perfeito! De qual cidade e estado você é? Pois assim, conseguimos direcioná-lo para um especialista mais próximo da sua localidade.',
         sender: 'ana',
         timestamp: new Date(),
       };
@@ -255,6 +470,9 @@ export default function WhatsAppModal() {
   const handleClose = () => {
     setMessages([]);
     setInputValue('');
+    setChatTurn('options');
+    setRegionAttempts(0);
+    setWhatsappLink(null);
     close();
   };
 
@@ -275,7 +493,18 @@ export default function WhatsAppModal() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold text-gray-800 truncate">{attendantConfig.name}</p>
-                <p className="text-xs text-gray-400">{status}</p>
+                <p className="text-xs text-gray-400 flex items-center gap-1.5">
+                  {status === 'Online agora' && (
+                    <span className="relative flex h-2 w-2" aria-hidden="true">
+                      <span
+                        className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+                        style={{ background: '#25D366' }}
+                      />
+                      <span className="relative inline-flex h-2 w-2 rounded-full" style={{ background: '#25D366' }} />
+                    </span>
+                  )}
+                  {status}
+                </p>
               </div>
               <button onClick={() => handleClose()} className="text-gray-400 hover:text-gray-600 transition-colors" aria-label="Fechar">
                 <X size={18} />
@@ -283,7 +512,14 @@ export default function WhatsAppModal() {
             </div>
 
             {/* Área do Chat */}
-            <div className="h-[300px] overflow-y-auto p-4 space-y-3" style={{ background: '#f9fafb' }}>
+            <style>{`
+                .chat-scroll { scrollbar-width: thin; scrollbar-color: #25D366 #f9fafb; }
+                .chat-scroll::-webkit-scrollbar { width: 8px; }
+                .chat-scroll::-webkit-scrollbar-track { background: #f9fafb; }
+                .chat-scroll::-webkit-scrollbar-thumb { background: #25D366; border-radius: 8px; }
+                .chat-scroll::-webkit-scrollbar-thumb:hover { background: #1ebe5a; }
+              `}</style>
+            <div className="chat-scroll h-[300px] overflow-y-auto p-4 space-y-3" style={{ background: '#f9fafb' }}>
               {messages.map((message) => (
                 <div
                   key={message.id}
@@ -304,13 +540,46 @@ export default function WhatsAppModal() {
                     {message.sender === 'ana' && (
                       <p className="text-xs font-semibold mb-1" style={{ color: '#25D366' }}>Ana</p>
                     )}
-                    <p className="text-sm">{message.text}</p>
+                    <p className="text-sm whitespace-pre-line">{message.text}</p>
                   </div>
                 </div>
               ))}
               
               {/* Botões de opção - exibidos apenas no turno de opções */}
-              {chatTurn === 'options' && messages.length >= 1 && messages[messages.length - 1]?.isOptions && (
+              {/* Link de WhatsApp: o clique é do usuário, então o navegador não bloqueia */}
+              {whatsappLink && (
+                <div className="flex justify-center pt-1">
+                  <a
+                    href={whatsappLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackWhatsAppClick(`chat-ana:${window.location.pathname}`)}
+                    className="w-full py-3 px-4 rounded-xl text-sm font-semibold text-center transition-all hover:brightness-110 hover:scale-[1.02]"
+                    style={{ background: '#25D366', color: 'white' }}
+                  >
+                    Abrir conversa no WhatsApp
+                  </a>
+                </div>
+              )}
+
+              {/* Seletor de assunto, exibido após "Quero apenas tirar dúvidas" */}
+              {chatTurn === 'topico' && (
+                <div className="flex flex-col gap-2 pt-2">
+                  {TOPICOS.map((topico) => (
+                    <button
+                      key={topico.key}
+                      onClick={() => handleTopico(topico.key)}
+                      className="w-full py-3 px-4 rounded-xl text-sm font-semibold transition-all hover:brightness-110 hover:scale-[1.02]"
+                      style={{ background: 'white', color: '#25D366', border: '2px solid #25D366' }}
+                    >
+                      {topico.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Botões de opção - ficam disponíveis enquanto o fluxo estiver nas opções (sem beco sem saída) */}
+              {chatTurn === 'options' && messages.length >= 1 && (
                 <div className="flex flex-col gap-2 pt-2">
                   <button
                     onClick={handleOptionDuvidas}
