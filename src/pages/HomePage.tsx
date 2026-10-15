@@ -116,7 +116,7 @@ export default function HomePage() {
               position: absolute;
               top: 60%;
               left: 55%;
-              width: 100vw;
+              width: 100%;
               height: 56.25vw;
               min-height: 100vh;
               min-width: 177.78vh;

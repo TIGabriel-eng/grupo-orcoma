@@ -88,7 +88,6 @@ const serviceDescriptions: Record<string, ServiceInfo> = {
 export default function ServicesOrbital() {
   const [activeKey, setActiveKey] = useState('departamento-contabil');
   const [manualReset, setManualReset] = useState(0);
-  const activeInfo = serviceDescriptions[activeKey];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -223,10 +222,22 @@ export default function ServicesOrbital() {
           >
             Clique nas bolinhas para alterar os setores
           </span>
-          <h3 className="text-white text-3xl sm:text-4xl font-bold mb-4">{activeInfo.title}</h3>
-          <p className="text-white/65 text-xl sm:text-2xl leading-relaxed max-w-2xl mx-auto">
-            {activeInfo.text}
-          </p>
+          {/* Todas as descrições ocupam a mesma célula: a altura fica a do maior texto e a página não "pula" a cada troca. */}
+          <div className="grid">
+            {Object.entries(serviceDescriptions).map(([key, info]) => (
+              <div
+                key={key}
+                className="col-start-1 row-start-1"
+                style={{ visibility: key === activeKey ? 'visible' : 'hidden' }}
+                aria-hidden={key !== activeKey}
+              >
+                <h3 className="text-white text-3xl sm:text-4xl font-bold mb-4">{info.title}</h3>
+                <p className="text-white/65 text-xl sm:text-2xl leading-relaxed max-w-2xl mx-auto">
+                  {info.text}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -208,7 +208,7 @@ export default function SpecialistsSection() {
               </div>
 
               {/* City cards grid */}
-              <div className="flex gap-3 flex-1 w-full">
+              <div className="flex gap-3 flex-1 w-full items-start min-h-[36rem] sm:min-h-[34rem]">
                 <div className="flex flex-col gap-2.5 flex-1">
                   {leftCities.map((city) => (
                     <CityCard

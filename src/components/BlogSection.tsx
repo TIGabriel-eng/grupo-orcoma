@@ -72,7 +72,7 @@ export default function BlogSection() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:min-h-[19rem] content-start">
             {loading ? (
               <>
                 {[0, 1, 2].map((i) => (
@@ -81,6 +81,7 @@ export default function BlogSection() {
                     <Skeleton className="h-3 w-24" />
                     <Skeleton className="h-4 w-3/4" />
                     <Skeleton className="h-3 w-full" />
+                    <Skeleton className="h-3 w-2/3" />
                   </div>
                 ))}
                 <div className="col-span-full">
@@ -113,12 +114,12 @@ export default function BlogSection() {
                   <span className="text-xs">{post.date}</span>
                 </div>
                 <h3
-                  className="text-gray-900 text-sm font-bold leading-snug group-hover:text-[#e8b800] transition-colors"
+                  className="text-gray-900 text-sm font-bold leading-snug line-clamp-2 group-hover:text-[#e8b800] transition-colors"
                   style={{ cursor: 'pointer' }}
                 >
                   {post.title}
                 </h3>
-                <p className="text-gray-500 text-xs leading-relaxed">{post.excerpt}</p>
+                <p className="text-gray-500 text-xs leading-relaxed line-clamp-3">{post.excerpt}</p>
               </div>
               ))
             )}

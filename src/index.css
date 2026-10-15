@@ -6,6 +6,17 @@
   font-family: 'Montserrat', sans-serif;
 }
 
+/* Evita a barra de rolagem horizontal que aparece/some quando algum elemento
+   (ex.: vídeo do hero com 100vw, carrosséis) fica mais largo que a tela. */
+html, body {
+  overflow-x: clip;
+}
+
+/* Reserva o espaço da barra vertical: o layout não "pula" quando ela aparece/some. */
+html {
+  scrollbar-gutter: stable;
+}
+
 @keyframes pulseGlow {
   0%, 100% {
     opacity: 1;
