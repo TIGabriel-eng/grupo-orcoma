@@ -4,6 +4,10 @@ import { useNav } from '../context/NavContext';
 
 type NavEntry = { label: string; page: 'contato' | 'solucoes' | 'sobre' | 'login' | 'eventos' | 'blog' } | { label: string; external: string };
 
+// Abre em outra aba, pois é um sistema externo ao site
+const ERP_URL = 'https://orcoma.com.br/?page_id=23434';
+const NFE_URL = 'https://orcoma.com.br/?page_id=23472';
+
 const navItems: NavEntry[] = [
   { label: 'Contato', page: 'contato' as const },
   { label: 'Soluções', page: 'solucoes' as const },
@@ -145,6 +149,18 @@ export default function Nav() {
                     >
                       Orcoma Academy Business
                     </button>
+                    <button
+                      onClick={() => { window.open(ERP_URL, '_blank', 'noopener,noreferrer'); setLoginOpen(false); }}
+                      className="sub-item w-full text-left px-5 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
+                    >
+                      ERP
+                    </button>
+                    <button
+                      onClick={() => { window.open(NFE_URL, '_blank', 'noopener,noreferrer'); setLoginOpen(false); }}
+                      className="sub-item w-full text-left px-5 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
+                    >
+                      NFE
+                    </button>
                   </div>
                 )}
               </div>
@@ -246,6 +262,22 @@ export default function Nav() {
                     className="text-white/80 text-lg font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors"
                   >
                     Orcoma Academy Business
+                  </button>
+                )}
+                {loginOpen && (
+                  <button
+                    onClick={() => { window.open(ERP_URL, '_blank', 'noopener,noreferrer'); setMobileOpen(false); setLoginOpen(false); }}
+                    className="text-white/80 text-lg font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors"
+                  >
+                    ERP
+                  </button>
+                )}
+                {loginOpen && (
+                  <button
+                    onClick={() => { window.open(NFE_URL, '_blank', 'noopener,noreferrer'); setMobileOpen(false); setLoginOpen(false); }}
+                    className="text-white/80 text-lg font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors"
+                  >
+                    NFE
                   </button>
                 )}
               </div>

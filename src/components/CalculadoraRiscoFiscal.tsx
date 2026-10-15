@@ -180,7 +180,7 @@ export default function CalculadoraRiscoFiscal() {
   return (
     <section
       className="py-14 sm:py-20 px-4 sm:px-6"
-      style={{ background: 'linear-gradient(to bottom, rgb(12, 12, 204) 0%, rgb(26, 26, 255) 28%, rgb(0, 0, 179) 56%, #FFFFFF 56%, #FFFFFF 100%)' }}
+      style={{ background: 'linear-gradient(to bottom, transparent 0%, transparent 56%, #FFFFFF 56%, #FFFFFF 100%)' }}
     >
       <style>{`
         .risk-slider {

@@ -183,7 +183,8 @@ export default function Footer() {
               href="https://www.instagram.com/agency.m7?igsh=cXY4bmVndTNuMmhk"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-500 text-xs hover:text-gray-800 transition-colors underline"
+              className="text-xs font-semibold transition-colors underline hover:brightness-90"
+              style={{ color: '#20b2aa' }}
               onMouseEnter={() => setM7Hover(true)}
               onMouseLeave={() => setM7Hover(false)}
             >M7 Soluções de Marketing</a>
@@ -204,7 +205,7 @@ export default function Footer() {
               </div>
             )}
           </span>
-          <span className="text-gray-500 text-xs"> e Desenvolvedores do Grupo Orcoma</span>
+          <span className="text-gray-500 text-xs"> e Desenvolvedores do <span className="font-semibold" style={{ color: '#0924a7' }}>Grupo Orcoma - G</span></span>
         </div>
       </div>
     </footer>
