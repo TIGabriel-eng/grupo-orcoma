@@ -4,9 +4,7 @@ import { useNav } from '../context/NavContext';
 
 type NavEntry = { label: string; page: 'contato' | 'solucoes' | 'sobre' | 'login' | 'eventos' | 'blog' } | { label: string; external: string };
 
-// Abre em outra aba, pois é um sistema externo ao site
-const ERP_URL = 'https://orcoma.com.br/?page_id=23434';
-const NFE_URL = 'https://orcoma.com.br/?page_id=23472';
+import { ERP_URL, NFE_URL } from '../config/links';
 
 const navItems: NavEntry[] = [
   { label: 'Contato', page: 'contato' as const },
@@ -25,13 +23,21 @@ export default function Nav() {
   const [contatoOpen, setContatoOpen] = useState(false);
   const loginDropdownRef = useRef<HTMLDivElement>(null);
   const contatoDropdownRef = useRef<HTMLDivElement>(null);
+  // Refs do menu mobile: sem eles, o clique num submenu mobile fecha o submenu
+  // no mousedown (o dropdown do desktop, escondido, é o único ref checado) e o click não chega.
+  const loginMobileRef = useRef<HTMLDivElement>(null);
+  const contatoMobileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    function clicouDentro(refs: React.RefObject<HTMLDivElement>[], alvo: Node) {
+      return refs.some((r) => r.current?.contains(alvo));
+    }
     function handleClickOutside(e: MouseEvent) {
-      if (loginDropdownRef.current && !loginDropdownRef.current.contains(e.target as Node)) {
+      const alvo = e.target as Node;
+      if (!clicouDentro([loginDropdownRef, loginMobileRef], alvo)) {
         setLoginOpen(false);
       }
-      if (contatoDropdownRef.current && !contatoDropdownRef.current.contains(e.target as Node)) {
+      if (!clicouDentro([contatoDropdownRef, contatoMobileRef], alvo)) {
         setContatoOpen(false);
       }
     }
@@ -41,19 +47,19 @@ export default function Nav() {
 
   return (
     <header className="relative flex items-center justify-center px-4 sm:px-8 py-4 sm:py-5 min-h-[5.5rem] sm:min-h-[6.5rem]">
-      <div className="w-full max-w-[110rem] flex items-center justify-center gap-4 relative">
-      <button className="flex-shrink-0 absolute left-0 top-1/2 -translate-y-1/2" onClick={() => navigate('home')}>
+      <div className="w-full max-w-[110rem] flex items-center justify-between gap-3 relative">
+      <button className="flex-shrink-0 xl:mr-3 2xl:mr-0 ml-2" onClick={() => navigate('home')}>
         <img src="/grupo-orcoma-logo.png" alt="Grupo Orcoma" className="h-12 sm:h-16 w-auto" style={{ transform: 'scale(1.26)' }} />
       </button>
 
-      <nav className="hidden xl:flex items-center rounded-full px-6 py-0.5 gap-1" style={{ background: 'rgba(100, 160, 255, 0.3)' }}>
+      <nav className="hidden xl:flex items-center rounded-full px-2 2xl:px-6 py-0.5 gap-0 2xl:gap-1 min-w-0" style={{ background: 'rgba(100, 160, 255, 0.3)' }}>
         {navItems.map((item) => {
           if ('external' in item) {
             return (
               <button
                 key={item.label}
                 onClick={() => { window.open(item.external, '_blank'); }}
-                className="px-4 py-1.5 text-[1.26rem] font-semibold rounded-full transition-colors hover:bg-white/10 relative"
+                className="px-2.5 2xl:px-4 py-1.5 text-[1rem] 2xl:text-[1.26rem] whitespace-nowrap font-semibold rounded-full transition-colors hover:bg-white/10 relative"
                 style={{ color: 'white' }}
               >
                 {item.label}
@@ -67,7 +73,7 @@ export default function Nav() {
               <div key={item.label} className="relative" ref={contatoDropdownRef}>
                 <button
                   onClick={() => setContatoOpen(!contatoOpen)}
-                  className="px-4 py-1.5 text-[1.26rem] font-semibold rounded-full transition-colors hover:bg-white/10 relative flex items-center gap-1"
+                  className="px-2.5 2xl:px-4 py-1.5 text-[1rem] 2xl:text-[1.26rem] whitespace-nowrap font-semibold rounded-full transition-colors hover:bg-white/10 relative flex items-center gap-1"
                   style={{ color: 'white' }}
                 >
                   {item.label}
@@ -117,7 +123,7 @@ export default function Nav() {
               <div key={item.label} className="relative" ref={loginDropdownRef}>
                 <button
                   onClick={() => setLoginOpen(!loginOpen)}
-                  className="px-4 py-1.5 text-[1.26rem] font-semibold rounded-full transition-colors hover:bg-white/10 relative flex items-center gap-1"
+                  className="px-2.5 2xl:px-4 py-1.5 text-[1rem] 2xl:text-[1.26rem] whitespace-nowrap font-semibold rounded-full transition-colors hover:bg-white/10 relative flex items-center gap-1"
                   style={{ color: 'white' }}
                 >
                   {item.label}
@@ -170,7 +176,7 @@ export default function Nav() {
             <button
               key={item.label}
               onClick={() => navigate(item.page)}
-              className="px-4 py-1.5 text-[1.26rem] font-semibold rounded-full transition-colors hover:bg-white/10 relative"
+              className="px-2.5 2xl:px-4 py-1.5 text-[1rem] 2xl:text-[1.26rem] whitespace-nowrap font-semibold rounded-full transition-colors hover:bg-white/10 relative"
               style={{ color: 'white' }}
             >
               {item.label}
@@ -185,17 +191,17 @@ export default function Nav() {
         })}
       </nav>
 
-      <div className="hidden xl:flex items-center gap-1 flex-shrink-0 absolute right-0 top-1/2 -translate-y-1/2">
+      <div className="hidden xl:flex items-center gap-1 flex-shrink-0">
         <button
           onClick={() => window.open('https://academy.orcomacontabilidade.com.br/login', '_blank')}
-          className="px-5 py-2 rounded-full text-[1.26rem] font-semibold transition-all hover:brightness-110 relative"
+          className="px-4 2xl:px-5 py-2 rounded-full text-[1rem] 2xl:text-[1.26rem] whitespace-nowrap font-semibold transition-all hover:brightness-110 relative"
           style={{ background: 'rgba(100, 160, 255, 0.3)', color: 'white' }}
         >
           Orcoma Academy
         </button>
       </div>
 
-      <button className="xl:hidden text-white p-2 flex-shrink-0 absolute right-0 top-1/2 -translate-y-1/2" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu">
+      <button className="xl:hidden text-white p-2 flex-shrink-0 ml-auto" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu">
         {mobileOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
       </div>
@@ -219,7 +225,7 @@ export default function Nav() {
             }
             if (item.label === 'Contato') {
               return (
-              <div key={item.label} className="w-full flex flex-col items-center">
+              <div key={item.label} className="w-full flex flex-col items-center" ref={contatoMobileRef}>
                 <button
                   onClick={() => setContatoOpen(!contatoOpen)}
                   className="text-white text-[1.4rem] font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors w-full text-center flex items-center justify-center gap-1"
@@ -248,7 +254,7 @@ export default function Nav() {
             }
             if (item.label === 'Login') {
               return (
-              <div key={item.label} className="w-full flex flex-col items-center">
+              <div key={item.label} className="w-full flex flex-col items-center" ref={loginMobileRef}>
                 <button
                   onClick={() => setLoginOpen(!loginOpen)}
                   className="text-white text-[1.4rem] font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors w-full text-center flex items-center justify-center gap-1"

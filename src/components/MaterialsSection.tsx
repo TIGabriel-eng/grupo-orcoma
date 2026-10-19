@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { apiUrl } from '../config/api';
+import { loadSiteData } from '../config/siteData';
 import { X } from 'lucide-react';
 import OrcomaLogo from './OrcomaLogo';
 import { Skeleton } from './Skeleton';
@@ -20,9 +21,9 @@ export default function MaterialsSection() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    fetch(apiUrl('/api/ebooks/'))
-      .then((res) => res.json())
-      .then((data) => setEbooks(Array.isArray(data.ebooks) ? data.ebooks : []))
+    loadSiteData<{ ebooks?: Ebook[] }>('/api/ebooks/', 'ebooks.json', (data) =>
+        setEbooks(Array.isArray(data.ebooks) ? data.ebooks : []),
+      )
       .catch((err) => {
         console.error('[MaterialsSection] Erro ao carregar ebooks:', err);
       })

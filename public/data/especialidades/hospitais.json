@@ -1,0 +1,10 @@
+{
+  "especialidade": {
+    "id": 4,
+    "titulo": "Hospitais",
+    "slug": "hospitais",
+    "descricao": "Gestão contábil completa para hospitais, alinhando conformidade fiscal, controles internos e eficiência operacional para o funcionamento sustentável da instituição.",
+    "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/data/media/5040afd9526ead96.jpg",
+    "ordem": 4
+  }
+}

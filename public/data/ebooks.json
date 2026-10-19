@@ -1,0 +1,25 @@
+{
+  "ebooks": [
+    {
+      "titulo": "Auditoria Moderna",
+      "slug": "auditoria-moderna",
+      "descricao": "Técnicas modernas de auditoria governamental",
+      "imagem_capa": "",
+      "downloads": 0
+    },
+    {
+      "titulo": "Compliance 2024",
+      "slug": "compliance-2024",
+      "descricao": "Manual de compliance para organizações públicas",
+      "imagem_capa": "",
+      "downloads": 0
+    },
+    {
+      "titulo": "Guia do Gestor",
+      "slug": "guia-do-gestor",
+      "descricao": "Um guia completo para gestores públicos",
+      "imagem_capa": "",
+      "downloads": 0
+    }
+  ]
+}

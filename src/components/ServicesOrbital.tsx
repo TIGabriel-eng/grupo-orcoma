@@ -85,9 +85,33 @@ const serviceDescriptions: Record<string, ServiceInfo> = {
   },
 };
 
+const MOBILE_QUERY = '(max-width: 639px)';
+
+/**
+ * No celular o SVG é reduzido para ~340 px, então as bolinhas ficam pequenas
+ * demais para tocar. Nesse caso usamos bolinhas maiores e área de toque ampliada.
+ */
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(MOBILE_QUERY).matches
+  );
+  useEffect(() => {
+    const mq = window.matchMedia(MOBILE_QUERY);
+    const onChange = () => setIsMobile(mq.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+  return isMobile;
+}
+
 export default function ServicesOrbital() {
   const [activeKey, setActiveKey] = useState('departamento-contabil');
   const [manualReset, setManualReset] = useState(0);
+  const isMobile = useIsMobile();
+  const DOT_R = isMobile ? 44 : 17;
+  const HIT_R = isMobile ? 90 : 17;
+  const LABEL_SIZE = isMobile ? 34 : 26;
+  const LABEL_LINE = isMobile ? 38 : 30;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -116,7 +140,7 @@ export default function ServicesOrbital() {
 
         {/* Orbital SVG */}
         <div className="flex justify-center reveal" style={{ overflow: 'visible', '--reveal-delay': '120ms' } as React.CSSProperties}>
-          <svg viewBox="-360 -160 1520 1280" width="100%" style={{ maxWidth: '900px', overflow: 'visible' }}>
+          <svg viewBox="-360 -160 1520 1080" width="100%" style={{ maxWidth: '900px', overflow: 'visible' }}>
             <style>{`
               @keyframes pulse-ring {
                 0% { r: ${CENTER_R}; stroke-width: 3; opacity: 0.6; }
@@ -126,11 +150,6 @@ export default function ServicesOrbital() {
               .pulse-circle {
                 animation: pulse-ring 2.5s ease-in-out infinite;
               }
-              @keyframes orbit-pulse {
-                0% { opacity: 0.3; }
-                50% { opacity: 1; }
-                100% { opacity: 0.3; }
-              }
               .service-dot {
                 cursor: pointer;
                 transition: all 0.3s ease;
@@ -138,8 +157,14 @@ export default function ServicesOrbital() {
               .service-dot:hover {
                 filter: brightness(1.3);
               }
-              .orbit-ring {
-                animation: orbit-pulse 1.5s ease-in-out infinite;
+              @keyframes dot-blink {
+                0%, 100% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 14px #e8b800); }
+                50% { opacity: 0.1; transform: scale(0.7); filter: drop-shadow(0 0 0 #e8b800); }
+              }
+              .service-dot-active {
+                transform-box: fill-box;
+                transform-origin: center;
+                animation: dot-blink 0.9s ease-in-out infinite;
               }
             `}</style>
             {/* Outer ring */}
@@ -172,38 +197,36 @@ export default function ServicesOrbital() {
               const isActive = activeKey === svc.key;
               return (
                 <g key={svc.label.join()}>
-                  {isActive && (
-                    <circle
-                      className="orbit-ring"
-                      cx={dot.x}
-                      cy={dot.y}
-                      r={25}
-                      fill="none"
-                      stroke="#e8b800"
-                      strokeWidth="2.5"
-                    />
-                  )}
+                  {/* Área de toque invisível, maior que a bolinha */}
                   <circle
-                    className="service-dot"
                     cx={dot.x}
                     cy={dot.y}
-                    r={17}
-                    fill={isActive ? '#e8b800' : 'white'}
+                    r={HIT_R}
+                    fill="transparent"
+                    style={{ cursor: 'pointer' }}
                     onClick={() => {
                       setActiveKey(svc.key);
                       setManualReset((n) => n + 1);
                     }}
                   />
+                  <circle
+                    className={isActive ? 'service-dot service-dot-active' : 'service-dot'}
+                    cx={dot.x}
+                    cy={dot.y}
+                    r={DOT_R}
+                    fill={isActive ? '#e8b800' : 'white'}
+                    style={{ pointerEvents: 'none' }}
+                  />
                   <text
                     x={lx}
-                    y={ly + ((svc.label.length - 1) * 30) / 2}
+                    y={ly + ((svc.label.length - 1) * LABEL_LINE) / 2}
                     textAnchor={anchor}
                     fill="white"
-                    fontSize="26"
+                    fontSize={LABEL_SIZE}
                     fontWeight="700"
                   >
                     {svc.label.map((line, i) => (
-                      <tspan key={i} x={lx} dy={i === 0 ? 0 : 30}>
+                      <tspan key={i} x={lx} dy={i === 0 ? 0 : LABEL_LINE}>
                         {line}
                       </tspan>
                     ))}
@@ -215,7 +238,7 @@ export default function ServicesOrbital() {
         </div>
 
         {/* Active service description */}
-        <div className="text-center -mt-6 reveal" style={{ '--reveal-delay': '180ms' } as React.CSSProperties}>
+        <div className="text-center mt-2 reveal" style={{ '--reveal-delay': '180ms' } as React.CSSProperties}>
           <span
             className="inline-block px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider mb-4"
             style={{ background: '#e8b800', color: '#000' }}

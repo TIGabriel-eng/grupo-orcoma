@@ -6,6 +6,7 @@ import PageNav from '../components/PageNav';
 import Footer from '../components/Footer';
 import WhatsAppToggle from '../components/WhatsAppToggle';
 import { apiUrl } from '../config/api';
+import { loadSiteData } from '../config/siteData';
 import { Skeleton } from '../components/Skeleton';
 import SlowLoadingHint from '../components/SlowLoadingHint';
 
@@ -54,15 +55,13 @@ export default function EventosPage() {
 
   useEffect(() => {
     let active = true;
-    fetch(apiUrl('/api/eventos/'))
-      .then((res) => {
-        if (!res.ok) throw new Error('Erro ao carregar eventos');
-        return res.json();
-      })
-      .then((data) => {
+    loadSiteData<{ eventos?: Array<{ titulo: string; descricao: string; local: string; data: string; imagem: string; link_inscricao: string }> }>(
+      '/api/eventos/',
+      'eventos.json',
+      (data) => {
         if (!active) return;
         const apiEvents: Evento[] = (Array.isArray(data.eventos) ? data.eventos : []).map(
-          (ev: { titulo: string; descricao: string; local: string; data: string; imagem: string; link_inscricao: string }) => ({
+          (ev) => ({
             title: ev.titulo,
             description: ev.descricao,
             location: ev.local,

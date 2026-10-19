@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { useNav, type Page } from '../context/NavContext';
+import { ERP_URL, NFE_URL } from '../config/links';
 
 type PageNavEntry = { label: string; page: Page } | { label: string; external: string };
 
@@ -27,13 +28,21 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
   const [contatoOpen, setContatoOpen] = useState(false);
   const loginDropdownRef = useRef<HTMLDivElement>(null);
   const contatoDropdownRef = useRef<HTMLDivElement>(null);
+  // Refs do menu mobile: sem eles, o clique num submenu mobile fecha o submenu
+  // no mousedown (o dropdown do desktop, escondido, é o único ref checado) e o click não chega.
+  const loginMobileRef = useRef<HTMLDivElement>(null);
+  const contatoMobileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    function clicouDentro(refs: React.RefObject<HTMLDivElement>[], alvo: Node) {
+      return refs.some((r) => r.current?.contains(alvo));
+    }
     function handleClickOutside(e: MouseEvent) {
-      if (loginDropdownRef.current && !loginDropdownRef.current.contains(e.target as Node)) {
+      const alvo = e.target as Node;
+      if (!clicouDentro([loginDropdownRef, loginMobileRef], alvo)) {
         setLoginOpen(false);
       }
-      if (contatoDropdownRef.current && !contatoDropdownRef.current.contains(e.target as Node)) {
+      if (!clicouDentro([contatoDropdownRef, contatoMobileRef], alvo)) {
         setContatoOpen(false);
       }
     }
@@ -43,19 +52,19 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
 
   return (
     <header className="relative flex items-center justify-center px-4 sm:px-8 py-4 sm:py-5 min-h-[5.5rem] sm:min-h-[6.5rem]">
-      <div className="w-full max-w-[110rem] flex items-center justify-center gap-4 relative">
-      <button onClick={() => navigate('home')} className="flex-shrink-0 absolute left-0 top-1/2 -translate-y-1/2">
+      <div className="w-full max-w-[110rem] flex items-center justify-between gap-3 relative">
+      <button onClick={() => navigate('home')} className="flex-shrink-0 xl:mr-3 2xl:mr-0 ml-2">
         <img src="/grupo-orcoma-logo.png" alt="Grupo Orcoma" className="h-12 sm:h-16 w-auto" style={{ transform: 'scale(1.26)' }} />
       </button>
 
-      <nav className="hidden xl:flex items-center rounded-full px-4 py-0.5 gap-0.5" style={{ background: 'rgba(100, 160, 255, 0.3)' }}>
+      <nav className="hidden xl:flex items-center rounded-full px-2 2xl:px-4 py-0.5 gap-0 2xl:gap-0.5 min-w-0" style={{ background: 'rgba(100, 160, 255, 0.3)' }}>
         {links.map((item) => {
           if ('external' in item) {
             return (
               <button
                 key={item.label}
                 onClick={() => window.open(item.external, '_blank')}
-                className="px-4 py-1.5 text-[1.26rem] font-semibold rounded-full transition-colors hover:bg-white/10 relative"
+                className="px-2.5 2xl:px-4 py-1.5 text-[1rem] 2xl:text-[1.26rem] whitespace-nowrap font-semibold rounded-full transition-colors hover:bg-white/10 relative"
                 style={{ color: 'white' }}
               >
                 {item.label}
@@ -68,7 +77,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
               <div key={item.label} className="relative" ref={contatoDropdownRef}>
                 <button
                   onClick={() => setContatoOpen(!contatoOpen)}
-                  className="px-4 py-1.5 text-[1.26rem] font-semibold rounded-full transition-colors hover:bg-white/10 relative flex items-center gap-1"
+                  className="px-2.5 2xl:px-4 py-1.5 text-[1rem] 2xl:text-[1.26rem] whitespace-nowrap font-semibold rounded-full transition-colors hover:bg-white/10 relative flex items-center gap-1"
                   style={{ color: 'white' }}
                 >
                   {item.label}
@@ -118,7 +127,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
               <div key={item.label} className="relative" ref={loginDropdownRef}>
                 <button
                   onClick={() => setLoginOpen(!loginOpen)}
-                  className="px-4 py-1.5 text-[1.26rem] font-semibold rounded-full transition-colors hover:bg-white/10 relative flex items-center gap-1"
+                  className="px-2.5 2xl:px-4 py-1.5 text-[1rem] 2xl:text-[1.26rem] whitespace-nowrap font-semibold rounded-full transition-colors hover:bg-white/10 relative flex items-center gap-1"
                   style={{ color: 'white' }}
                 >
                   {item.label}
@@ -144,11 +153,23 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
                         animation: fadeSlideIn 0.3s ease-out both;
                       }
                     `}</style>
-                                        <button
+                    <button
                       onClick={() => { navigate('academy-business'); setLoginOpen(false); }}
                       className="sub-item w-full text-left px-5 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
                     >
                       Orcoma Academy Business
+                    </button>
+                    <button
+                      onClick={() => { window.open(ERP_URL, '_blank', 'noopener,noreferrer'); setLoginOpen(false); }}
+                      className="sub-item w-full text-left px-5 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
+                    >
+                      ERP
+                    </button>
+                    <button
+                      onClick={() => { window.open(NFE_URL, '_blank', 'noopener,noreferrer'); setLoginOpen(false); }}
+                      className="sub-item w-full text-left px-5 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
+                    >
+                      NFE
                     </button>
                   </div>
                 )}
@@ -159,7 +180,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
             <button
               key={item.label}
               onClick={() => navigate(item.page)}
-              className="px-4 py-1.5 text-[1.26rem] font-semibold rounded-full transition-colors hover:bg-white/10 relative"
+              className="px-2.5 2xl:px-4 py-1.5 text-[1rem] 2xl:text-[1.26rem] whitespace-nowrap font-semibold rounded-full transition-colors hover:bg-white/10 relative"
               style={{ color: 'white' }}
             >
               {item.label}
@@ -174,10 +195,10 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
         })}
       </nav>
 
-      <div className={`hidden xl:flex absolute right-0 top-1/2 -translate-y-1/2 ${stackConsultor ? 'flex-col items-end gap-1' : 'items-center gap-1'} flex-shrink-0`}>
+      <div className={`hidden xl:flex ${stackConsultor ? 'flex-col items-end gap-1' : 'items-center gap-1'} flex-shrink-0`}>
         <button
           onClick={() => window.open('https://academy.orcomacontabilidade.com.br/login', '_blank')}
-          className="px-5 py-2 rounded-full text-[1.26rem] font-semibold transition-all hover:brightness-110 relative"
+          className="px-4 2xl:px-5 py-2 rounded-full text-[1rem] 2xl:text-[1.26rem] whitespace-nowrap font-semibold transition-all hover:brightness-110 relative"
           style={{ background: 'rgba(100, 160, 255, 0.3)', color: 'white' }}
         >
           Orcoma Academy
@@ -186,7 +207,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
         {showConsultor && (
           <button
             onClick={() => navigate('contato')}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:brightness-110 hover:scale-105"
+            className="hidden 2xl:flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:brightness-110 hover:scale-105"
             style={{ background: '#e8b800', color: '#000' }}
           >
             Falar com um Consultor(a)
@@ -195,7 +216,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
       </div>
 
       <button
-        className="xl:hidden text-white p-2 flex-shrink-0 absolute right-0 top-1/2 -translate-y-1/2"
+        className="xl:hidden text-white p-2 flex-shrink-0 ml-auto"
         onClick={() => setMobileOpen(!mobileOpen)}
         aria-label="Menu"
       >
@@ -222,7 +243,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
             }
             if (item.label === 'Contato') {
               return (
-              <div key={item.label} className="w-full flex flex-col items-center">
+              <div key={item.label} className="w-full flex flex-col items-center" ref={contatoMobileRef}>
                 <button
                   onClick={() => setContatoOpen(!contatoOpen)}
                   className="text-white text-[1.4rem] font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors w-full text-center flex items-center justify-center gap-1"
@@ -251,7 +272,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
             }
             if (item.label === 'Login') {
               return (
-              <div key={item.label} className="w-full flex flex-col items-center">
+              <div key={item.label} className="w-full flex flex-col items-center" ref={loginMobileRef}>
                 <button
                   onClick={() => setLoginOpen(!loginOpen)}
                   className="text-white text-[1.4rem] font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors w-full text-center flex items-center justify-center gap-1"
@@ -265,6 +286,22 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
                     className="text-white/80 text-lg font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors"
                   >
                     Orcoma Academy Business
+                  </button>
+                )}
+                {loginOpen && (
+                  <button
+                    onClick={() => { window.open(ERP_URL, '_blank', 'noopener,noreferrer'); setMobileOpen(false); setLoginOpen(false); }}
+                    className="text-white/80 text-lg font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors"
+                  >
+                    ERP
+                  </button>
+                )}
+                {loginOpen && (
+                  <button
+                    onClick={() => { window.open(NFE_URL, '_blank', 'noopener,noreferrer'); setMobileOpen(false); setLoginOpen(false); }}
+                    className="text-white/80 text-lg font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors"
+                  >
+                    NFE
                   </button>
                 )}
               </div>

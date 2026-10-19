@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Calendar } from 'lucide-react';
 import { useNav } from '../context/NavContext';
-import { apiUrl } from '../config/api';
+import { loadSiteData } from '../config/siteData';
 import { Skeleton } from './Skeleton';
 import SlowLoadingHint from './SlowLoadingHint';
 
@@ -20,12 +20,10 @@ export default function BlogSection() {
 
   useEffect(() => {
     let active = true;
-    fetch(apiUrl('/api/posts/'))
-      .then((res) => {
-        if (!res.ok) throw new Error('Erro ao carregar posts');
-        return res.json();
-      })
-      .then((data) => {
+    loadSiteData<{ posts?: Array<{ titulo: string; resumo: string; data_publicacao: string; imagem: string; slug: string }> }>(
+      '/api/posts/',
+      'posts.json',
+      (data) => {
         if (!active) return;
         const apiPosts: BlogPost[] = (Array.isArray(data.posts) ? data.posts : []).map(
           (post: { titulo: string; resumo: string; data_publicacao: string; imagem: string; slug: string }) => ({

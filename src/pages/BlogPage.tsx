@@ -6,6 +6,7 @@ import WhatsAppToggle from '../components/WhatsAppToggle';
 import BlogCtaCard from '../components/BlogCtaCard';
 import { useNav } from '../context/NavContext';
 import { apiUrl } from '../config/api';
+import { loadSiteData } from '../config/siteData';
 import { Skeleton } from '../components/Skeleton';
 import SlowLoadingHint from '../components/SlowLoadingHint';
 
@@ -147,12 +148,10 @@ export default function BlogPage() {
 
   useEffect(() => {
     let active = true;
-    fetch(apiUrl('/api/posts/'))
-      .then((res) => {
-        if (!res.ok) throw new Error('Erro ao carregar posts');
-        return res.json();
-      })
-      .then((data) => {
+    loadSiteData<{ posts?: Array<{ titulo: string; resumo: string; data_publicacao: string; data_iso: string; imagem: string; slug: string }> }>(
+      '/api/posts/',
+      'posts.json',
+      (data) => {
         if (!active) return;
         const apiPosts: BlogPost[] = (Array.isArray(data.posts) ? data.posts : []).map(
           (post: { titulo: string; resumo: string; data_publicacao: string; data_iso: string; imagem: string; slug: string }) => ({

@@ -8,6 +8,20 @@ export const attendantConfig = {
 export const buildWhatsAppUrl = (text: string) =>
   `https://wa.me/557399747460?text=${encodeURIComponent(text)}`;
 
+// WhatsApp de cada atendente regional, pelo nome da unidade em `unidadesAtendidas`
+// (formato: 55 + DDD + número, só dígitos). Unidade sem número cai no atendimento geral.
+export const whatsappPorUnidade: Record<string, string> = {
+  // 'Salvador': '5571XXXXXXXXX',
+};
+
+// Link de WhatsApp do atendente da unidade; sem número cadastrado, usa o geral
+export const linkWhatsAppUnidade = (nomeUnidade: string | undefined, texto: string): string => {
+  const numero = nomeUnidade ? whatsappPorUnidade[nomeUnidade] : undefined;
+  return numero
+    ? `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`
+    : buildWhatsAppUrl(texto);
+};
+
 // Lista de unidades/regiões atendidas pela Orcoma (coordenadas aproximadas da sede de cada cidade)
 export const unidadesAtendidas = [
   { nome: 'Salvador', estado: 'BA', keywords: ['salvador', 'ssa'], lat: -12.9714, lng: -38.5014 },

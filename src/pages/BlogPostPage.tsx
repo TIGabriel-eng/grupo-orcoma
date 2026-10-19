@@ -8,7 +8,7 @@ import BlogCtaCard from '../components/BlogCtaCard';
 import BlogPostIndex from '../components/BlogPostIndex';
 import { prepararConteudo } from '../utils/blogContent';
 import { useNav } from '../context/NavContext';
-import { apiUrl } from '../config/api';
+import { loadSiteData } from '../config/siteData';
 import { Skeleton } from '../components/Skeleton';
 import SlowLoadingHint from '../components/SlowLoadingHint';
 
@@ -49,12 +49,10 @@ export default function BlogPostPage() {
     setLoading(true);
     setNotFound(false);
 
-    fetch(apiUrl(`/api/posts/${activePostSlug}/`))
-      .then((res) => {
-        if (!res.ok) throw new Error('Post não encontrado');
-        return res.json();
-      })
-      .then((data) => {
+    loadSiteData<{ post?: PostDetalhe }>(
+      `/api/posts/${activePostSlug}/`,
+      `posts/${activePostSlug}.json`,
+      (data) => {
         if (!active) return;
         if (data.post) {
           setPost(data.post);

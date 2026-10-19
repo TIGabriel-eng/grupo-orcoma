@@ -1,0 +1,10 @@
+{
+  "especialidade": {
+    "id": 1,
+    "titulo": "Iniciativa Pública",
+    "slug": "iniciativa-publica",
+    "descricao": "Assessoria contábil especializada para órgãos e entidades públicas, com foco em conformidade fiscal, transparência na aplicação dos recursos e prestação de contas segura junto aos órgãos de controle.",
+    "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/data/media/ec6758ad1bcde9aa.jpg",
+    "ordem": 1
+  }
+}

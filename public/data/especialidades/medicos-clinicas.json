@@ -1,0 +1,10 @@
+{
+  "especialidade": {
+    "id": 3,
+    "titulo": "Médicos, Clínicas Médicas e Profissionais da Área da Saúde",
+    "slug": "medicos-clinicas",
+    "descricao": "Planejamento tributário e contabilidade sob medida para médicos, clínicas e profissionais da saúde, unindo economia fiscal e regularidade com o CRM e demais exigências do setor.",
+    "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/data/media/423a3513643893a9.jpg",
+    "ordem": 3
+  }
+}

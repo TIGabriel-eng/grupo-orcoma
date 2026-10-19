@@ -7,7 +7,7 @@ import {
   attendantConfig,
   getAttendantStatus,
   findNearestUnit,
-  buildWhatsAppUrl,
+  linkWhatsAppUnidade,
   isAttendantOnline,
   horarioAtendimento,
   trackWhatsAppClick,
@@ -73,7 +73,7 @@ const TOPICOS = [
 type TopicoKey = (typeof TOPICOS)[number]['key'];
 
 export default function WhatsAppModal() {
-  const { isOpen, open, close } = useWhatsApp();
+  const { isOpen, intent, pergunta, open, close } = useWhatsApp();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [bubbleVisible, setBubbleVisible] = useState(true);
@@ -119,6 +119,22 @@ export default function WhatsAppModal() {
       setChatTurn('options');
       setRegionAttempts(0);
       setWhatsappLink(null);
+
+      // Veio do botão "Fale Conosco" de abertura de empresa: já pergunta a localidade
+      if (intent === 'regiao') {
+        setChatTurn('await_region');
+        setMessages([
+          {
+            id: Date.now(),
+            text: pergunta ?? 'Você deseja abrir a sua empresa! Antes de seguirmos, me fale de qual localidade você está falando?',
+            sender: 'ana',
+            timestamp: new Date(),
+          },
+        ]);
+        prevOpenRef.current = isOpen;
+        return;
+      }
+
       // Mostra mensagem de boas-vindas da Ana ao abrir
       const boasVindas: Message[] = [
         {
@@ -209,7 +225,8 @@ export default function WhatsAppModal() {
         return;
       }
 
-      const whatsappUrl = buildWhatsAppUrl(
+      const whatsappUrl = linkWhatsAppUnidade(
+        foundUnit?.nome,
         `Olá, gostaria de conversar com um consultor(a). Vim do site Orcoma e sou da região ${regionInput}.`
       );
 

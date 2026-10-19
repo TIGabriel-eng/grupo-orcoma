@@ -1,0 +1,10 @@
+{
+  "especialidade": {
+    "id": 2,
+    "titulo": "Comércio Varejista e Atacadista",
+    "slug": "comercio-varejista-e-atacadista",
+    "descricao": "Contabilidade estratégica para lojas, distribuidoras e atacados, com planejamento tributário, controle de custos e redução de impostos para uma gestão financeira mais saudável.",
+    "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/data/media/640036973ff4dabd.jpg",
+    "ordem": 2
+  }
+}

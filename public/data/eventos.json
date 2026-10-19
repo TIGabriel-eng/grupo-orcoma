@@ -1,0 +1,22 @@
+{
+  "eventos": [
+    {
+      "titulo": "Orcoma Day - Amargosa – BA",
+      "descricao": "O nosso próximo encontro está te esperando em Amargosa - BA, não perca tempo para participar de um dos nossos maiores eventos sobre a Reforma Tributária!",
+      "local": "Amargosa",
+      "data": "15 SET",
+      "data_completa": "15 de setembro de 2026",
+      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/publichttps://dashboard-orcoma.onrender.com/media/eventos/BANNER_SITE_AMARGOSA.avif",
+      "link_inscricao": "https://inscricoesday.orcomacontabilidade.com.br/inscricao/amargosa"
+    },
+    {
+      "titulo": "Orcoma Day - Poções",
+      "descricao": "Te esperamos lá em Poções!",
+      "local": "Poções",
+      "data": "30 SET",
+      "data_completa": "30 de setembro de 2026",
+      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/publichttps://dashboard-orcoma.onrender.com/media/eventos/BANNER_SITE_POCOES.avif",
+      "link_inscricao": "https://inscricoesday.orcomacontabilidade.com.br/inscricao/pocoes"
+    }
+  ]
+}

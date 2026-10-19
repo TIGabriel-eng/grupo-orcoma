@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { apiUrl } from '../config/api';
+import { loadSiteData } from '../config/siteData';
 import { useWhatsApp } from '../context/WhatsAppContext';
 import { useNav, type Page } from '../context/NavContext';
 
@@ -7,6 +7,8 @@ interface CarrosselBotao {
   texto: string;
   tipo: string;
   link: string;
+  // Só para tipo 'regiao': primeira pergunta da Ana no chat
+  pergunta?: string;
 }
 
 interface CarrosselSlide {
@@ -58,7 +60,12 @@ const SLIDES_CODIGO: CarrosselSlide[] = [
     imagem: '/abertura.jpg',
     foto: '',
     ordem: -1,
-    botao1: { texto: 'Abra sua empresa agora!', tipo: 'whatsapp', link: '' },
+    botao1: {
+      texto: 'Abra sua empresa agora!',
+      tipo: 'regiao',
+      link: '',
+      pergunta: 'Você deseja abrir a sua empresa! Antes de seguirmos, me fale de qual localidade você está falando?',
+    },
     botao2: { texto: '', tipo: 'nenhum', link: '' },
   },
   {
@@ -69,22 +76,25 @@ const SLIDES_CODIGO: CarrosselSlide[] = [
     imagem: '',
     foto: '',
     ordem: -2,
-    botao1: { texto: 'Venha conversar com a gente!', tipo: 'whatsapp', link: '' },
+    botao1: {
+      texto: 'Venha conversar com a gente!',
+      tipo: 'regiao',
+      link: '',
+      pergunta: 'Você deseja trocar de contabilidade! Antes de seguirmos, me fale de qual localidade você está falando?',
+    },
     botao2: { texto: '', tipo: 'nenhum', link: '' },
   },
 ];
 
 export default function HeroCarousel() {
-  const { open: openWhatsApp } = useWhatsApp();
+  const { open: openWhatsApp, openRegiao } = useWhatsApp();
   const { navigate } = useNav();
   const [slides, setSlides] = useState<CarrosselSlide[]>([...SLIDES_CODIGO, ...FALLBACK_SLIDES]);
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
-    fetch(apiUrl('/api/carrossel/'))
-      .then((res) => res.json())
-      .then((data) => {
+    loadSiteData<{ slides?: CarrosselSlide[] }>('/api/carrossel/', 'carrossel.json', (data) => {
         const list: CarrosselSlide[] = (data.slides || [])
           .filter((s: CarrosselSlide) => s.titulo || s.subtitulo || s.botao1?.texto || s.botao2?.texto)
           .map((s: CarrosselSlide) => ({
@@ -122,6 +132,9 @@ export default function HeroCarousel() {
     switch (botao.tipo) {
       case 'whatsapp':
         openWhatsApp();
+        break;
+      case 'regiao':
+        openRegiao(botao.pergunta);
         break;
       case 'contato':
         navigate('contato');

@@ -1,0 +1,10 @@
+{
+  "especialidade": {
+    "id": 5,
+    "titulo": "Terceiro Setor",
+    "slug": "terceiro-setor",
+    "descricao": "Assessoria contábil para ONGs, associações e fundações, com prestação de contas transparente, captação responsável de recursos e manutenção das obrigações legais.",
+    "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/data/media/0e3bc83e034ef3b7.jpg",
+    "ordem": 5
+  }
+}

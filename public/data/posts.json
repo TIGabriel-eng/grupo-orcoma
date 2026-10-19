@@ -1,0 +1,36 @@
+{
+  "posts": [
+    {
+      "titulo": "Reforma Tributária 2026: O Contador que Não se Adaptar, Ficará para Trás",
+      "resumo": "A contabilidade brasileira vive sua maior transformação em décadas. Com a Reforma Tributária do consumo entrando em vigor em 2026 e a inteligência artificial dominando processos operacionais, o contador que não se adaptar corre sério risco de obsolescência.",
+      "data_publicacao": "12 de agosto de 2026",
+      "data_iso": "2026-08-12",
+      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/data/media/025cc1cef54fd4f4.jpg",
+      "slug": "reforma-tributaria-2026-o-contador-que-nao-se-adap"
+    },
+    {
+      "titulo": "Contabilidade 2026: Como a Inteligência Artificial e a Reforma Tributária Estão Redefinindo o Futuro do Setor",
+      "resumo": "Descubra as principais tendências da contabilidade em 2026: da automação com IA à Reforma Tributária, passando pelo papel estratégico do contador. Saiba como se preparar para as mudanças que transformarão o setor.",
+      "data_publicacao": "12 de agosto de 2026",
+      "data_iso": "2026-08-12",
+      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/data/media/c8bc16706ad8f544.jpg",
+      "slug": "contabilidade-2026-como-a-inteligencia-artificial"
+    },
+    {
+      "titulo": "Automações na Contabilidade: O Que Realmente Funciona em 2026",
+      "resumo": "Pare de perder tempo com tarefas que um robô faz em segundos. Veja as 5 automações que todo escritório contábil precisa implementar agora.",
+      "data_publicacao": "10 de agosto de 2026",
+      "data_iso": "2026-08-10",
+      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/data/media/6b1a80aa8f9ec691.webp",
+      "slug": "automacoes-na-contabilidade-o-que-realmente-funcio"
+    },
+    {
+      "titulo": "As IAs Estão Desenvolvendo Softwares Contábeis: O Que Isso Significa para o Futuro do Setor",
+      "resumo": "As IAs Estão Desenvolvendo Softwares Contábeis: O Que Isso Significa para o Futuro do Setor",
+      "data_publicacao": "7 de agosto de 2026",
+      "data_iso": "2026-08-07",
+      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/data/media/492f380160786e48.png",
+      "slug": "as-ias-estao-desenvolvendo-softwares-contabeis-o-q"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "especialidades": [
+    {
+      "id": 1,
+      "titulo": "Iniciativa Pública",
+      "slug": "iniciativa-publica",
+      "descricao": "Assessoria contábil especializada para órgãos e entidades públicas, com foco em conformidade fiscal, transparência na aplicação dos recursos e prestação de contas segura junto aos órgãos de controle.",
+      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/data/media/ec6758ad1bcde9aa.jpg",
+      "ordem": 1
+    },
+    {
+      "id": 2,
+      "titulo": "Comércio Varejista e Atacadista",
+      "slug": "comercio-varejista-e-atacadista",
+      "descricao": "Contabilidade estratégica para lojas, distribuidoras e atacados, com planejamento tributário, controle de custos e redução de impostos para uma gestão financeira mais saudável.",
+      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/data/media/640036973ff4dabd.jpg",
+      "ordem": 2
+    },
+    {
+      "id": 3,
+      "titulo": "Médicos, Clínicas Médicas e Profissionais da Área da Saúde",
+      "slug": "medicos-clinicas",
+      "descricao": "Planejamento tributário e contabilidade sob medida para médicos, clínicas e profissionais da saúde, unindo economia fiscal e regularidade com o CRM e demais exigências do setor.",
+      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/data/media/423a3513643893a9.jpg",
+      "ordem": 3
+    },
+    {
+      "id": 4,
+      "titulo": "Hospitais",
+      "slug": "hospitais",
+      "descricao": "Gestão contábil completa para hospitais, alinhando conformidade fiscal, controles internos e eficiência operacional para o funcionamento sustentável da instituição.",
+      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/data/media/5040afd9526ead96.jpg",
+      "ordem": 4
+    },
+    {
+      "id": 5,
+      "titulo": "Terceiro Setor",
+      "slug": "terceiro-setor",
+      "descricao": "Assessoria contábil para ONGs, associações e fundações, com prestação de contas transparente, captação responsável de recursos e manutenção das obrigações legais.",
+      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/data/media/0e3bc83e034ef3b7.jpg",
+      "ordem": 5
+    },
+    {
+      "id": 6,
+      "titulo": "Construção Civil",
+      "slug": "construcao-civil",
+      "descricao": "Especialização em contabilidade para construtoras e incorporadoras, com apuração correta de custos e tributos do setor e suporte nas particularidades de cada obra.",
+      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/data/media/c60687a3667bd694.jpg",
+      "ordem": 6
+    }
+  ]
+}

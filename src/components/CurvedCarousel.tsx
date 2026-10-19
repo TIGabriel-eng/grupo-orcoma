@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { apiUrl } from '../config/api';
-import { Skeleton } from './Skeleton';
-import SlowLoadingHint from './SlowLoadingHint';
+import { SOBRE_NOS_FOTOS_LOCAIS, imagemLocalOuOriginal } from '../data/sobreFotos';
 
 interface SobreNosFoto {
   id: number;
@@ -25,8 +24,8 @@ function getCardWidth(): string {
 // ────────────────────────────────────────────────────────────────────────────
 
 export default function CurvedCarousel() {
-  const [fotos, setFotos] = useState<SobreNosFoto[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Começa com as fotos incluídas no build: aparecem na hora, sem esperar a API.
+  const [fotos, setFotos] = useState<SobreNosFoto[]>(SOBRE_NOS_FOTOS_LOCAIS);
   const [cardWidth, setCardWidth] = useState(CARD_WIDTH_DESKTOP);
 
   useEffect(() => {
@@ -36,43 +35,27 @@ export default function CurvedCarousel() {
     return () => window.removeEventListener('resize', update);
   }, []);
 
+  // Atualiza com a lista da API em segundo plano (quando ela responder).
+  // Se a API falhar ou vier vazia, continuam valendo as fotos locais.
   useEffect(() => {
     let cancelled = false;
     fetch(apiUrl('/api/sobre-nos-fotos/'))
       .then((res) => res.json())
       .then((data) => {
-        const list: SobreNosFoto[] = (data.fotos || []).filter(
-          (f: { imagem: string }) => f.imagem
-        );
+        const list: SobreNosFoto[] = (data.fotos || [])
+          .filter((f: { imagem: string }) => f.imagem)
+          .map((f: SobreNosFoto) => ({ ...f, imagem: imagemLocalOuOriginal(f.imagem) }));
         if (!cancelled && list.length > 0) {
           setFotos(list);
         }
       })
       .catch((err) => {
         console.error('[CurvedCarousel] Erro ao carregar fotos do Sobre Nós:', err);
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
       });
     return () => {
       cancelled = true;
     };
   }, []);
-
-  if (loading) {
-    return (
-      <div className="scene">
-        <div className="flex flex-col items-center py-10">
-          <div className="flex gap-4">
-            {[0, 1, 2, 3, 4].map((i) => (
-              <Skeleton key={i} className="w-40 h-56 rounded-2xl" />
-            ))}
-          </div>
-          <SlowLoadingHint />
-        </div>
-      </div>
-    );
-  }
 
   if (fotos.length === 0) return null;
 

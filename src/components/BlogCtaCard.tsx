@@ -1,5 +1,6 @@
 import { useNav } from '../context/NavContext';
-import { attendantConfig, trackWhatsAppClick } from '../config/attendant';
+import { useWhatsApp } from '../context/WhatsAppContext';
+import { trackWhatsAppClick, type InteresseKey } from '../config/attendant';
 
 interface CtaCardProps {
   title: string;
@@ -7,10 +8,10 @@ interface CtaCardProps {
   pillColor: string;
   pillTextColor: string;
   animationName: string;
-  whatsappUrl?: string;
+  onClick?: () => void;
 }
 
-function CtaCard({ title, pillLabel, pillColor, pillTextColor, animationName, whatsappUrl }: CtaCardProps) {
+function CtaCard({ title, pillLabel, pillColor, pillTextColor, animationName, onClick }: CtaCardProps) {
   const { navigate } = useNav();
 
   const pillClassName =
@@ -35,17 +36,15 @@ function CtaCard({ title, pillLabel, pillColor, pillTextColor, animationName, wh
         <h3 className="text-xl font-extrabold text-gray-900 leading-snug">
           {title}
         </h3>
-        {whatsappUrl ? (
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => trackWhatsAppClick('blog_cta')}
+        {onClick ? (
+          <button
+            type="button"
+            onClick={onClick}
             className={pillClassName}
             style={pillStyle}
           >
             {pillLabel}
-          </a>
+          </button>
         ) : (
           <button
             onClick={() => navigate('contato')}
@@ -61,6 +60,11 @@ function CtaCard({ title, pillLabel, pillColor, pillTextColor, animationName, wh
 }
 
 export default function BlogCtaCard() {
+  const { openRegiao } = useWhatsApp();
+  const abrirChat = (pergunta: string, interesse: InteresseKey) => {
+    trackWhatsAppClick('blog_cta', interesse);
+    openRegiao(pergunta);
+  };
   return (
     <aside className="w-full max-w-md mx-auto lg:max-w-none lg:w-[280px] lg:shrink-0 lg:sticky lg:top-24">
       <div className="flex flex-col gap-6">
@@ -70,7 +74,12 @@ export default function BlogCtaCard() {
           pillColor="#e8b800"
           pillTextColor="#000"
           animationName="ctaPulseGold"
-          whatsappUrl={attendantConfig.whatsappUrl}
+          onClick={() =>
+            abrirChat(
+              'Você deseja abrir a sua empresa! Antes de seguirmos, me fale de qual localidade você está falando?',
+              'abrir_empresa',
+            )
+          }
         />
         <CtaCard
           title="Chega de dor de cabeça: trocar de contabilidade ficou simples"
@@ -78,6 +87,12 @@ export default function BlogCtaCard() {
           pillColor="#22c55e"
           pillTextColor="#fff"
           animationName="ctaPulseGreen"
+          onClick={() =>
+            abrirChat(
+              'Você deseja trocar de contabilidade! Antes de seguirmos, me fale de qual localidade você está falando?',
+              'migracao_contabilidade',
+            )
+          }
         />
       </div>
 

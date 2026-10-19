@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { MapPin, ArrowRight } from 'lucide-react';
-import { apiUrl } from '../config/api';
+import { loadSiteData } from '../config/siteData';
 import { useNav } from '../context/NavContext';
 import { Skeleton } from './Skeleton';
 import SlowLoadingHint from './SlowLoadingHint';
@@ -99,9 +99,7 @@ export default function SpecialistsSection() {
   }, [autoPlay]);
 
   useEffect(() => {
-    fetch(apiUrl('/api/especialidades/'))
-      .then(res => res.json())
-      .then(data => {
+    loadSiteData<{ especialidades?: Especialidade[] }>('/api/especialidades/', 'especialidades.json', data => {
         setEspecialidades(data.especialidades || []);
         setLoading(false);
       })
