@@ -3,6 +3,7 @@ import { Shield, Target, Eye, Heart } from 'lucide-react';
 import PageNav from '../components/PageNav';
 import Footer from '../components/Footer';
 import WhatsAppToggle from '../components/WhatsAppToggle';
+import SlideUpPhotos from '../components/SlideUpPhotos';
 
 const BLUE = 'linear-gradient(160deg, #0c0ccc 0%, #1a1aff 50%, #0000b3 100%)';
 
@@ -49,8 +50,8 @@ const diretores = [
   { nome: 'Magali Leal', cargo: 'Diretora', local: 'Orcoma Várzea Nova', imagem: '/magali.png' },
   { nome: 'Sidnéia Caetano', cargo: 'Diretora', local: 'Orcoma Seabra', imagem: '/Sidneia.png' },
   { nome: 'Michele Oliveira', cargo: 'Diretora', local: 'Orcoma Jaguaquara', imagem: '/Michele.png' },
-  { nome: 'Edmilson', cargo: 'Diretor', local: 'Orcoma Jequié 2', imagem: '/edmilson.png' },
-  { nome: 'Rodrigo', cargo: 'Diretor', local: 'Orcoma Campo Formoso', imagem: '/Rodrigo.png' },
+  { nome: 'Edmilson Bastos', cargo: 'Diretor', local: 'Orcoma Jequié 2', imagem: '/edmilson.png' },
+  { nome: 'Rodrigo Farias', cargo: 'Diretor', local: 'Orcoma Campo Formoso', imagem: '/Rodrigo.png' },
 ];
 
 const IDLE_RESUME_MS = 3000;
@@ -246,7 +247,7 @@ export default function SobrePage() {
         <div className="relative z-10">
           <PageNav activePage="sobre" showConsultor={false} />
 
-          <section className="px-4 sm:px-8 pt-8 sm:pt-10 pb-16 sm:pb-24 max-w-5xl mx-auto">
+          <section className="px-4 sm:px-8 pt-8 sm:pt-10 pb-16 sm:pb-24 max-w-6xl 2xl:max-w-[90rem] mx-auto">
             <div className="flex flex-col md:flex-row items-start gap-8 sm:gap-10">
               {/* Left */}
               <div className="flex-1">
@@ -293,12 +294,14 @@ export default function SobrePage() {
       `}</style>
       {/* ── Missão ── */}
       <section className="bg-white py-14 sm:py-20 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 sm:gap-12 items-center">
-          <div className="w-full md:w-96 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg relative reveal" style={{ height: '480px', minHeight: '420px' }}>
-            <img
-              src="/nossa-historia.jpg"
-              alt="Nossa história"
-              className="w-full h-full object-cover"
+        <div className="max-w-6xl 2xl:max-w-[90rem] mx-auto flex flex-col md:flex-row gap-8 sm:gap-12 items-center">
+          <div className="w-full md:w-[48%] xl:w-[44rem] 2xl:w-[52rem] flex-shrink-0 aspect-[4/5] sm:aspect-[4/3] lg:aspect-[3/2] rounded-2xl overflow-hidden shadow-lg relative reveal">
+            <SlideUpPhotos
+              fotos={[
+                '/nossa-historia/slide-1.webp',
+                '/nossa-historia/slide-2.webp',
+                '/nossa-historia/slide-3.webp',
+              ]}
             />
           </div>
 
@@ -319,7 +322,7 @@ export default function SobrePage() {
               <Highlight text="Em 1991, João Albino retornou à sua terra de origem, Itaberaba. A mudança foi motivada pela transferência da empresa onde ele era empregado, todavia, com o sonho de empreender e a vontade grande de gerar emprego e renda, viu a oportunidade de expandir o seu negócio, e na sua própria casa, instalou a sede da Orcoma." />
             </p>
             <div
-              className="hidden md:block absolute -top-4 -right-72 w-[16.8rem] h-[16.8rem] z-10"
+              className="hidden lg:block absolute -top-4 -right-44 xl:-right-72 w-[12rem] h-[12rem] xl:w-[16.8rem] xl:h-[16.8rem] z-10"
               style={{ filter: 'drop-shadow(0 18px 24px rgba(9,36,167,0.35))' }}
             >
               <div
@@ -353,7 +356,7 @@ export default function SobrePage() {
 
       {/* ── História 1994 ── */}
       <section className="bg-white py-14 sm:py-20 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 sm:gap-12 items-center">
+        <div className="max-w-6xl 2xl:max-w-[90rem] mx-auto flex flex-col md:flex-row gap-8 sm:gap-12 items-center">
           <div className="flex-1">
             <p className="text-gray-500 text-sm leading-relaxed mb-4">
               <Highlight text="Em 1994, João Albino recebeu proposta da empresa onde trabalhava como empregado para ser transferido para Salvador, contudo, a suas duas unidades estavam indo muito bem, e a sua vontade de empreender falava mais alto do que a permanecer no emprego, e depois de 15 anos, abriu mão e viu a necessidade de &quot;caminhar com as próprias pernas&quot;." />
@@ -365,9 +368,9 @@ export default function SobrePage() {
               <Highlight text="Naquele período, foi feita a reestruturação societária: Itaberaba se tornou a matriz e Maracás, filial. João Albino também passou a intensificar os trabalhos e promoveu diversas palestras em várias cidades. Constantemente, capacitava a equipe para melhor prestação dos serviços contábeis. Focado, e pesquisador nato, como sempre, estava presente em todos os eventos, cursos, seminários e outros que pudessem ainda mais aprimorar os conhecimentos, para prestar um melhor serviço aos clientes." />
             </p>
           </div>
-          <div className="w-full md:w-96 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg reveal">
+          <div className="w-full md:w-[44%] xl:w-[32rem] 2xl:w-[38rem] flex-shrink-0 rounded-2xl overflow-hidden shadow-lg reveal">
             <img
-              src="/Joao-Albino.jpg"
+              src="/joao-albino-retrato.webp"
               alt="João Albino"
               className="w-full h-auto object-cover"
             />
@@ -377,7 +380,7 @@ export default function SobrePage() {
 
       {/* ── Diferenciais ── */}
       <section className="bg-gray-50 py-8 sm:py-10 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl 2xl:max-w-[90rem] mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {diferenciais.map(({ title, description }, index) => (
               <div
@@ -408,7 +411,7 @@ export default function SobrePage() {
       {/* ── Logo e texto após diferenciais ── */}
       <section className="bg-white py-14 sm:py-20 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto flex flex-col items-center text-center">
-          <img src="/logo2.png" alt="Orcoma Logo" className="w-72 sm:w-80 md:w-96 h-auto mb-8" />
+          <img src="/logo-sobre.webp" alt="Orcoma Logo" className="w-full max-w-[20rem] sm:max-w-[26rem] md:max-w-[32rem] 2xl:max-w-[40rem] h-auto mb-8" />
           <p className="text-gray-600 text-sm sm:text-base leading-relaxed max-w-2xl">
             <Highlight text="Neste intervalo, a Orcoma redesenhou sua logomarca. E como era conhecida apenas como Orcoma, passou a ser chamada de Orcoma Contabilidade Inteligente." />
           </p>
@@ -417,10 +420,10 @@ export default function SobrePage() {
 
       {/* ── Expansão 2008-2012 ── */}
       <section className="bg-white py-14 sm:py-20 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 sm:gap-12 items-start">
-          <div className="w-full md:w-[26rem] lg:w-[31.2rem] flex-shrink-0 rounded-2xl overflow-hidden shadow-lg reveal">
+        <div className="max-w-6xl 2xl:max-w-[90rem] mx-auto flex flex-col md:flex-row gap-8 sm:gap-12 items-start">
+          <div className="w-full md:w-[44%] lg:w-[46%] xl:w-[38rem] 2xl:w-[44rem] flex-shrink-0 rounded-2xl overflow-hidden shadow-lg reveal">
             <img
-              src="/2008.jpg"
+              src="/2008-empresa.webp"
               alt="Escritório Orcoma"
               className="w-full h-auto object-cover"
             />
@@ -444,7 +447,7 @@ export default function SobrePage() {
 
       {/* ── Expansão 2014-2021 ── */}
       <section className="py-14 sm:py-20 px-4 sm:px-6" style={{ background: BLUE }}>
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 sm:gap-12 items-start">
+        <div className="max-w-6xl 2xl:max-w-[90rem] mx-auto flex flex-col md:flex-row gap-8 sm:gap-12 items-start">
           <div className="flex-1 reveal">
             <p className="text-white/80 text-sm leading-relaxed mb-4">
               <Highlight text="Em 2014, foi aberta uma unidade em Feira de Santana. Os serviços e os esforços do time Orcoma só faziam ainda mais continuar na linha crescente, pois atender e prestar um serviço melhor aos clientes desta cidade era necessário. Hoje, esta unidade é gerenciada pelo diretor Caio Vivas, que veio para o time somar e fazer a marca continuar a ser forte." />
@@ -462,9 +465,9 @@ export default function SobrePage() {
               <Highlight text="Novas unidades foram abertas: 2020, em Seabra e Jequié II; e 2021, em Salvador, tornando assim o Grupo Orcoma consolidado como referência no mercado contábil baiano." />
             </p>
           </div>
-          <div className="w-full md:w-[26rem] lg:w-[31.2rem] flex-shrink-0 rounded-2xl overflow-hidden shadow-lg reveal" style={{ '--reveal-delay': '120ms' } as React.CSSProperties}>
+          <div className="w-full md:w-[44%] lg:w-[48%] xl:w-[42rem] 2xl:w-[48rem] md:ml-6 md:mt-20 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg reveal" style={{ '--reveal-delay': '120ms' } as React.CSSProperties}>
             <img
-              src="/2014.jpg"
+              src="/2014-palco.webp"
               alt="Unidade Feira de Santana 2014"
               className="w-full h-auto object-cover"
             />
@@ -474,7 +477,7 @@ export default function SobrePage() {
 
       {/* ── Mascote Bino ── */}
       <section className="bg-white py-14 sm:py-20 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 sm:gap-12 items-center">
+        <div className="max-w-6xl 2xl:max-w-[90rem] mx-auto flex flex-col md:flex-row gap-8 sm:gap-12 items-center">
           <div className="flex-1 reveal">
             <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">
               Conheça nosso novo mascote! Seu nome é <span style={{ color: '#e8b800' }}>Bino!</span>
@@ -483,7 +486,14 @@ export default function SobrePage() {
               <Highlight text="Buscando sempre inovar e otimizar a sua experiência conosco, criamos o BINO, a nova mascote da ORCOMA." />
             </p>
           </div>
-          <div className="w-full md:w-[25rem] lg:w-[29rem] flex-shrink-0 reveal relative top-10 z-10" style={{ '--reveal-delay': '120ms' } as React.CSSProperties}>
+          <div
+            className="w-full md:w-[38%] lg:w-[36%] xl:w-[29rem] 2xl:w-[34rem] flex-shrink-0 reveal relative top-10 z-10"
+            style={{
+              '--reveal-delay': '120ms',
+              maskImage: 'linear-gradient(to bottom, #000 55%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to bottom, #000 55%, transparent 100%)',
+            } as React.CSSProperties}
+          >
             <img
               src="/bino.png"
               alt="Mascote Bino"
@@ -530,7 +540,7 @@ export default function SobrePage() {
             );
           })}
         </svg>
-        <div className="relative max-w-5xl mx-auto">
+        <div className="relative max-w-6xl 2xl:max-w-[90rem] mx-auto">
           {/* Texto centralizado */}
           <div className="text-center mb-12">
             <p className="text-white text-lg sm:text-xl leading-relaxed font-medium">
@@ -559,9 +569,9 @@ export default function SobrePage() {
                 Agende sua reunião com um Especialista!
               </a>
             </div>
-            <div className="w-full md:w-[26rem] lg:w-[31.2rem] flex-shrink-0 rounded-2xl overflow-hidden shadow-lg reveal" style={{ '--reveal-delay': '120ms' } as React.CSSProperties}>
+            <div className="w-full md:w-[44%] lg:w-[46%] xl:w-[38rem] 2xl:w-[44rem] flex-shrink-0 rounded-2xl overflow-hidden shadow-lg reveal" style={{ '--reveal-delay': '120ms' } as React.CSSProperties}>
               <img
-                src="/politica.jpg"
+                src="/politica-qualidade.webp"
                 alt="Política de qualidade"
                 className="w-full h-auto object-cover"
               />
@@ -572,7 +582,7 @@ export default function SobrePage() {
 
       {/* ── Missão, Visão e Valores ── */}
       <section className="bg-white py-14 sm:py-20 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl 2xl:max-w-[90rem] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Card MISSÃO */}
             <CurtainCard>
@@ -635,7 +645,7 @@ export default function SobrePage() {
 
       {/* ── Perguntas Frequentes ── */}
       <section className="bg-white py-14 sm:py-20 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl 2xl:max-w-[90rem] mx-auto">
           <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 text-center mb-3 reveal">
             Perguntas frequentes
           </h1>

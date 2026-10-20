@@ -21,12 +21,15 @@ export default function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [contatoOpen, setContatoOpen] = useState(false);
+  const [eventosOpen, setEventosOpen] = useState(false);
   const loginDropdownRef = useRef<HTMLDivElement>(null);
   const contatoDropdownRef = useRef<HTMLDivElement>(null);
   // Refs do menu mobile: sem eles, o clique num submenu mobile fecha o submenu
   // no mousedown (o dropdown do desktop, escondido, é o único ref checado) e o click não chega.
   const loginMobileRef = useRef<HTMLDivElement>(null);
   const contatoMobileRef = useRef<HTMLDivElement>(null);
+  const eventosDropdownRef = useRef<HTMLDivElement>(null);
+  const eventosMobileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function clicouDentro(refs: React.RefObject<HTMLDivElement>[], alvo: Node) {
@@ -39,6 +42,9 @@ export default function Nav() {
       }
       if (!clicouDentro([contatoDropdownRef, contatoMobileRef], alvo)) {
         setContatoOpen(false);
+      }
+      if (!clicouDentro([eventosDropdownRef, eventosMobileRef], alvo)) {
+        setEventosOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -112,6 +118,41 @@ export default function Nav() {
                       style={{ color: '#1f2937', animationDelay: '0.1s' }}
                     >
                       Trabalhe Conosco
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          }
+          if (item.label === 'Eventos') {
+            const isEventosActive = navPage === page || page === 'orcoma-day';
+            return (
+              <div key={item.label} className="relative" ref={eventosDropdownRef}>
+                <button
+                  onClick={() => setEventosOpen(!eventosOpen)}
+                  className="px-2.5 2xl:px-4 py-1.5 text-[1rem] 2xl:text-[1.26rem] whitespace-nowrap font-semibold rounded-full transition-colors hover:bg-white/10 relative flex items-center gap-1"
+                  style={{ color: 'white' }}
+                >
+                  {item.label}
+                  <ChevronDown size={22} className={`transition-transform ${eventosOpen ? 'rotate-180' : ''}`} />
+                  {isEventosActive && (
+                    <span
+                      className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-0.5 rounded-full"
+                      style={{ background: '#e8b800' }}
+                    />
+                  )}
+                </button>
+                {eventosOpen && (
+                  <div
+                    className="absolute top-full right-0 mt-2 w-56 rounded-2xl shadow-2xl py-3 z-50"
+                    style={{ background: 'white', border: '1px solid #e5e7eb' }}
+                  >
+                    <button
+                      onClick={() => { navigate('orcoma-day'); setEventosOpen(false); }}
+                      className="w-full text-left px-5 py-2.5 text-lg font-medium transition-colors hover:bg-gray-100"
+                      style={{ color: '#1f2937' }}
+                    >
+                      Orcoma Day
                     </button>
                   </div>
                 )}
@@ -248,6 +289,27 @@ export default function Nav() {
                       Trabalhe Conosco
                     </button>
                   </>
+                )}
+              </div>
+            );
+            }
+            if (item.label === 'Eventos') {
+              return (
+              <div key={item.label} className="w-full flex flex-col items-center" ref={eventosMobileRef}>
+                <button
+                  onClick={() => setEventosOpen(!eventosOpen)}
+                  className="text-white text-[1.4rem] font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors w-full text-center flex items-center justify-center gap-1"
+                >
+                  {item.label}
+                  <ChevronDown size={22} className={`transition-transform ${eventosOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {eventosOpen && (
+                  <button
+                    onClick={() => { navigate('orcoma-day'); setMobileOpen(false); setEventosOpen(false); }}
+                    className="text-white/80 text-lg font-medium px-6 py-2 rounded-full hover:bg-white/10 transition-colors"
+                  >
+                    Orcoma Day
+                  </button>
                 )}
               </div>
             );

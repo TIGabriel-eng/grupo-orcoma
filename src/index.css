@@ -33,20 +33,37 @@ html {
 /* ====== 3D Carousel ====== */
 .scene, .a3d { display: grid }
 
+/* todas as medidas em em (cards, perspectiva, raio, margens) escalam com a largura da tela:
+   a composição fica igual em celular, notebook, monitor e telão */
+.carousel-3d {
+  font-size: 0.836vw;
+}
+
+@media (max-width: 768px) {
+  .carousel-3d { font-size: 2.07vw; }
+}
+
+@media (max-width: 480px) {
+  .carousel-3d { font-size: 4.26vw; }
+}
+
 .scene {
-  width: 50vw;
-  max-width: 1200px;
+  width: 70vw;
   margin-inline: auto;
+  /* empurra o carrossel para a esquerda, já que o giro visível fica deslocado para a direita */
+  translate: -6vw 0;
+  /* o layout reserva a altura do card inteiro, mas ele aparece menor por causa da perspectiva */
+  margin-bottom: -12em;
   overflow: visible;
   /* larger perspective to reduce distortion with bigger cards */
-  perspective: 40em;
+  perspective: 80em;
   mask: /* lateral fade */
     linear-gradient(90deg, #0000, black 10% 90%, #0000);
   -webkit-mask:linear-gradient(90deg, #0000, black 10% 90%, #0000);
 }
 
 @media (max-width: 768px) {
-  .scene { width: 82vw; }
+  .scene { width: 82vw; translate: none; }
 }
 
 @media (max-width: 480px) {
@@ -67,8 +84,9 @@ html {
   --ba: 1turn/var(--n);
   /* compute base angle corresponding to a card */
   grid-area: 1 / 1;
+  justify-self: center;
   width: var(--w);
-  aspect-ratio: 7 / 10;
+  aspect-ratio: 5 / 4;
   object-fit: cover;
   border-radius: 1.5em;
   /* don't want to see back of cards in front of screen plane */
@@ -78,10 +96,10 @@ html {
    * in wrong order (translate, then rotate) for what we need */
   transform:
     /* rotate around y axis */
-    rotatey(calc(var(--i)*var(--ba)))
+    rotatey(calc((var(--i) - (var(--n) - 1) / 2)*var(--ba)))
     /* only after that translate along z axis with minus */
     /* multiplied by 1.5 to spread cards wider — more dramatic 3d cylinder */
-    translatez(calc(-1.15*(.5*var(--w) + .5em)/tan(.5*var(--ba))));
+    translatez(calc(-1.4*(.5*var(--w) + .5em)/tan(.5*var(--ba))));
 }
 
 @media (prefers-reduced-motion: reduce) {

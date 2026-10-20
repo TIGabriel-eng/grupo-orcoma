@@ -9,6 +9,7 @@ import SolucoesPage from './pages/SolucoesPage';
 import SobrePage from './pages/SobrePage';
 import LoginPage from './pages/LoginPage';
 import EventosPage from './pages/EventosPage';
+import OrcomaDayPage from './pages/OrcomaDayPage';
 import TrabalheConoscoPage from './pages/TrabalheConoscoPage';
 import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
@@ -27,6 +28,7 @@ function Router() {
   if (page === 'sobre') return <SobrePage />;
   if (page === 'login') return <LoginPage />;
   if (page === 'eventos') return <EventosPage />;
+  if (page === 'orcoma-day') return <OrcomaDayPage />;
   if (page === 'trabalhe-conosco') return <TrabalheConoscoPage />;
   if (page === 'blog') return <BlogPage />;
   if (page === 'blog-post') return <BlogPostPage />;

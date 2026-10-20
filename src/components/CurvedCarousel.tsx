@@ -11,9 +11,9 @@ interface SobreNosFoto {
 
 // ─── CONFIG ─────────────────────────────────────────────────────────────────
 // Card width in em units (deve bater com o --w usado no .card no CSS)
-const CARD_WIDTH_DESKTOP = '38.06em';
-const CARD_WIDTH_TABLET = '20.88em';
-const CARD_WIDTH_MOBILE = '13.92em';
+const CARD_WIDTH_DESKTOP = '62em';
+const CARD_WIDTH_TABLET = '34em';
+const CARD_WIDTH_MOBILE = '22em';
 
 function getCardWidth(): string {
   const vw = window.innerWidth;
@@ -60,7 +60,7 @@ export default function CurvedCarousel() {
   if (fotos.length === 0) return null;
 
   return (
-    <div className="-mt-24 sm:-mt-40">
+    <div className="carousel-3d -mt-[6em] sm:-mt-[10em]">
     <div className="scene">
       <div
         className="a3d"
