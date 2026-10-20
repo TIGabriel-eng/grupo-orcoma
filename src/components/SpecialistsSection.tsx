@@ -3,6 +3,7 @@ import { MapPin, ArrowRight } from 'lucide-react';
 import { loadSiteData } from '../config/siteData';
 import { useNav } from '../context/NavContext';
 import { Skeleton } from './Skeleton';
+import { imagemEspecialidade } from '../data/especialidadesImagens';
 import SlowLoadingHint from './SlowLoadingHint';
 
 interface CityInfo {
@@ -161,7 +162,7 @@ export default function SpecialistsSection() {
                       style={{ height: '160px' }}
                     >
                       <img
-                        src={esp.imagem}
+                        src={imagemEspecialidade(esp.slug, esp.imagem)}
                         alt={esp.titulo}
                         loading="lazy"
                         decoding="async"

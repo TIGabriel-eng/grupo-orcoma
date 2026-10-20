@@ -7,6 +7,7 @@ import { useNav } from '../context/NavContext';
 import { useWhatsApp } from '../context/WhatsAppContext';
 import { loadSiteData } from '../config/siteData';
 import { Skeleton } from '../components/Skeleton';
+import { imagemEspecialidade } from '../data/especialidadesImagens';
 import SlowLoadingHint from '../components/SlowLoadingHint';
 
 interface Especialidade {
@@ -30,7 +31,7 @@ function EspecialidadeCard({ esp, onOpen }: { esp: Especialidade; onOpen: (slug:
     >
       <div className="relative overflow-hidden" style={{ aspectRatio: '16/11' }}>
         <img
-          src={esp.imagem}
+          src={imagemEspecialidade(esp.slug, esp.imagem)}
           alt={esp.titulo}
           loading="lazy"
           decoding="async"
@@ -193,7 +194,7 @@ export default function EspecialidadesPage() {
           <div className="max-w-3xl mx-auto">
             {detalhe.imagem && (
               <div className="rounded-2xl overflow-hidden shadow-lg mb-12" style={{ aspectRatio: '21/9' }}>
-                <img src={detalhe.imagem} alt={detalhe.titulo} className="w-full h-full object-cover" />
+                <img src={imagemEspecialidade(detalhe.slug, detalhe.imagem)} alt={detalhe.titulo} className="w-full h-full object-cover" />
               </div>
             )}
 
