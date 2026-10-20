@@ -212,7 +212,7 @@ export default function HomePage() {
             <p className="text-gray-500 text-sm leading-relaxed mb-6 max-w-xl mx-auto px-2 reveal" style={{ '--reveal-delay': '80ms' } as React.CSSProperties}>
               O Grupo Orcoma Contabilidade Inteligente, atuante em segmentos como fiscal, contábil, pessoal, societário, consultoria e assessoria na gestão pública e privada, tem como princípio prestar serviços que atendam à legislação e previnam riscos de insolvência de negócios, objetivando crescimento e fortalecimento de sua imagem como uma organização confiável.
             </p>
-            <button onClick={() => navigate('sobre')} className="inline-block px-8 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all hover:brightness-110 hover:scale-105 mb-8 sm:mb-10 cursor-pointer reveal" style={{ background: '#e8b800', color: '#000' }}>
+            <button onClick={() => navigate('sobre')} className="relative z-10 inline-block px-8 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all hover:brightness-110 hover:scale-105 mb-8 sm:mb-10 cursor-pointer reveal" style={{ background: '#e8b800', color: '#000' }}>
               Saiba Mais
             </button>
             <div className="reveal">
