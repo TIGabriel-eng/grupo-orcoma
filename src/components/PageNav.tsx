@@ -21,7 +21,12 @@ interface Props {
   stackConsultor?: boolean;
 }
 
+const ORCOMA_DAY_PILL_BG =
+  'radial-gradient(circle farthest-corner at 67.1875% 97.91666666666666%, rgba(137, 99, 64, 0.99) 0%, 25%, rgba(137, 99, 64, 0) 50%), radial-gradient(circle farthest-corner at 6% 13%, #1e1e1d 0%, 42%, rgba(30, 30, 29, 0) 70%), radial-gradient(circle farthest-corner at 94% 11%, #d2bf95 0%, 42%, rgba(210, 191, 149, 0) 70%), radial-gradient(circle farthest-corner at 49% 50%, #ffffff 0%, 100%, rgba(255, 255, 255, 0) 100%)';
+
 export default function PageNav({ activePage, showConsultor = true, stackConsultor = false }: Props) {
+  // Na página do Orcoma Day, as pílulas da barra usam o degradê da marca
+  const pillBg = activePage === 'orcoma-day' ? ORCOMA_DAY_PILL_BG : 'rgba(100, 160, 255, 0.3)';
   const { navigate } = useNav();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
@@ -63,7 +68,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
         <img src="/grupo-orcoma-logo.png" alt="Grupo Orcoma" className="h-12 sm:h-16 w-auto" style={{ transform: 'scale(1.26)' }} />
       </button>
 
-      <nav className="hidden xl:flex items-center rounded-full px-2 2xl:px-4 py-0.5 gap-0 2xl:gap-0.5 min-w-0" style={{ background: 'rgba(100, 160, 255, 0.3)' }}>
+      <nav className="hidden xl:flex items-center rounded-full px-2 2xl:px-4 py-0.5 gap-0 2xl:gap-0.5 min-w-0" style={{ background: pillBg }}>
         {links.map((item) => {
           if ('external' in item) {
             return (
@@ -249,7 +254,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
         <button
           onClick={() => window.open('https://academy.orcomacontabilidade.com.br/login', '_blank')}
           className="px-4 2xl:px-5 py-2 rounded-full text-[1rem] 2xl:text-[1.26rem] whitespace-nowrap font-semibold transition-all hover:brightness-110 relative"
-          style={{ background: 'rgba(100, 160, 255, 0.3)', color: 'white' }}
+          style={{ background: pillBg, color: 'white' }}
         >
           Orcoma Academy
         </button>
@@ -277,7 +282,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
       {mobileOpen && (
         <nav
           className="xl:hidden absolute top-full left-0 right-0 flex flex-col items-center gap-2 pb-4 z-50"
-          style={{ background: 'rgba(10,10,180,0.97)' }}
+          style={{ background: activePage === 'orcoma-day' ? ORCOMA_DAY_PILL_BG : 'rgba(10,10,180,0.97)' }}
         >
           {links.map((item) => {
             if ('external' in item) {

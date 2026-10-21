@@ -194,7 +194,7 @@ export default function EventosPage() {
                     <button
                       onClick={() => window.open(ev.link_inscricao, '_blank', 'noopener,noreferrer')}
                       className="w-full mt-2 py-2.5 rounded-xl text-white text-xs font-bold transition-all hover:brightness-110"
-                      style={{ background: '#0c0ccc' }}
+                      style={{ background: 'linear-gradient(135deg, #e4d0a8 0%, #906b48 100%)' }}
                     >
                       Inscrever-se
                     </button>

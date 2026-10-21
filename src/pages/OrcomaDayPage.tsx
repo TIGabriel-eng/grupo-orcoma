@@ -6,7 +6,6 @@ import WhatsAppToggle from '../components/WhatsAppToggle';
 import { loadSiteData } from '../config/siteData';
 import { Skeleton } from '../components/Skeleton';
 
-const BLUE = 'linear-gradient(160deg, #0c0ccc 0%, #1a1aff 50%, #0000b3 100%)';
 
 interface EventoOrcomaDay {
   titulo: string;
@@ -20,7 +19,9 @@ interface EventoOrcomaDay {
 }
 
 // Fotos do Orcoma Day, em public/orcoma-day/ (WebP): 01.webp até 17.webp
-const FOTOS = Array.from({ length: 17 }, (_, i) => i + 1).map((n) => ({
+const FOTOS = Array.from({ length: 17 }, (_, i) => i + 1)
+  .filter((n) => n !== 14)
+  .map((n) => ({
   src: `/orcoma-day/${String(n).padStart(2, '0')}.webp`,
   alt: `Foto ${n} do Orcoma Day`,
 }));
@@ -102,7 +103,7 @@ function CardEvento({ ev, passado = false }: { ev: EventoOrcomaDay; passado?: bo
           <button
             onClick={() => window.open(ev.link_inscricao, '_blank', 'noopener,noreferrer')}
             className="w-full mt-2 py-2.5 rounded-xl text-white text-xs font-bold transition-all hover:brightness-110"
-            style={{ background: '#0c0ccc' }}
+            style={{ background: 'linear-gradient(135deg, #e4d0a8 0%, #906b48 100%)' }}
           >
             Inscrever-se
           </button>
@@ -171,7 +172,7 @@ export default function OrcomaDayPage() {
   return (
     <div className="min-h-screen">
       {/* ── Hero ── */}
-      <div style={{ background: BLUE }}>
+      <div style={{ background: '#1e1e1d' }}>
         <PageNav activePage="orcoma-day" showConsultor={false} />
 
         <section className="flex flex-col items-center text-center px-4 sm:px-6 pt-10 sm:pt-12 pb-16 sm:pb-20">
@@ -255,7 +256,7 @@ export default function OrcomaDayPage() {
       {/* ── Carrossel de fotos ── */}
       <section className="bg-white py-12 sm:py-16">
         <h2 className="text-center text-[3.75rem] sm:text-[4.875rem] font-bold mb-8" style={{ fontFamily: 'Montserrat', color: '#1e1e1d' }}>Nossa Galeria</h2>
-        <div className="mx-4 sm:mx-6 rounded-3xl py-8 sm:py-10 overflow-hidden shadow-lg" style={{ background: '#000' }}>
+        <div className="mx-4 sm:mx-6 rounded-3xl py-8 sm:py-10 overflow-hidden shadow-lg" style={{ background: 'linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), radial-gradient(circle farthest-corner at 7% 88%, rgba(137, 99, 64, 0.99) 0%, 25%, rgba(137, 99, 64, 0) 50%), radial-gradient(circle farthest-corner at 45.3125% 0%, #1e1e1d 0%, 42%, rgba(30, 30, 29, 0) 70%), radial-gradient(circle farthest-corner at 100% 73.958%, #d2bf95 0%, 42%, rgba(210, 191, 149, 0) 70%), radial-gradient(circle farthest-corner at 49% 50%, #ffffff 0%, 100%, rgba(255, 255, 255, 0) 100%)' }}>
           <CarrosselFotos fotos={FOTOS} />
         </div>
       </section>
