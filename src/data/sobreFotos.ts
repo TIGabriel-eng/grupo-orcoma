@@ -1,37 +1,24 @@
 /**
- * Fotos do carrossel da home, já incluídas no build (public/carrossel/).
+ * Fotos do carrossel da home (seção Sobre Nós), incluídas no build em public/carrossel/.
  *
- * O CurvedCarousel mostra estas imagens na hora, sem esperar a API (que pode
- * demorar para acordar no Render). Depois ele consulta /api/sobre-nos-fotos/:
- * cada foto da API é trocada pela versão local quando o nome do arquivo já
- * existe aqui. Foto nova cadastrada no admin usa a URL original da API.
- *
- * Para atualizar uma foto: gere a versão leve (WebP, máx. 1200 px) em
- * public/carrossel/ e adicione o nome original do arquivo neste mapa.
+ * O site não consulta mais a API do admin para essas fotos: o carrossel mostra
+ * sempre esta lista. Para trocar uma foto, substitua o arquivo WebP em
+ * public/carrossel/ e ajuste o caminho aqui.
  */
 
-const LOCAIS_POR_ARQUIVO: Record<string, string> = {
-  '1.jpg': '/carrossel/sobrenos-01.webp',
-  '2.jpg': '/carrossel/sobrenos-02.webp',
-  '3.jpg': '/carrossel/sobrenos-03.webp',
-  '4.jpg': '/carrossel/sobrenos-04.webp',
-  '5.jpg': '/carrossel/sobrenos-05.webp',
-  '6.jpg': '/carrossel/sobrenos-06.webp',
-  '7.jpg': '/carrossel/sobrenos-07.webp',
-  '8.jpg': '/carrossel/sobrenos-08.webp',
-  '9.jpg': '/carrossel/sobrenos-09.webp',
-  '10.jpg': '/carrossel/sobrenos-10.webp',
-  '11.jpg': '/carrossel/sobrenos-11.webp',
-};
+// Sem repetições: a foto 07 repete a 06, a 09 repete a 08 e as 01, 02, 03 e 11 repetem a cena da 10.
+const FOTOS_LOCAIS = [
+  '/carrossel/sobrenos-04.webp',
+  '/carrossel/sobrenos-05.webp',
+  '/carrossel/sobrenos-06.webp',
+  '/carrossel/sobrenos-08.webp',
+  '/carrossel/sobrenos-10.webp',
+  '/carrossel/sobrenos-13.webp',
+  '/carrossel/sobrenos-14.webp',
+  '/carrossel/sobrenos-15.webp',
+];
 
-/** Devolve a versão local da foto da API, ou a própria URL se não houver versão local. */
-export function imagemLocalOuOriginal(url: string): string {
-  const arquivo = url.split('/').pop() ?? '';
-  return LOCAIS_POR_ARQUIVO[arquivo] ?? url;
-}
-
-/** Fotos mostradas antes da resposta da API. */
-export const SOBRE_NOS_FOTOS_LOCAIS = Object.values(LOCAIS_POR_ARQUIVO).map((imagem, i) => ({
+export const SOBRE_NOS_FOTOS_LOCAIS = FOTOS_LOCAIS.map((imagem, i) => ({
   id: i,
   titulo: '',
   imagem,

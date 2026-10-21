@@ -1,5 +1,43 @@
 import { useState, useEffect, useRef } from 'react';
 
+interface YTPlayer {
+  unloadModule?: (module: string) => void;
+  setOption?: (module: string, option: string, value: unknown) => void;
+}
+
+interface YTNamespace {
+  Player: new (
+    element: HTMLIFrameElement,
+    options: { events: { onReady: (event: { target: YTPlayer }) => void } }
+  ) => unknown;
+}
+
+declare global {
+  interface Window {
+    YT?: YTNamespace;
+    onYouTubeIframeAPIReady?: () => void;
+  }
+}
+
+let youTubeApiPromise: Promise<void> | null = null;
+
+function loadYouTubeApi(): Promise<void> {
+  if (window.YT) return Promise.resolve();
+  if (!youTubeApiPromise) {
+    youTubeApiPromise = new Promise((resolve) => {
+      const previous = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        previous?.();
+        resolve();
+      };
+      const script = document.createElement('script');
+      script.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(script);
+    });
+  }
+  return youTubeApiPromise;
+}
+
 interface YouTubePlayerProps {
   videoId: string;
   autoplay?: boolean;
@@ -15,6 +53,8 @@ interface YouTubePlayerProps {
   lazy?: boolean;
   loadOnVisible?: boolean;
   eager?: boolean;
+  /** Remove as legendas do YouTube (exige a API de iframe, ativada via enablejsapi). */
+  hideCaptions?: boolean;
 }
 
 function getThumbnailUrl(videoId: string): string {
@@ -30,6 +70,7 @@ function buildEmbedUrl(
     controls?: boolean;
     rel?: boolean;
     modestBranding?: boolean;
+    hideCaptions?: boolean;
   }
 ): string {
   const params = new URLSearchParams();
@@ -46,6 +87,7 @@ function buildEmbedUrl(
   params.set('iv_load_policy', '3');
   params.set('disablekb', '1');
   params.set('fs', '0');
+  if (opts.hideCaptions) params.set('enablejsapi', '1');
   return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
 }
 
@@ -63,9 +105,11 @@ export default function YouTubePlayer({
   lazy = false,
   loadOnVisible = true,
   eager = false,
+  hideCaptions = false,
 }: YouTubePlayerProps) {
   const [loaded, setLoaded] = useState(eager);
   const containerRef = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Carrega o iframe quando a thumbnail termina de carregar (lightweight start)
   const onThumbnailLoad = () => {
@@ -93,7 +137,29 @@ export default function YouTubePlayer({
     return () => observer.disconnect();
   }, [eager, loaded, loadOnVisible, lazy]);
 
-  const embedUrl = buildEmbedUrl(videoId, { autoplay, loop, muted, controls, rel, modestBranding });
+  // Quando hideCaptions está ativo, a API descarrega o módulo de legendas assim que o player fica pronto
+  useEffect(() => {
+    if (!hideCaptions || !loaded) return;
+
+    let cancelled = false;
+    loadYouTubeApi().then(() => {
+      if (cancelled || !iframeRef.current || !window.YT) return;
+      new window.YT.Player(iframeRef.current, {
+        events: {
+          onReady: ({ target }) => {
+            target.unloadModule?.('captions');
+            target.setOption?.('captions', 'track', {});
+          },
+        },
+      });
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [hideCaptions, loaded]);
+
+  const embedUrl = buildEmbedUrl(videoId, { autoplay, loop, muted, controls, rel, modestBranding, hideCaptions });
   const thumbnailUrl = getThumbnailUrl(videoId);
 
   return (
@@ -122,6 +188,7 @@ export default function YouTubePlayer({
       {/* Iframe */}
       {loaded && (
         <iframe
+          ref={iframeRef}
           className={iframeClassName}
           src={embedUrl}
           title=""

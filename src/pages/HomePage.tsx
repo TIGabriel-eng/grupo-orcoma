@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Headphones, Monitor, UserCheck, Shield } from 'lucide-react';
+import { Headphones, Monitor, UserCheck, Shield, ArrowRight } from 'lucide-react';
 import Nav from '../components/Nav';
 import { useWhatsApp } from '../context/WhatsAppContext';
 import { useNav } from '../context/NavContext';
@@ -112,38 +112,16 @@ export default function HomePage() {
         {/* Vídeo de fundo (YouTube em loop infinito); o gradiente base acima mantém o visual enquanto carrega */}
         <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
           <style>{`
+            /* Vídeo 20% maior e deslocado para baixo: a parte de baixo (legendas) fica fora da área visível */
             .hero-video-iframe {
               position: absolute;
-              top: 60%;
-              left: 55%;
-              width: 100%;
-              height: 56.25vw;
-              min-height: 100vh;
-              min-width: 177.78vh;
-              transform: translate(-50%, -50%) scale(1.25);
+              top: 58%;
+              left: 50%;
+              width: max(120vw, 213.33vh);
+              height: max(67.5vw, 120vh);
+              transform: translate(-50%, -50%);
               border: none;
               pointer-events: none;
-            }
-            /* Portrait / mobile estreito (ex: 366x690): garante cobertura total da altura */
-            @media (max-aspect-ratio: 16/9) {
-              .hero-video-iframe {
-                width: 177.78vh;
-                height: 100vh;
-                top: 55%;
-                left: 50%;
-              }
-            }
-            /* Ajuste fino para celulares pequenos: um pouco mais de zoom para cortar bordas do player */
-            @media (max-width: 480px) {
-              .hero-video-iframe {
-                width: 200vh;
-                min-width: 200vh;
-                height: 100vh;
-                min-height: 100vh;
-                transform: translate(-50%, -50%) scale(1.15);
-                top: 55%;
-                left: 50%;
-              }
             }
           `}</style>
           <YouTubePlayer
@@ -155,6 +133,7 @@ export default function HomePage() {
             rel={false}
             modestBranding
             iframeClassName="hero-video-iframe"
+            hideCaptions
           />
         </div>
         <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, rgba(12,12,204,0.3) 0%, rgba(26,26,255,0.3) 40%, rgba(0,0,179,0.3) 100%)' }}></div>
@@ -212,8 +191,22 @@ export default function HomePage() {
             <p className="text-gray-500 text-sm leading-relaxed mb-6 max-w-xl mx-auto px-2 reveal" style={{ '--reveal-delay': '80ms' } as React.CSSProperties}>
               O Grupo Orcoma Contabilidade Inteligente, atuante em segmentos como fiscal, contábil, pessoal, societário, consultoria e assessoria na gestão pública e privada, tem como princípio prestar serviços que atendam à legislação e previnam riscos de insolvência de negócios, objetivando crescimento e fortalecimento de sua imagem como uma organização confiável.
             </p>
-            <button onClick={() => navigate('sobre')} className="inline-block px-8 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all hover:brightness-110 hover:scale-105 mb-8 sm:mb-10 cursor-pointer reveal" style={{ background: '#e8b800', color: '#000' }}>
-              Saiba Mais
+            <style>{`
+              @keyframes saibaMaisPulse {
+                0%, 100% { box-shadow: 0 0 0 0 rgba(232,184,0,0.55); }
+                50% { box-shadow: 0 0 0 12px rgba(232,184,0,0); }
+              }
+              @media (prefers-reduced-motion: reduce) {
+                .saiba-mais-sobre { animation: none !important; }
+              }
+            `}</style>
+            <button
+              onClick={() => navigate('sobre')}
+              className="saiba-mais-sobre group relative z-10 inline-flex items-center gap-2 overflow-hidden px-8 py-3 rounded-full text-xs font-bold uppercase tracking-wider transition-all hover:brightness-110 hover:scale-105 mb-8 sm:mb-10 cursor-pointer reveal"
+              style={{ background: '#e8b800', color: '#000', animation: 'saibaMaisPulse 2.5s ease-in-out infinite' }}
+            >
+              <span className="relative">Saiba Mais</span>
+              <ArrowRight size={14} className="relative transition-transform duration-300 group-hover:translate-x-1" />
             </button>
             <div className="reveal">
               <CurvedCarousel />

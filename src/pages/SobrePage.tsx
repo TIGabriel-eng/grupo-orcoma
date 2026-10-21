@@ -41,17 +41,17 @@ const diferenciais = [
 ];
 
 const diretores = [
-  { nome: 'João Albino Mascarenhas', cargo: 'Presidente', local: 'Orcoma Itaberaba', imagem: '/Joao-Albino.png' },
-  { nome: 'Jacson Mascarenhas', cargo: 'Vice-presidente | Diretor', local: 'Orcoma Maracás', imagem: '/jackson.png' },
-  { nome: 'Marcelo Mascarenhas', cargo: 'Diretor', local: 'Orcoma Itaberaba Pública', imagem: '/marcelo.png' },
-  { nome: 'Jaciane Mascarenhas', cargo: 'Diretora jurídica', local: 'Geral', imagem: '/jaciane.png' },
-  { nome: 'Caio Vivas', cargo: 'Diretor', local: 'Orcoma Feira de Santana', imagem: '/caio.png' },
-  { nome: 'Salvador Rios', cargo: 'Diretor', local: 'Orcoma Jequié', imagem: '/Salvador.png' },
-  { nome: 'Magali Leal', cargo: 'Diretora', local: 'Orcoma Várzea Nova', imagem: '/magali.png' },
-  { nome: 'Sidnéia Caetano', cargo: 'Diretora', local: 'Orcoma Seabra', imagem: '/Sidneia.png' },
-  { nome: 'Michele Oliveira', cargo: 'Diretora', local: 'Orcoma Jaguaquara', imagem: '/Michele.png' },
-  { nome: 'Edmilson Bastos', cargo: 'Diretor', local: 'Orcoma Jequié 2', imagem: '/edmilson.png' },
-  { nome: 'Rodrigo Farias', cargo: 'Diretor', local: 'Orcoma Campo Formoso', imagem: '/Rodrigo.png' },
+  { nome: 'João Albino Mascarenhas', cargo: 'Presidente', local: 'Orcoma Itaberaba', imagem: '/Joao-Albino.webp' },
+  { nome: 'Jacson Mascarenhas', cargo: 'Vice-presidente | Diretor', local: 'Orcoma Maracás', imagem: '/jackson.webp' },
+  { nome: 'Marcelo Mascarenhas', cargo: 'Diretor', local: 'Orcoma Itaberaba Pública', imagem: '/marcelo.webp' },
+  { nome: 'Jaciane Mascarenhas', cargo: 'Diretora jurídica', local: 'Geral', imagem: '/jaciane.webp' },
+  { nome: 'Caio Vivas', cargo: 'Diretor', local: 'Orcoma Feira de Santana', imagem: '/caio.webp' },
+  { nome: 'Salvador Rios', cargo: 'Diretor', local: 'Orcoma Jequié', imagem: '/Salvador.webp' },
+  { nome: 'Magali Leal', cargo: 'Diretora', local: 'Orcoma Várzea Nova', imagem: '/magali.webp' },
+  { nome: 'Sidnéia Caetano', cargo: 'Diretora', local: 'Orcoma Seabra', imagem: '/Sidneia.webp' },
+  { nome: 'Michele Oliveira', cargo: 'Diretora', local: 'Orcoma Jaguaquara', imagem: '/Michele.webp' },
+  { nome: 'Edmilson Bastos', cargo: 'Diretor', local: 'Orcoma Jequié 2', imagem: '/edmilson.webp' },
+  { nome: 'Rodrigo Farias', cargo: 'Diretor', local: 'Orcoma Campo Formoso', imagem: '/Rodrigo.webp' },
 ];
 
 const IDLE_RESUME_MS = 3000;
@@ -165,7 +165,7 @@ function DiretoresMarquee() {
         {[...diretores, ...diretores].map((d, i) => (
           <div key={i} className="flex flex-col items-center w-[16.9rem] sm:w-[22.425rem] md:w-[26.91rem] mx-2 sm:mx-4 flex-shrink-0" style={{ userSelect: 'none' }}>
             <div className="w-full aspect-[3/4] rounded-2xl overflow-hidden mb-3 bg-white">
-              <img src={d.imagem} alt={d.nome} className="w-full h-full object-cover" loading="lazy" draggable={false} style={d.nome === 'Jaciane Mascarenhas' ?{ transform: 'translateY(1.5rem)' } : d.imagem === '/Joao-Albino.png' ? { transform: 'translateY(7%) scale(0.91, 0.94)' } : undefined} />
+              <img src={d.imagem} alt={d.nome} className="w-full h-full object-cover" loading="lazy" draggable={false} style={d.nome === 'Jaciane Mascarenhas' ?{ transform: 'translateY(1.5rem)' } : d.imagem === '/Joao-Albino.webp' ? { transform: 'translateY(7%) scale(0.91, 0.94)' } : undefined} />
             </div>
             <div className="w-full rounded-xl p-3 sm:p-[1.15rem] text-center" style={{ background: '#0924a7' }}>
               <p className="font-bold text-white text-[0.95rem] sm:text-[1.15rem]">{d.nome}</p>
@@ -250,27 +250,27 @@ export default function SobrePage() {
           <section className="px-4 sm:px-8 pt-8 sm:pt-10 pb-16 sm:pb-24 max-w-6xl 2xl:max-w-[90rem] mx-auto">
             <div className="flex flex-col md:flex-row items-start gap-8 sm:gap-10">
               {/* Left */}
-              <div className="flex-1">
+              <div className="md:flex-1 md:max-w-xl">
                 <span
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold mb-4 sm:mb-5"
+                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-bold mb-4 sm:mb-5"
                   style={{ background: '#e8b800', color: '#000' }}
                 >
                   <Shield size={11} /> DESDE <strong>1987</strong>
                 </span>
-                <h1 className="text-white font-extrabold text-3xl sm:text-4xl leading-tight mb-4">
+                <h1 className="text-white font-extrabold text-4xl sm:text-5xl leading-tight mb-5">
                   Quem Somos
                 </h1>
-                <p className="text-white/70 text-sm leading-relaxed mb-6 sm:mb-8 max-w-sm">
+                <p className="text-white/70 text-base leading-relaxed mb-6 sm:mb-8 max-w-lg">
                   <Highlight text="O Grupo Orcoma Contabilidade Inteligente tem como princípio transformar burocracia em inteligência estratégica para o seu crescimento." />
                 </p>
               </div>
 
               {/* Right: stat card */}
               <div
-                className="w-full md:w-64 rounded-2xl p-6 sm:p-8 text-center flex-shrink-0 reveal"
+                className="w-full md:w-80 md:ml-auto rounded-2xl p-7 sm:p-10 text-center flex-shrink-0 reveal"
                 style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)' }}
               >
-                <p className="font-extrabold leading-none" style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)', color: 'white' }}>+39</p>
+                <p className="font-extrabold leading-none" style={{ fontSize: 'clamp(3rem, 9vw, 5rem)', color: 'white' }}>+39</p>
                 <p className="text-white font-bold text-xs tracking-widest uppercase mt-1 mb-3">Anos de Experiência</p>
                 <div className="w-8 h-0.5 mx-auto mb-3" style={{ background: '#e8b800' }} />
                 <p className="text-white/65 text-xs leading-relaxed">

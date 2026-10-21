@@ -94,12 +94,15 @@ html {
   /* need to use a transform chain here, cannot use separate
    * rotate & translate properties because they'd be applied
    * in wrong order (translate, then rotate) for what we need */
+  /* raio do cilindro proporcional à largura do card: independe da quantidade de fotos,
+     então os cards não crescem perto da câmera quando a lista é curta */
+  --R: calc(1.5 * var(--w));
   transform:
     /* rotate around y axis */
     rotatey(calc((var(--i) - (var(--n) - 1) / 2)*var(--ba)))
     /* only after that translate along z axis with minus */
     /* multiplied by 1.5 to spread cards wider — more dramatic 3d cylinder */
-    translatez(calc(-1.4*(.5*var(--w) + .5em)/tan(.5*var(--ba))));
+    translatez(calc(-1 * var(--R)));
 }
 
 @media (prefers-reduced-motion: reduce) {

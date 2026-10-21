@@ -147,9 +147,18 @@ export default function Nav() {
                     className="absolute top-full right-0 mt-2 w-56 rounded-2xl shadow-2xl py-3 z-50"
                     style={{ background: 'white', border: '1px solid #e5e7eb' }}
                   >
+                    <style>{`
+                      @keyframes fadeSlideIn {
+                        from { opacity: 0; transform: translateY(-8px); }
+                        to { opacity: 1; transform: translateY(0); }
+                      }
+                      .sub-item {
+                        animation: fadeSlideIn 0.3s ease-out both;
+                      }
+                    `}</style>
                     <button
                       onClick={() => { navigate('orcoma-day'); setEventosOpen(false); }}
-                      className="w-full text-left px-5 py-2.5 text-lg font-medium transition-colors hover:bg-gray-100"
+                      className="sub-item w-full text-left px-5 py-2.5 text-lg font-medium transition-colors hover:bg-gray-100"
                       style={{ color: '#1f2937' }}
                     >
                       Orcoma Day
