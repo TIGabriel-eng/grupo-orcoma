@@ -25,6 +25,24 @@ function Highlight({ text }: { text: string }) {
   );
 }
 
+function CountUp({ to, duration = 1800 }: { to: number; duration?: number }) {
+  const [valor, setValor] = useState(0);
+
+  useEffect(() => {
+    let frame = 0;
+    const inicio = performance.now();
+    const passo = (agora: number) => {
+      const progresso = Math.min((agora - inicio) / duration, 1);
+      setValor(Math.round(to * progresso));
+      if (progresso < 1) frame = requestAnimationFrame(passo);
+    };
+    frame = requestAnimationFrame(passo);
+    return () => cancelAnimationFrame(frame);
+  }, [to, duration]);
+
+  return <>{valor}</>;
+}
+
 const diferenciais = [
   {
     title: 'Expansão',
@@ -43,14 +61,14 @@ const diferenciais = [
 const diretores = [
   { nome: 'João Albino Mascarenhas', cargo: 'Presidente', local: 'Orcoma Itaberaba', imagem: '/Joao-Albino.webp' },
   { nome: 'Jacson Mascarenhas', cargo: 'Vice-presidente | Diretor', local: 'Orcoma Maracás', imagem: '/jackson.webp' },
-  { nome: 'Marcelo Mascarenhas', cargo: 'Diretor', local: 'Orcoma Itaberaba Pública', imagem: '/marcelo.webp' },
-  { nome: 'Jaciane Mascarenhas', cargo: 'Diretora jurídica', local: 'Geral', imagem: '/jaciane.webp' },
+  { nome: 'Marcelo Mascarenhas', cargo: 'Diretor', local: 'Orcoma Itaberaba', imagem: '/marcelo.webp' },
+  { nome: 'Jaciane Mascarenhas', cargo: 'Diretora jurídica', local: 'Orcoma Feira de Santana', imagem: '/jaciane.webp' },
   { nome: 'Caio Vivas', cargo: 'Diretor', local: 'Orcoma Feira de Santana', imagem: '/caio.webp' },
   { nome: 'Salvador Rios', cargo: 'Diretor', local: 'Orcoma Jequié', imagem: '/Salvador.webp' },
-  { nome: 'Magali Leal', cargo: 'Diretora', local: 'Orcoma Várzea Nova', imagem: '/magali.webp' },
+  { nome: 'Magali Leal', cargo: 'Diretora', local: 'Orcoma Jiquiriçá', imagem: '/magali.webp' },
   { nome: 'Sidnéia Caetano', cargo: 'Diretora', local: 'Orcoma Seabra', imagem: '/Sidneia.webp' },
   { nome: 'Michele Oliveira', cargo: 'Diretora', local: 'Orcoma Jaguaquara', imagem: '/Michele.webp' },
-  { nome: 'Edmilson Bastos', cargo: 'Diretor', local: 'Orcoma Jequié 2', imagem: '/edmilson.webp' },
+  { nome: 'Edmilson Bastos', cargo: 'Diretor', local: 'Orcoma Jequié', imagem: '/edmilson.webp' },
   { nome: 'Rodrigo Farias', cargo: 'Diretor', local: 'Orcoma Campo Formoso', imagem: '/Rodrigo.webp' },
 ];
 
@@ -270,7 +288,7 @@ export default function SobrePage() {
                 className="w-full md:w-80 md:ml-auto rounded-2xl p-7 sm:p-10 text-center flex-shrink-0 reveal"
                 style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)' }}
               >
-                <p className="font-extrabold leading-none" style={{ fontSize: 'clamp(3rem, 9vw, 5rem)', color: 'white' }}>+39</p>
+                <p className="font-extrabold leading-none" style={{ fontSize: 'clamp(3rem, 9vw, 5rem)', color: 'white' }}>+<CountUp to={39} /></p>
                 <p className="text-white font-bold text-xs tracking-widest uppercase mt-1 mb-3">Anos de Experiência</p>
                 <div className="w-8 h-0.5 mx-auto mb-3" style={{ background: '#e8b800' }} />
                 <p className="text-white/65 text-xs leading-relaxed">
@@ -295,13 +313,11 @@ export default function SobrePage() {
       {/* ── Missão ── */}
       <section className="bg-white py-14 sm:py-20 px-4 sm:px-6">
         <div className="max-w-6xl 2xl:max-w-[90rem] mx-auto flex flex-col md:flex-row gap-8 sm:gap-12 items-center">
-          <div className="w-full md:w-[48%] xl:w-[44rem] 2xl:w-[52rem] flex-shrink-0 aspect-[4/5] sm:aspect-[4/3] lg:aspect-[3/2] rounded-2xl overflow-hidden shadow-lg relative reveal">
-            <SlideUpPhotos
-              fotos={[
-                '/nossa-historia/slide-1.webp',
-                '/nossa-historia/slide-2.webp',
-                '/nossa-historia/slide-3.webp',
-              ]}
+          <div className="w-1/2 md:w-[24%] xl:w-[22rem] 2xl:w-[26rem] flex-shrink-0 rounded-2xl overflow-hidden shadow-lg reveal">
+            <img
+              src="/joao-albino-retrato.webp"
+              alt="João Albino"
+              className="w-full h-auto object-cover"
             />
           </div>
 
@@ -368,11 +384,13 @@ export default function SobrePage() {
               <Highlight text="Naquele período, foi feita a reestruturação societária: Itaberaba se tornou a matriz e Maracás, filial. João Albino também passou a intensificar os trabalhos e promoveu diversas palestras em várias cidades. Constantemente, capacitava a equipe para melhor prestação dos serviços contábeis. Focado, e pesquisador nato, como sempre, estava presente em todos os eventos, cursos, seminários e outros que pudessem ainda mais aprimorar os conhecimentos, para prestar um melhor serviço aos clientes." />
             </p>
           </div>
-          <div className="w-full md:w-[44%] xl:w-[32rem] 2xl:w-[38rem] flex-shrink-0 rounded-2xl overflow-hidden shadow-lg reveal">
-            <img
-              src="/joao-albino-retrato.webp"
-              alt="João Albino"
-              className="w-full h-auto object-cover"
+          <div className="w-full md:w-[44%] xl:w-[32rem] 2xl:w-[38rem] flex-shrink-0 aspect-[4/5] sm:aspect-[4/3] lg:aspect-[3/2] rounded-2xl overflow-hidden shadow-lg relative reveal">
+            <SlideUpPhotos
+              fotos={[
+                '/nossa-historia/slide-1.webp',
+                '/nossa-historia/slide-2.webp',
+                '/nossa-historia/slide-3.webp',
+              ]}
             />
           </div>
         </div>
@@ -516,14 +534,14 @@ export default function SobrePage() {
           className="absolute inset-0 w-full h-full pointer-events-none"
           viewBox="0 0 100 100"
           preserveAspectRatio="xMidYMid slice"
-          style={{ opacity: 0.22 }}
+          style={{ opacity: 0.04 }}
         >
           <defs>
             <linearGradient id="sLineGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
-              <stop offset="35%" stopColor="#ffffff" stopOpacity="1" />
-              <stop offset="70%" stopColor="#ffffff" stopOpacity="0.5" />
-              <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+              <stop offset="0%" stopColor="#030d4a" stopOpacity="0" />
+              <stop offset="35%" stopColor="#030d4a" stopOpacity="1" />
+              <stop offset="70%" stopColor="#030d4a" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#030d4a" stopOpacity="0" />
             </linearGradient>
           </defs>
           {Array.from({ length: 24 }, (_, i) => {
@@ -549,8 +567,14 @@ export default function SobrePage() {
           </div>
 
           {/* Card Política de Qualidade */}
-          <div className="flex flex-col md:flex-row gap-8 sm:gap-12 items-center">
-            <div className="flex-1 text-white reveal">
+          <div className="relative flex flex-col items-center text-center text-white reveal">
+            <img
+              src="/orcoma-logo-branca.webp"
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 m-auto w-[112%] max-w-none h-auto opacity-[0.028] pointer-events-none select-none"
+            />
+            <div className="relative max-w-3xl">
               <h2 className="text-2xl sm:text-3xl font-extrabold mb-6">Política de qualidade</h2>
               <p className="text-sm sm:text-base leading-relaxed mb-4" style={{ color: 'rgba(255,255,255,0.85)' }}>
                 Prestar serviços que atendam à legislação e previnam riscos de insolvência de negócios, objetivando crescimento e fortalecimento de sua imagem como uma organização confiável.
@@ -568,13 +592,6 @@ export default function SobrePage() {
               >
                 Agende sua reunião com um Especialista!
               </a>
-            </div>
-            <div className="w-full md:w-[44%] lg:w-[46%] xl:w-[38rem] 2xl:w-[44rem] flex-shrink-0 rounded-2xl overflow-hidden shadow-lg reveal" style={{ '--reveal-delay': '120ms' } as React.CSSProperties}>
-              <img
-                src="/politica-qualidade.webp"
-                alt="Política de qualidade"
-                className="w-full h-auto object-cover"
-              />
             </div>
           </div>
         </div>

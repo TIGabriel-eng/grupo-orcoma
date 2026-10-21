@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { loadSiteData } from '../config/siteData';
 import { useWhatsApp } from '../context/WhatsAppContext';
 import { useNav, type Page } from '../context/NavContext';
 
@@ -27,30 +26,33 @@ const PAGE_KEYS: Page[] = ['home', 'contato', 'solucoes', 'sobre', 'login', 'eve
 const AUTOPLAY_MS = 18000;
 const TRANSITION_MS = 800;
 
-const FALLBACK_SLIDES: CarrosselSlide[] = [
+// Slides do site, fixos no código (sem consultar a API)
+const SLIDES_SITE: CarrosselSlide[] = [
   {
-    id: 0,
+    id: 1,
     titulo: 'Apoio especializado para uma gestão mais tranquila',
-    subtitulo: 'Nossa parceria mostra como o dinheiro público é usado, com transparência.',
+    subtitulo:
+      'Nossa parceria vai te ajudar a entender melhor como estão sendo utilizados os recursos da sua gestão, permitindo o uso consciente do dinheiro público e a prestação de contas transparente.',
     imagem: '',
     foto: '',
-    ordem: 0,
-    botao1: { texto: 'Agende sua Reunião', tipo: 'contato', link: '' },
-    botao2: { texto: 'Mais Informações', tipo: 'pagina', link: 'sobre' },
+    ordem: 1,
+    botao1: { texto: 'Agende sua Reunião', tipo: 'whatsapp', link: 'https://calendly.com/orcoma/gestao' },
+    botao2: { texto: 'Mais Informações', tipo: 'contato', link: '' },
   },
   {
-    id: 0,
-    titulo: 'Somos especializados na contabilidade pública',
-    subtitulo: 'Tenha registros, controles, geração de demonstrativos orçamentários e suporte relacionado às atividades da administração pública.',
+    id: 2,
+    titulo: 'Somos especialistas em gerar resultados, em gerar riqueza, usando a contabilidade',
+    subtitulo:
+      'Utilizamos a contabilidade de forma estratégica para otimizar recursos, identificar oportunidades e impulsionar o crescimento do seu negócio, transformando números em decisões inteligentes e resultados reais.',
     imagem: '',
-    foto: '',
-    ordem: 0,
-    botao1: { texto: 'Solicitar proposta', tipo: 'contato', link: '' },
-    botao2: { texto: 'Saiba mais', tipo: 'pagina', link: 'solucoes' },
+    foto: 'https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/data/media/4f19585d64eff72c.png',
+    ordem: 2,
+    botao1: { texto: 'Solicitar proposta', tipo: 'whatsapp', link: '' },
+    botao2: { texto: 'Saiba mais', tipo: 'pagina', link: 'sobre' },
   },
 ];
 
-// Slides fixos no código: aparecem antes dos slides vindos do /admin (API)
+// Slides fixos no código: aparecem antes dos slides do site
 const SLIDES_CODIGO: CarrosselSlide[] = [
   {
     id: -1,
@@ -89,36 +91,8 @@ const SLIDES_CODIGO: CarrosselSlide[] = [
 export default function HeroCarousel() {
   const { open: openWhatsApp, openRegiao } = useWhatsApp();
   const { navigate } = useNav();
-  const [slides, setSlides] = useState<CarrosselSlide[]>([...SLIDES_CODIGO, ...FALLBACK_SLIDES]);
+  const slides = [...SLIDES_CODIGO, ...SLIDES_SITE];
   const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    let cancelled = false;
-    loadSiteData<{ slides?: CarrosselSlide[] }>('/api/carrossel/', 'carrossel.json', (data) => {
-        const list: CarrosselSlide[] = (data.slides || [])
-          .filter((s: CarrosselSlide) => s.titulo || s.subtitulo || s.botao1?.texto || s.botao2?.texto)
-          .map((s: CarrosselSlide) => ({
-            id: s.id,
-            titulo: s.titulo || '',
-            subtitulo: s.subtitulo || '',
-            imagem: s.imagem,
-            foto: s.foto || '',
-            ordem: s.ordem,
-            botao1: { texto: s.botao1?.texto || '', tipo: s.botao1?.tipo || 'nenhum', link: s.botao1?.link || '' },
-            botao2: { texto: s.botao2?.texto || '', tipo: s.botao2?.tipo || 'nenhum', link: s.botao2?.link || '' },
-          }));
-        if (!cancelled && list.length > 0) {
-          setSlides([...SLIDES_CODIGO, ...list]);
-          setIndex(0);
-        }
-      })
-      .catch((err) => {
-        console.error('[HeroCarousel] Erro ao carregar carrossel:', err);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   useEffect(() => {
     if (slides.length <= 1) return;

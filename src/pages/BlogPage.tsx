@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Search, Calendar, ArrowRight, Sparkles } from 'lucide-react';
+import { Search, Calendar, ArrowRight } from 'lucide-react';
 import PageNav from '../components/PageNav';
 import Footer from '../components/Footer';
 import WhatsAppToggle from '../components/WhatsAppToggle';
@@ -21,31 +21,6 @@ interface BlogPost {
 
 const BLUE = 'linear-gradient(160deg, #0c0ccc 0%, #1a1aff 50%, #0000b3 100%)';
 const GOLD = '#e8b800';
-
-function isRecent(dataIso: string): boolean {
-  if (!dataIso) return false;
-  const postDate = new Date(dataIso + 'T00:00:00');
-  if (isNaN(postDate.getTime())) return false;
-  const cutoff = new Date();
-  cutoff.setDate(cutoff.getDate() - 30);
-  return postDate >= cutoff;
-}
-
-function Pill({ active, children, onClick }: { active: boolean; children: React.ReactNode; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className="px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 whitespace-nowrap inline-flex items-center gap-2"
-      style={{
-        backgroundColor: active ? '#0924a7' : '#FFFFFF',
-        color: active ? '#FFFFFF' : '#12122B',
-        border: `1px solid ${active ? '#0924a7' : '#E9E9F2'}`,
-      }}
-    >
-      {children}
-    </button>
-  );
-}
 
 function PostCard({
   post,
@@ -106,7 +81,6 @@ export default function BlogPage() {
   const { openPost, navigate } = useNav();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [novidadesAtivo, setNovidadesAtivo] = useState(false);
   const [query, setQuery] = useState('');
   const [newsNome, setNewsNome] = useState('');
   const [newsCelular, setNewsCelular] = useState('');
@@ -179,17 +153,18 @@ export default function BlogPage() {
   }, []);
 
   const filtered = useMemo(() => {
-    return posts.filter((p) => {
-      // Filtro "Novidades" — apenas artigos dos últimos 30 dias
-      if (novidadesAtivo && !isRecent(p.data_iso)) return false;
-      // Busca por texto
-      const matchesQuery =
-        query.trim() === '' ||
-        p.titulo.toLowerCase().includes(query.toLowerCase()) ||
-        p.resumo.toLowerCase().includes(query.toLowerCase());
-      return matchesQuery;
-    });
-  }, [novidadesAtivo, query, posts]);
+    return posts
+      .filter((p) => {
+        // Busca por texto
+        const matchesQuery =
+          query.trim() === '' ||
+          p.titulo.toLowerCase().includes(query.toLowerCase()) ||
+          p.resumo.toLowerCase().includes(query.toLowerCase());
+        return matchesQuery;
+      })
+      // Mais novo sempre primeiro (data_iso é AAAA-MM-DD, então a comparação de texto ordena por data)
+      .sort((a, b) => (b.data_iso || '').localeCompare(a.data_iso || ''));
+  }, [query, posts]);
 
   const featured = filtered[0];
   const rest = filtered.slice(1);
@@ -232,16 +207,6 @@ export default function BlogPage() {
           </section>
         </div>
       </div>
-
-      {/* ── Filtro Novidades ── */}
-      <section className="max-w-[1440px] mx-auto px-6 -mt-8 relative z-10">
-        <div className="flex gap-2 overflow-x-auto pb-2">
-          <Pill active={novidadesAtivo} onClick={() => setNovidadesAtivo((v) => !v)}>
-            <Sparkles size={14} />
-            Novidades
-          </Pill>
-        </div>
-      </section>
 
       {/* ── Conteúdo ── */}
       <main className="max-w-[1440px] mx-auto px-6 py-12">

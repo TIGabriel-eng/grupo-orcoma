@@ -162,7 +162,7 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
                     `}</style>
                     <button
                       onClick={() => { navigate('orcoma-day'); setEventosOpen(false); }}
-                      className="sub-item w-full text-left px-5 py-2.5 text-lg font-medium transition-colors hover:bg-gray-100"
+                      className="sub-item w-full text-left px-5 py-2.5 text-sm font-medium transition-colors hover:bg-gray-100"
                       style={{ color: '#1f2937' }}
                     >
                       Orcoma Day

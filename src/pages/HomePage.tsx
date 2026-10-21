@@ -17,12 +17,9 @@ import YouTubePlayer from '../components/YouTubePlayer';
 
 const serviceCards = [
   {
-    title: 'Escritório Virtual',
-    description: 'Endereço comercial e suporte para sua empresa atuar com mais organização e credibilidade.',
-  },
-  {
     title: 'Orcoma para Empresas',
     description: 'Contabilidade estratégica para sua empresa crescer com mais organização e segurança.',
+    destaque: true,
   },
   {
     title: 'Orcoma para Gestão',
@@ -163,18 +160,18 @@ export default function HomePage() {
             <p className="text-gray-500 text-base sm:text-lg mb-8 sm:mb-10 max-w-2xl mx-auto reveal" style={{ '--reveal-delay': '80ms' } as React.CSSProperties}>
               Somos uma contabilidade "expert" em dar assistência para órgãos das áreas pública e privada. Conheça os eixos dos nossos serviços e tenha detalhes sobre como cada um deles vai facilitar a sua gestão;
             </p>
-            <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+            <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
               {serviceCards.map((card, index) => (
-                <div key={card.title} className={`reveal ${index === 1 ? 'md:-mt-8' : ''}`}>
+                <div key={card.title} className="reveal">
                   <div
-                    className={`rounded-xl p-5 sm:p-6 flex flex-col gap-4 h-full transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl ${index === 1 ? 'bg-[linear-gradient(160deg,rgb(12,12,204)_0%,rgb(26,26,255)_50%,rgb(0,0,179)_100%)]' : 'bg-gray-200'}`}
+                    className={`rounded-xl p-5 sm:p-6 flex flex-col gap-4 h-full transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl ${card.destaque ? 'bg-[linear-gradient(160deg,rgb(12,12,204)_0%,rgb(26,26,255)_50%,rgb(0,0,179)_100%)]' : 'bg-gray-200'}`}
                     style={{
                       '--reveal-delay': `${index * 100}ms`,
                     } as React.CSSProperties}
                   >
-                    <h3 className={`font-bold text-base text-center ${index === 1 ? 'text-white' : 'text-gray-900'}`}>{card.title}</h3>
-                    <p className={`text-sm leading-relaxed flex-1 ${index === 1 ? 'text-white' : 'text-gray-500'}`}>{card.description}</p>
-                    {index === 1 ? (
+                    <h3 className={`font-bold text-base text-center ${card.destaque ? 'text-white' : 'text-gray-900'}`}>{card.title}</h3>
+                    <p className={`text-sm leading-relaxed flex-1 ${card.destaque ? 'text-white' : 'text-gray-500'}`}>{card.description}</p>
+                    {card.destaque ? (
                       <button
                         onClick={openWhatsApp}
                         className="self-center px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all hover:brightness-110"
