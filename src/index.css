@@ -67,7 +67,8 @@ html {
 }
 
 @media (max-width: 480px) {
-  .scene { width: 92vw; }
+  /* no celular os cards passam bem da caixa do carrossel: sem essa margem, eles cobrem os números */
+  .scene { width: 92vw; margin-bottom: 8em; }
 }
 
 .a3d {

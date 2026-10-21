@@ -123,6 +123,14 @@ export default function HomePage() {
               border: none;
               pointer-events: none;
             }
+            /* Celular: zoom de 20% e deslocado para baixo, igual ao desktop, para esconder a legenda */
+            @media (max-width: 480px) {
+              .hero-video-iframe {
+                top: 58%;
+                width: max(120vw, 213.33vh);
+                height: max(67.5vw, 120vh);
+              }
+            }
           `}</style>
           <YouTubePlayer
             videoId="mdF72LEmGhU"
