@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { MapPin } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import PageNav from '../components/PageNav';
 import Footer from '../components/Footer';
 import WhatsAppToggle from '../components/WhatsAppToggle';
@@ -70,7 +70,7 @@ function CarrosselFotos({ fotos }: { fotos: { src: string; alt: string }[] }) {
 
 function CardEvento({ ev, passado = false }: { ev: EventoOrcomaDay; passado?: boolean }) {
   return (
-    <div className="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col">
+    <div className="group w-full bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col">
       <div className="relative">
         {ev.imagem ? (
           <img
@@ -110,6 +110,124 @@ function CardEvento({ ev, passado = false }: { ev: EventoOrcomaDay; passado?: bo
         )}
       </div>
     </div>
+  );
+}
+
+// Espaço entre os cards do carrossel (igual ao gap-6 do grid)
+const GAP_CARDS = 24;
+
+// Carrossel de eventos: 2 cards por vez no desktop, 1 no celular.
+// As setas rolam o trilho; o scroll-snap alinha cada card na borda.
+function CarrosselEventos({
+  titulo,
+  eventos,
+  carregando = false,
+  passado = false,
+}: {
+  titulo: string;
+  eventos: EventoOrcomaDay[];
+  carregando?: boolean;
+  passado?: boolean;
+}) {
+  const trilhoRef = useRef<HTMLDivElement>(null);
+  const [podeVoltar, setPodeVoltar] = useState(false);
+  const [podeAvancar, setPodeAvancar] = useState(false);
+
+  const atualizarSetas = useCallback(() => {
+    const trilho = trilhoRef.current;
+    if (!trilho) return;
+    const maximo = trilho.scrollWidth - trilho.clientWidth;
+    setPodeVoltar(trilho.scrollLeft > 2);
+    setPodeAvancar(trilho.scrollLeft < maximo - 2);
+  }, []);
+
+  useEffect(() => {
+    atualizarSetas();
+    window.addEventListener('resize', atualizarSetas);
+    return () => window.removeEventListener('resize', atualizarSetas);
+  }, [atualizarSetas, eventos]);
+
+  const mover = (direcao: 1 | -1) => {
+    const trilho = trilhoRef.current;
+    if (!trilho) return;
+    const primeiro = trilho.firstElementChild as HTMLElement | null;
+    const passo = primeiro ? primeiro.offsetWidth + GAP_CARDS : trilho.clientWidth;
+    trilho.scrollBy({ left: direcao * passo, behavior: 'smooth' });
+  };
+
+  const cabecalho = (
+    <div className="flex items-center justify-between gap-4 mb-6">
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-900">{titulo}</h2>
+      {(podeVoltar || podeAvancar) && (
+        <div className="flex gap-2 shrink-0">
+          <button
+            type="button"
+            aria-label="Ver eventos anteriores"
+            onClick={() => mover(-1)}
+            disabled={!podeVoltar}
+            className="w-10 h-10 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-700 transition hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <button
+            type="button"
+            aria-label="Ver próximos eventos"
+            onClick={() => mover(1)}
+            disabled={!podeAvancar}
+            className="w-10 h-10 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-700 transition hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+
+  if (carregando) {
+    return (
+      <>
+        {cabecalho}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[0, 1].map((i) => (
+            <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col">
+              <Skeleton className="h-40 w-full rounded-none" />
+              <div className="p-4 sm:p-5 flex flex-col gap-3 flex-1">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-3 w-1/2" />
+                <Skeleton className="h-9 w-full rounded-xl mt-1" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </>
+    );
+  }
+
+  if (eventos.length === 0) {
+    return (
+      <>
+        {cabecalho}
+        <p className="text-center text-gray-500 py-8">Nenhum evento agendado no momento.</p>
+      </>
+    );
+  }
+
+  return (
+    <>
+      {cabecalho}
+      <div
+        ref={trilhoRef}
+        onScroll={atualizarSetas}
+        className="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 pt-1 px-1 -mx-1 [&::-webkit-scrollbar]:hidden"
+        style={{ scrollbarWidth: 'none' }}
+      >
+        {eventos.map((ev) => (
+          <div key={ev.titulo} className="snap-start shrink-0 flex w-full md:w-[calc(50%-0.75rem)]">
+            <CardEvento ev={ev} passado={passado} />
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
 
@@ -193,25 +311,7 @@ export default function OrcomaDayPage() {
       {/* ── Próximos eventos (vindos do Django) ── */}
       <section className="bg-white pt-12 sm:pt-16 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Próximos Eventos</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {carregando ? (
-              [0, 1, 2].map((i) => (
-                <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col">
-                  <Skeleton className="h-40 w-full rounded-none" />
-                  <div className="p-4 sm:p-5 flex flex-col gap-3 flex-1">
-                    <Skeleton className="h-4 w-3/4" />
-                    <Skeleton className="h-3 w-1/2" />
-                    <Skeleton className="h-9 w-full rounded-xl mt-1" />
-                  </div>
-                </div>
-              ))
-            ) : proximos.length === 0 ? (
-              <p className="col-span-full text-center text-gray-500 py-8">Nenhum evento agendado no momento.</p>
-            ) : (
-              proximos.map((ev) => <CardEvento key={ev.titulo} ev={ev} />)
-            )}
-          </div>
+          <CarrosselEventos titulo="Próximos Eventos" eventos={proximos} carregando={carregando} />
         </div>
       </section>
 
@@ -219,12 +319,7 @@ export default function OrcomaDayPage() {
       {!carregando && passados.length > 0 && (
         <section className="bg-white pt-12 sm:pt-16 px-4 sm:px-6">
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Eventos Passados</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {passados.map((ev) => (
-                <CardEvento key={ev.titulo} ev={ev} passado />
-              ))}
-            </div>
+            <CarrosselEventos titulo="Eventos Passados" eventos={passados} passado />
           </div>
         </section>
       )}

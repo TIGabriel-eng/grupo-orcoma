@@ -7,20 +7,25 @@ import SlideUpPhotos from '../components/SlideUpPhotos';
 
 const BLUE = 'linear-gradient(160deg, #0c0ccc 0%, #1a1aff 50%, #0000b3 100%)';
 
-const KEYWORDS = ['1987', '1989', '1991', 'João Albino Rios Mascarenhas', 'João Albino', 'ORCOMA', 'Orcoma'];
+const KEYWORDS = ['1987', '1989', '1991', '2025', 'João Albino Rios Mascarenhas', 'João Albino', 'ORCOMA', 'Orcoma'];
+// Palavras em negrito e na cor amarela da marca (ex.: o mascote Bino)
+const KEYWORDS_AMARELAS = ['Bino', 'Jacson Mascarenhas'];
 
 function Highlight({ text }: { text: string }) {
-  const escaped = KEYWORDS.map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+  const todas = [...KEYWORDS, ...KEYWORDS_AMARELAS];
+  const escaped = todas.map((k) => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
   const parts = text.split(new RegExp(`(${escaped})`, 'gi'));
   return (
     <>
-      {parts.map((part, i) =>
-        KEYWORDS.some((k) => k.toLowerCase() === part.toLowerCase()) ? (
-          <strong key={i}>{part}</strong>
-        ) : (
-          <Fragment key={i}>{part}</Fragment>
-        )
-      )}
+      {parts.map((part, i) => {
+        if (KEYWORDS_AMARELAS.some((k) => k.toLowerCase() === part.toLowerCase())) {
+          return <strong key={i} style={{ color: '#e8b800' }}>{part}</strong>;
+        }
+        if (KEYWORDS.some((k) => k.toLowerCase() === part.toLowerCase())) {
+          return <strong key={i}>{part}</strong>;
+        }
+        return <Fragment key={i}>{part}</Fragment>;
+      })}
     </>
   );
 }
@@ -62,7 +67,7 @@ const diretores = [
   { nome: 'João Albino Mascarenhas', cargo: 'Presidente', local: 'Orcoma Itaberaba', imagem: '/Joao-Albino.webp' },
   { nome: 'Jacson Mascarenhas', cargo: 'Vice-presidente | Diretor', local: 'Orcoma Maracás', imagem: '/jackson.webp' },
   { nome: 'Marcelo Mascarenhas', cargo: 'Diretor', local: 'Orcoma Itaberaba', imagem: '/marcelo.webp' },
-  { nome: 'Jaciane Mascarenhas', cargo: 'Diretora jurídica', local: 'Orcoma Feira de Santana', imagem: '/jaciane.webp' },
+  { nome: 'Jaciane Mascarenhas', cargo: 'Diretora Jurídica', local: 'Orcoma Feira de Santana', imagem: '/jaciane.webp' },
   { nome: 'Caio Vivas', cargo: 'Diretor', local: 'Orcoma Feira de Santana', imagem: '/caio.webp' },
   { nome: 'Salvador Rios', cargo: 'Diretor', local: 'Orcoma Jequié', imagem: '/Salvador.webp' },
   { nome: 'Magali Leal', cargo: 'Diretora', local: 'Orcoma Jiquiriçá', imagem: '/magali.webp' },
@@ -483,7 +488,7 @@ export default function SobrePage() {
               <Highlight text="Novas unidades foram abertas: 2020, em Seabra e Jequié II; e 2021, em Salvador, tornando assim o Grupo Orcoma consolidado como referência no mercado contábil baiano." />
             </p>
           </div>
-          <div className="w-full md:w-[44%] lg:w-[48%] xl:w-[42rem] 2xl:w-[48rem] md:ml-6 md:mt-20 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg reveal" style={{ '--reveal-delay': '120ms' } as React.CSSProperties}>
+          <div className="w-full md:w-[44%] lg:w-[48%] xl:w-[42rem] 2xl:w-[48rem] md:ml-6 md:mt-0 flex-shrink-0 rounded-2xl overflow-hidden shadow-lg reveal" style={{ '--reveal-delay': '120ms' } as React.CSSProperties}>
             <img
               src="/2014-palco.webp"
               alt="Unidade Feira de Santana 2014"
@@ -501,7 +506,8 @@ export default function SobrePage() {
               Conheça nosso novo mascote! Seu nome é <span style={{ color: '#e8b800' }}>Bino!</span>
             </h1>
             <p className="text-gray-500 text-sm sm:text-base leading-relaxed">
-              <Highlight text="Buscando sempre inovar e otimizar a sua experiência conosco, criamos o BINO, a nova mascote da ORCOMA." />
+              <Highlight text="Em 2023, o Grupo Orcoma ganhou um novo integrante muito especial: Bino, nosso mascote oficial!
+Chegando para trazer ainda mais alegria, carisma e diversão, Bino conquistou seu espaço e passou a fazer parte da nossa história, tornando a experiência do nosso público ainda mais leve, próxima e marcante." />
             </p>
           </div>
           <div
@@ -516,6 +522,58 @@ export default function SobrePage() {
               src="/bino.png"
               alt="Mascote Bino"
               className="w-full h-auto object-cover"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ── Inauguração de Campo Formoso ── */}
+      <section
+        className="py-14 sm:py-20 px-4 sm:px-6"
+        style={{ backgroundColor: '#0924a7' }}
+      >
+        <div className="max-w-6xl 2xl:max-w-[90rem] mx-auto flex flex-col md:flex-row gap-8 sm:gap-12 items-center">
+          <div className="w-full md:w-1/2 reveal">
+            <img
+              src="/rodrigo-barbosa-campo-formoso.jpg"
+              alt="Rodrigo Barbosa, diretor da unidade de Campo Formoso, apresentando no Orcoma Day"
+              loading="lazy"
+              decoding="async"
+              className="w-full h-auto rounded-2xl shadow-lg object-cover"
+            />
+          </div>
+          <div className="w-full md:w-1/2 reveal" style={{ '--reveal-delay': '120ms' } as React.CSSProperties}>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-4">
+              Inauguração de Campo Formoso
+            </h2>
+            <p className="text-white/85 text-sm sm:text-base leading-relaxed">
+              <Highlight text="Na virada de 2023 para 2024, o Grupo Orcoma deu mais um importante passo em sua trajetória de crescimento, inaugurando uma nova unidade na cidade de Campo Formoso. A expansão reforçou nosso compromisso de levar serviços de qualidade a cada vez mais clientes, fortalecendo nossa presença na região e ampliando nossas oportunidades de crescimento. À frente dessa unidade, Rodrigo Barbosa assumiu o cargo de diretor, trazendo sua contribuição para o desenvolvimento da equipe e para a continuidade da missão da Orcoma de gerar resultados, construir relacionamentos sólidos e oferecer soluções cada vez melhores aos nossos clientes." />
+            </p>
+            <p className="text-white/85 text-sm sm:text-base leading-relaxed mt-4">
+              <Highlight text="A chegada a Campo Formoso marcou mais um capítulo importante na história do Grupo Orcoma, refletindo a confiança em nosso modelo de atuação e a busca contínua por novas oportunidades. Mais do que ampliar nossa estrutura física, essa conquista reforçou nosso propósito de construir parcerias duradouras, compreender as necessidades de cada negócio e contribuir para o crescimento sustentável de nossos clientes. Assim, seguimos expandindo nossa atuação com responsabilidade, excelência e compromisso com os resultados, mantendo os valores que orientam nossa trajetória." />
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Vice-presidência (Jacson Mascarenhas) ── */}
+      <section className="bg-white py-14 sm:py-20 px-4 sm:px-6">
+        <div className="max-w-6xl 2xl:max-w-[90rem] mx-auto flex flex-col md:flex-row gap-8 sm:gap-12 items-center">
+          <div className="w-full md:w-1/2 reveal text-gray-500 text-sm sm:text-base leading-relaxed space-y-4">
+            <p>
+              <Highlight text="Em 2025, Jacson Mascarenhas assumiu o cargo de vice-presidente do Grupo Orcoma Contabilidade, marcando um novo momento na trajetória de crescimento e consolidação da empresa. Sua nomeação fortaleceu a integração entre as unidades e ampliou o alinhamento estratégico do grupo, contribuindo para uma gestão mais unificada, eficiente e orientada a objetivos comuns. Essa nova estrutura de liderança reforçou a importância da colaboração entre os diretores, da comunicação entre as equipes e da construção de uma visão compartilhada para o futuro da organização." />
+            </p>
+            <p>
+              <Highlight text="A vice-presidência passou a desempenhar um papel estratégico na condução das unidades, promovendo o alinhamento de metas, o acompanhamento de resultados, a otimização de processos e a identificação de oportunidades de melhoria. Entre suas frentes de atuação, destacam-se o fortalecimento da gestão integrada, a padronização de práticas operacionais, o desenvolvimento das lideranças, a troca de experiências entre as unidades e o planejamento de ações voltadas à expansão sustentável do grupo. Com essa estrutura, o Grupo Orcoma busca aprimorar a eficiência de suas operações, fortalecer sua identidade institucional e garantir que cada unidade contribua de forma consistente para os objetivos gerais da organização, mantendo o compromisso com a excelência, a inovação e a geração de resultados para seus clientes e parceiros." />
+            </p>
+          </div>
+          <div className="w-full md:w-1/2 reveal" style={{ '--reveal-delay': '120ms' } as React.CSSProperties}>
+            <img
+              src="/entrevista-vice-presidencia.jpg"
+              alt="Foto de entrevista"
+              loading="lazy"
+              decoding="async"
+              className="w-full h-auto rounded-2xl shadow-lg object-cover"
             />
           </div>
         </div>

@@ -8,7 +8,6 @@ import {
   Headphones,
   Shield,
   Monitor,
-  ChevronDown,
 } from 'lucide-react';
 import { useNav } from '../context/NavContext';
 import PageNav from '../components/PageNav';
@@ -140,15 +139,6 @@ export default function SolucoesPage() {
             Transformamos burocracia em inteligência de gestão.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center gap-3">
-            <button
-              className="flex items-center gap-2 px-7 py-3 rounded-full text-sm font-bold transition-all hover:brightness-110"
-              style={{ background: '#e8b800', color: '#000' }}
-            >
-              Nossos Serviços
-              <ChevronDown size={15} />
-            </button>
-          </div>
         </section>
       </div>
 
