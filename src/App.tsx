@@ -18,6 +18,7 @@ import AcademyBusinessPage from './pages/AcademyBusinessPage';
 import PoliticaPrivacidadePage from './pages/PoliticaPrivacidadePage';
 import WhatsAppModal from './components/WhatsAppModal';
 import CookieConsentBanner from './components/CookieConsentBanner';
+import NewsletterPopup from './components/NewsletterPopup';
 
 function Router() {
   const { page } = useNav();
@@ -46,6 +47,7 @@ export default function App() {
           <Router />
           <WhatsAppModal />
           <CookieConsentBanner />
+          <NewsletterPopup />
         </ClienteProvider>
       </WhatsAppProvider>
     </NavProvider>

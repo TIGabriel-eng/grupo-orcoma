@@ -4,6 +4,7 @@ import PageNav from '../components/PageNav';
 import Footer from '../components/Footer';
 import WhatsAppToggle from '../components/WhatsAppToggle';
 import BlogCtaCard from '../components/BlogCtaCard';
+import BlogShareButtons from '../components/BlogShareButtons';
 import { useNav } from '../context/NavContext';
 import { apiUrl } from '../config/api';
 import { loadSiteData } from '../config/siteData';
@@ -48,7 +49,7 @@ function PostCard({
         />
       </div>
 
-      <div className={`flex flex-col p-6 ${big ? 'md:w-1/2 md:p-8 md:justify-center' : ''}`}>
+      <div className={`flex flex-col flex-1 p-6 ${big ? 'md:w-1/2 md:p-8 md:justify-center' : ''}`}>
         <div className="flex items-center gap-2 text-sm mb-2" style={{ color: '#6B6B85' }}>
           <Calendar size={14} />
           <span>{post.data_publicacao}</span>
@@ -61,9 +62,13 @@ function PostCard({
           {post.titulo}
         </h3>
 
-        <p className={`text-sm mb-5 ${big ? 'md:text-base' : ''}`} style={{ color: '#6B6B85' }}>
+        <p className={`text-sm mb-5 flex-1 ${big ? 'md:text-base' : ''}`} style={{ color: '#6B6B85' }}>
           {post.resumo}
         </p>
+
+        <div className="mb-5">
+          <BlogShareButtons titulo={post.titulo} slug={post.slug} />
+        </div>
 
         <span
           className="inline-flex items-center gap-2 text-sm font-bold px-5 py-2.5 rounded-full w-fit transition-all duration-200 group-hover:translate-x-0.5"

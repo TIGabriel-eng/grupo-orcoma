@@ -193,7 +193,6 @@ function DiretoresMarquee() {
             <div className="w-full rounded-xl p-3 sm:p-[1.15rem] text-center" style={{ background: '#0924a7' }}>
               <p className="font-bold text-white text-[0.95rem] sm:text-[1.15rem]">{d.nome}</p>
               <p className="text-[0.85rem] sm:text-[1.01rem] mt-0.5" style={{ color: 'rgba(255,255,255,0.7)' }}>{d.cargo}</p>
-              <p className="text-[0.85rem] sm:text-[1.01rem] mt-0.5 font-semibold" style={{ color: '#e8b800' }}>{d.local}</p>
             </div>
           </div>
         ))}

@@ -312,30 +312,34 @@ export default function ContactPage() {
                   <MapPin size={16} className="flex-shrink-0 mt-0.5" style={{ color: '#0c0ccc' }} />
                   <p className="text-gray-500 text-sm leading-relaxed">{unidade.endereco}</p>
                 </div>
-                <div className="flex items-center gap-2.5">
-                  <Phone size={16} className="flex-shrink-0" style={{ color: '#0c0ccc' }} />
-                  <a
-                    href={telefoneParaLink(unidade.telefone)}
-                    className="text-gray-700 text-sm font-semibold transition-colors"
-                    onMouseOver={(e) => (e.currentTarget.style.color = '#0c0ccc')}
-                    onMouseOut={(e) => (e.currentTarget.style.color = '')}
-                  >
-                    {unidade.telefone}
-                  </a>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <Mail size={16} className="flex-shrink-0" style={{ color: '#0c0ccc' }} />
-                  <a
-                    href={`https://mail.google.com/mail/?view=cm&fs=1&to=${unidade.email}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-700 text-sm font-semibold break-all transition-colors"
-                    onMouseOver={(e) => (e.currentTarget.style.color = '#0c0ccc')}
-                    onMouseOut={(e) => (e.currentTarget.style.color = '')}
-                  >
-                    {unidade.email}
-                  </a>
-                </div>
+                {unidade.telefone && (
+                  <div className="flex items-center gap-2.5">
+                    <Phone size={16} className="flex-shrink-0" style={{ color: '#0c0ccc' }} />
+                    <a
+                      href={telefoneParaLink(unidade.telefone)}
+                      className="text-gray-700 text-sm font-semibold transition-colors"
+                      onMouseOver={(e) => (e.currentTarget.style.color = '#0c0ccc')}
+                      onMouseOut={(e) => (e.currentTarget.style.color = '')}
+                    >
+                      {unidade.telefone}
+                    </a>
+                  </div>
+                )}
+                {unidade.email && (
+                  <div className="flex items-center gap-2.5">
+                    <Mail size={16} className="flex-shrink-0" style={{ color: '#0c0ccc' }} />
+                    <a
+                      href={`https://mail.google.com/mail/?view=cm&fs=1&to=${unidade.email}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-700 text-sm font-semibold break-all transition-colors"
+                      onMouseOver={(e) => (e.currentTarget.style.color = '#0c0ccc')}
+                      onMouseOut={(e) => (e.currentTarget.style.color = '')}
+                    >
+                      {unidade.email}
+                    </a>
+                  </div>
+                )}
               </div>
             ))}
           </div>

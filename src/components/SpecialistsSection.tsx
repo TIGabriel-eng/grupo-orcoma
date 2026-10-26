@@ -20,24 +20,22 @@ interface Especialidade {
   ordem: number;
 }
 
-const leftCities: CityInfo[] = [
+// Ordem da maior cidade para a menor (a grade lê da esquerda para a direita, de cima para baixo)
+const cidades: CityInfo[] = [
+  { name: 'São Paulo - Sp', address: 'Sem escritório físico' },
   { name: 'Salvador - Ba', address: 'AV. Tancredo Neves, 2539, Cond. Ceo Salvador Shopping, T. Londres, sala 1016, Caminho das Árvores, Salvador - BA' },
   { name: 'Feira de Santana - Ba', address: 'Av. Getúlio Vargas, 1745 - Sl 205 - Capuchinhos, Feira de Santana - BA, 44075-425' },
   { name: 'Jequié - Ba', address: 'R. Álvares Cabral, 242-362 - Centro, Jequié - BA, 45203-040' },
   { name: 'Jequié 02 - Ba', address: 'Av. Rio Branco, 253 - Campo do América, Jequié - BA' },
   { name: 'Campo Formoso - Ba', address: 'Praça Frei Lino Graflage, 108, Sala 108, Centro, Campo Formoso - BA, CEP 44790-000' },
-  { name: 'Jaguaquara - Ba', address: 'Rua Cel. Durval de Matos, 50, 1º Andar - Centro, Jaguaquara - BA, CEP 45345-000' },
-  { name: 'Maracás - Ba', address: 'Rua Afrânio Peixoto, 19, Centro - Maracás - BA' },
-];
-
-const rightCities: CityInfo[] = [
-  { name: 'Utinga - Ba', address: 'Avenida Monteiro, 6-A, Térreo, Centro - Utinga - BA, CEP 46810-000' },
   { name: 'Itaberaba - Ba', address: 'Av. Rui Barbosa, 138 - Centro, Itaberaba - BA' },
   { name: 'Itaberaba | Pública', address: 'Av. Rio Branco, 594, primeiro andar, Centro, Itaberaba - BA' },
+  { name: 'Seabra - Ba', address: 'Rua Ana Nery, 54, 1º Andar - Centro, Seabra - BA, CEP 46900-112' },
+  { name: 'Jaguaquara - Ba', address: 'Rua Cel. Durval de Matos, 50, 1º Andar - Centro, Jaguaquara - BA, CEP 45345-000' },
+  { name: 'Maracás - Ba', address: 'Rua Afrânio Peixoto, 19, Centro - Maracás - BA' },
+  { name: 'Utinga - Ba', address: 'Avenida Monteiro, 6-A, Térreo, Centro - Utinga - BA, CEP 46810-000' },
   { name: 'Jiquiriçá - Ba', address: 'Rua Sete de Setembro - Centro, Jiquiriçá - BA, CEP 45470-000' },
   { name: 'Várzea Nova - Ba', address: 'Sem escritório físico' },
-  { name: 'Seabra - Ba', address: 'Rua Ana Nery, 54, 1º Andar - Centro, Seabra - BA, CEP 46900-112' },
-  { name: 'São Paulo - Sp', address: 'Sem escritório físico' },
 ];
 
 function CityCard({ city, isSelected, onClick }: { city: CityInfo; isSelected: boolean; onClick: () => void }) {
@@ -78,8 +76,6 @@ function CityCard({ city, isSelected, onClick }: { city: CityInfo; isSelected: b
   );
 }
 
-const allCities = [...leftCities, ...rightCities];
-
 export default function SpecialistsSection() {
   const { openEspecialidade } = useNav();
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
@@ -92,8 +88,8 @@ export default function SpecialistsSection() {
 
     let index = -1;
     const timer = setInterval(() => {
-      index = (index + 1) % allCities.length;
-      setSelectedCity(allCities[index].name);
+      index = (index + 1) % cidades.length;
+      setSelectedCity(cidades[index].name);
     }, 3000);
 
     return () => clearInterval(timer);
@@ -207,33 +203,18 @@ export default function SpecialistsSection() {
               </div>
 
               {/* City cards grid */}
-              <div className="flex gap-3 flex-1 w-full items-start min-h-[36rem] sm:min-h-[34rem]">
-                <div className="flex flex-col gap-2.5 flex-1">
-                  {leftCities.map((city) => (
-                    <CityCard
-                      key={city.name}
-                      city={city}
-                      isSelected={selectedCity === city.name}
-                      onClick={() => {
-                        setSelectedCity(city.name);
-                        setAutoPlay(false);
-                      }}
-                    />
-                  ))}
-                </div>
-                <div className="flex flex-col gap-2.5 flex-1">
-                  {rightCities.map((city) => (
-                    <CityCard
-                      key={city.name}
-                      city={city}
-                      isSelected={selectedCity === city.name}
-                      onClick={() => {
-                        setSelectedCity(city.name);
-                        setAutoPlay(false);
-                      }}
-                    />
-                  ))}
-                </div>
+              <div className="grid grid-cols-2 gap-x-3 gap-y-2.5 flex-1 w-full items-start min-h-[36rem] sm:min-h-[34rem]">
+                {cidades.map((city) => (
+                  <CityCard
+                    key={city.name}
+                    city={city}
+                    isSelected={selectedCity === city.name}
+                    onClick={() => {
+                      setSelectedCity(city.name);
+                      setAutoPlay(false);
+                    }}
+                  />
+                ))}
               </div>
             </div>
           </div>

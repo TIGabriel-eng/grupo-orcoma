@@ -12,15 +12,17 @@ interface Service {
   key: string;
 }
 
+// 9 bolinhas espaçadas igualmente (40° cada), para caber a nova "Consultoria Pública"
 const services: Service[] = [
   { label: ['Consultoria tributária'], angle: -90, key: 'consultoria-tributaria' },
-  { label: ['Serviços financeiros'], angle: -45, key: 'servicos-financeiros' },
-  { label: ['Serviço fiscal'], angle: 0, key: 'departamento-fiscal' },
-  { label: ['Serviço de', 'departamento', 'pessoal'], angle: 45, key: 'departamento-pessoal' },
-  { label: ['Serviço contábil'], angle: 90, key: 'departamento-contabil' },
-  { label: ['Consultoria', 'empresarial'], angle: 135, key: 'consultoria-empresarial' },
-  { label: ['Planejamento', 'tributário'], angle: 180, key: 'planejamento-tributario' },
-  { label: ['Serviço societário'], angle: -135, key: 'consultoria-societaria' },
+  { label: ['Serviços financeiros'], angle: -50, key: 'servicos-financeiros' },
+  { label: ['Serviço fiscal'], angle: -10, key: 'departamento-fiscal' },
+  { label: ['Serviço de', 'departamento', 'pessoal'], angle: 30, key: 'departamento-pessoal' },
+  { label: ['Serviço contábil'], angle: 70, key: 'departamento-contabil' },
+  { label: ['Consultoria Pública'], angle: 110, key: 'consultoria-publica' },
+  { label: ['Consultoria', 'empresarial'], angle: 150, key: 'consultoria-empresarial' },
+  { label: ['Planejamento', 'tributário'], angle: 190, key: 'planejamento-tributario' },
+  { label: ['Serviço societário'], angle: 230, key: 'consultoria-societaria' },
 ];
 
 function toXY(angle: number, r: number) {
@@ -78,6 +80,10 @@ const serviceDescriptions: Record<string, ServiceInfo> = {
   'consultoria-empresarial': {
     title: 'Consultoria Empresarial',
     text: 'Consultoria especializada para impulsionar o crescimento e a eficiência da sua empresa com soluções estratégicas personalizadas.',
+  },
+  'consultoria-publica': {
+    title: 'Consultoria Pública',
+    text: 'Oferecemos suporte especializado para aprimorar os processos administrativos, fortalecer os controles e garantir maior segurança na gestão dos recursos públicos.',
   },
   'planejamento-tributario': {
     title: 'Planejamento Tributário',

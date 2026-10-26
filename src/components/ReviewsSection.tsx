@@ -1,6 +1,10 @@
 import { Star } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { reviews, googleRating } from '../data/reviews';
+
+// Página do Google com as avaliações da Orcoma (destino do "Leia mais")
+const GOOGLE_AVALIACOES_URL =
+  'https://www.google.com/search?sca_esv=72d5cd2ff8b49349&rlz=1C1GCEA_enBR1217BR1217&cs=1&output=search&kgmid=/g/11b6hkwx1l&q=Orcoma+Contabilidade&shem=dlvs1,epsd1,ltae,rimspwouoe&shndl=30&source=sh/x/loc/uni/m1/1&kgs=0fafff4be9c4f0d4&utm_source=dlvs1,epsd1,ltae,rimspwouoe,sh/x/loc/uni/m1/1';
 
 function GoogleLogo({ size = 28 }: { size?: number }) {
   return (
@@ -24,9 +28,62 @@ function initialsOf(name: string) {
 
 const allReviews = [...reviews, ...reviews, ...reviews, ...reviews, ...reviews, ...reviews];
 
-function ReviewCard({ review }: { review: (typeof reviews)[0] }) {
+// Logo do Google no canto do card, com "Publicado em" ao lado ao passar o mouse (ou tocar)
+function SeloGoogle() {
   return (
-    <div className="bg-white rounded-2xl p-3 sm:p-5 flex flex-col flex-shrink-0" style={{ width: 'min(340px, 80vw)', height: '220px' }}>
+    <span className="group relative flex-shrink-0 inline-flex outline-none" tabIndex={0} aria-label="Publicado em Google">
+      <span className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border border-gray-100 flex items-center justify-center shadow-sm">
+        <GoogleLogo size={14} />
+      </span>
+      <span
+        role="tooltip"
+        className="pointer-events-none absolute right-full top-1/2 z-10 mr-3 -translate-y-1/2 whitespace-nowrap rounded-lg bg-black px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100 group-focus:opacity-100"
+      >
+        Publicado em
+        <span className="absolute left-full top-1/2 -translate-y-1/2 border-y-4 border-l-4 border-y-transparent border-l-black" />
+      </span>
+    </span>
+  );
+}
+
+// Selo azul de verificação, com a explicação do Trustindex ao passar o mouse (ou tocar)
+function SeloTrustindex() {
+  return (
+    <span
+      className="group relative ml-2 inline-flex items-center outline-none"
+      tabIndex={0}
+      aria-label="Trustindex verifica se a fonte original da avaliação é Google."
+    >
+      <svg viewBox="0 0 24 24" width={16} height={16} aria-hidden="true">
+        <circle cx="12" cy="12" r="11" fill="#1877F2" />
+        <path fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" d="M7 12.5l3.2 3.2L17 9" />
+      </svg>
+      <span
+        role="tooltip"
+        className="pointer-events-none absolute left-full top-1/2 z-10 ml-3 w-56 -translate-y-1/2 rounded-lg bg-black px-3 py-2 text-xs font-normal leading-snug text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100 group-focus:opacity-100"
+      >
+        Trustindex verifica se a fonte original da avaliação é Google.
+      </span>
+    </span>
+  );
+}
+
+function ReviewCard({ review }: { review: (typeof reviews)[0] }) {
+  const textoRef = useRef<HTMLParagraphElement>(null);
+  const [truncado, setTruncado] = useState(false);
+
+  // Só mostra "Leia mais" quando o texto não cabe no card (está sendo cortado)
+  useEffect(() => {
+    const elemento = textoRef.current;
+    if (!elemento) return;
+    const verificar = () => setTruncado(elemento.scrollHeight > elemento.clientHeight + 1);
+    verificar();
+    window.addEventListener('resize', verificar);
+    return () => window.removeEventListener('resize', verificar);
+  }, [review.text]);
+
+  return (
+    <div className="bg-white rounded-2xl p-3 sm:p-5 flex flex-col flex-shrink-0" style={{ width: 'min(340px, 80vw)', height: '270px' }}>
       <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
         <div
           className="w-8 h-8 sm:w-11 sm:h-11 rounded-full flex items-center justify-center flex-shrink-0"
@@ -38,18 +95,31 @@ function ReviewCard({ review }: { review: (typeof reviews)[0] }) {
           <p className="text-gray-900 font-semibold truncate text-sm sm:text-base">{review.name}</p>
           {review.date && <p className="text-gray-400 text-xs">{review.date}</p>}
         </div>
-        <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border border-gray-100 flex items-center justify-center flex-shrink-0 shadow-sm">
-          <span className="font-bold text-xs sm:text-sm" style={{ color: '#4285F4' }}>G</span>
-        </div>
+        <SeloGoogle />
       </div>
       <div className="flex gap-0.5 mb-1 sm:mb-2">
         {[1, 2, 3, 4, 5].map((s) => (
           <Star key={s} size={14} fill="#e8b800" color="#e8b800" />
         ))}
-        <span className="ml-2 text-blue-600 font-semibold text-xs sm:text-sm">✓</span>
+        <SeloTrustindex />
       </div>
-      <p className="text-gray-600 leading-snug flex-1 text-xs sm:text-sm overflow-hidden">{review.text}</p>
-      <button className="text-blue-600 font-semibold mt-1 sm:mt-2 hover:underline self-start text-xs sm:text-sm">Leia mais</button>
+      <p
+        ref={textoRef}
+        className="text-gray-600 leading-snug flex-1 text-xs sm:text-sm overflow-hidden"
+        style={{ display: '-webkit-box', WebkitLineClamp: 5, WebkitBoxOrient: 'vertical' }}
+      >
+        {review.text}
+      </p>
+      {truncado && (
+        <a
+          href={GOOGLE_AVALIACOES_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 font-semibold mt-1 sm:mt-2 hover:underline self-start text-xs sm:text-sm"
+        >
+          Leia mais
+        </a>
+      )}
     </div>
   );
 }

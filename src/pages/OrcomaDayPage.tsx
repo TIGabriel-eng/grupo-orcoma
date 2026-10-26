@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { ArrowUpRight, ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import PageNav from '../components/PageNav';
 import Footer from '../components/Footer';
 import WhatsAppToggle from '../components/WhatsAppToggle';
 import { loadSiteData } from '../config/siteData';
+import { apiUrl } from '../config/api';
 import { Skeleton } from '../components/Skeleton';
 
 
@@ -91,6 +92,14 @@ function CardEvento({ ev, passado = false }: { ev: EventoOrcomaDay; passado?: bo
         >
           {ev.data}
         </span>
+        {/* Faixa diagonal "GRATUITO" no canto superior direito, em todos os eventos */}
+        <div className="absolute top-0 right-0 w-24 h-24 overflow-hidden pointer-events-none z-10">
+          <span
+            className="absolute right-[-38px] top-[20px] w-36 rotate-45 bg-green-600 text-white text-[11px] font-bold tracking-wider text-center py-1 shadow-md"
+          >
+            GRATUITO
+          </span>
+        </div>
       </div>
       <div className="p-4 sm:p-5 flex flex-col gap-2 flex-1">
         <h3 className="font-bold text-gray-900 text-sm leading-snug">{ev.titulo}</h3>
@@ -231,6 +240,66 @@ function CarrosselEventos({
   );
 }
 
+// Fundo dos cards de números (mesmo degradê da galeria)
+const DEGRADE_CARD =
+  'radial-gradient(circle at 25% 0%, #1e1e1d 0%, rgba(30, 30, 29, 0) 50%), radial-gradient(circle at 0% 100%, rgba(137, 99, 64, 0.95) 0%, rgba(137, 99, 64, 0) 55%), radial-gradient(circle at 100% 30%, #d2bf95 0%, rgba(210, 191, 149, 0) 60%), radial-gradient(circle at 85% 100%, rgba(230, 230, 230, 0.9) 0%, rgba(230, 230, 230, 0) 45%), linear-gradient(135deg, #8a7a6a 0%, #4a4540 100%)';
+
+// Posição "fechada" do recorte de cada direção: o cartão aparece ao longo dessa direção
+const RECORTE_FECHADO = {
+  'de-cima': 'inset(0 0 100% 0)',
+  'de-baixo': 'inset(100% 0 0 0)',
+  esquerda: 'inset(0 100% 0 0)',
+} as const;
+
+// Cartão que se revela na direção indicada quando entra na tela
+function CartaoRevelar({
+  direcao,
+  className,
+  style,
+  children,
+}: {
+  direcao: keyof typeof RECORTE_FECHADO;
+  className: string;
+  style: CSSProperties;
+  children: ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visivel, setVisivel] = useState(false);
+
+  useEffect(() => {
+    const elemento = ref.current;
+    if (!elemento) return;
+    const observer = new IntersectionObserver(
+      ([entrada]) => {
+        if (entrada.isIntersecting) {
+          setVisivel(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 },
+    );
+    observer.observe(elemento);
+    return () => observer.disconnect();
+  }, []);
+
+  // O observador fica no wrapper sem recorte, porque o clip-path pode impedir o disparo no próprio cartão
+  return (
+    <div ref={ref} className="h-full">
+      <div
+        className={`h-full ${className}`}
+        style={{
+          ...style,
+          clipPath: visivel ? 'inset(0 0 0 0)' : RECORTE_FECHADO[direcao],
+          opacity: visivel ? 1 : 0.4,
+          transition: 'clip-path 1.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.2s ease-out',
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
 const MESES = [
   'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
   'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro',
@@ -252,6 +321,19 @@ export default function OrcomaDayPage() {
   const [eventos, setEventos] = useState<EventoOrcomaDay[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [agora, setAgora] = useState(() => Date.now());
+  const [videoFundoSrc, setVideoFundoSrc] = useState<string | undefined>(undefined);
+
+  // Pede ao backend um link temporário para o vídeo de fundo (expira em 1 hora)
+  useEffect(() => {
+    fetch(apiUrl('/api/video/orcoma-day-bg.mp4/link/'))
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 'ok') setVideoFundoSrc(data.url);
+      })
+      .catch((err) => {
+        console.error('[OrcomaDayPage] Erro ao carregar o vídeo de fundo:', err);
+      });
+  }, []);
 
   useEffect(() => {
     let ativo = true;
@@ -290,10 +372,26 @@ export default function OrcomaDayPage() {
   return (
     <div className="min-h-screen">
       {/* ── Hero ── */}
-      <div style={{ background: '#1e1e1d' }}>
-        <PageNav activePage="orcoma-day" showConsultor={false} />
+      <div className="relative overflow-hidden flex flex-col min-h-[85svh] md:min-h-[95svh] xl:min-h-screen" style={{ background: '#1e1e1d' }}>
+        {/* Vídeo de fundo: sem áudio, em loop, com véu da cor da página a 70% de opacidade (30% de transparência) */}
+        <video
+          src={videoFundoSrc}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          tabIndex={-1}
+          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+        />
+        <div className="absolute inset-0 pointer-events-none" style={{ backgroundColor: 'rgba(30, 30, 29, 0.7)' }} />
 
-        <section className="flex flex-col items-center text-center px-4 sm:px-6 pt-10 sm:pt-12 pb-16 sm:pb-20">
+        <div className="relative z-50">
+          <PageNav activePage="orcoma-day" showConsultor={false} />
+        </div>
+
+        <section className="relative z-10 flex flex-1 flex-col items-center justify-center text-center px-4 sm:px-6 pt-10 sm:pt-12 pb-16 sm:pb-20">
           <h1
             className="text-white font-extrabold leading-tight w-full mb-4"
             style={{ fontSize: 'clamp(2.24rem, 5.6vw, 3.64rem)', lineHeight: '1.2' }}
@@ -305,13 +403,29 @@ export default function OrcomaDayPage() {
               className="block mx-auto mt-6 w-[88vw] sm:w-[75vw] md:w-[60vw] lg:w-[48rem] xl:w-[52rem] 2xl:w-[60rem] max-w-full h-auto"
             />
           </h1>
+
+          <a
+            href="https://inscricoesday.orcomacontabilidade.com.br/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative overflow-hidden mt-10 inline-flex items-center gap-5 px-12 py-5 rounded-xl text-white text-base sm:text-lg transition hover:scale-[1.02]"
+            style={{ background: 'linear-gradient(135deg, #e4d0a8 0%, #906b48 100%)' }}
+          >
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 opacity-0 transition-opacity duration-700 ease-in-out group-hover:opacity-100"
+              style={{ background: 'radial-gradient(ellipse at 50% 0%, #1c1b19 0%, #3a3733 55%, #6e6558 100%)' }}
+            />
+            <span className="relative z-10">Quero participar.</span>
+            <ArrowUpRight size={34} className="relative z-10" />
+          </a>
         </section>
       </div>
 
       {/* ── Próximos eventos (vindos do Django) ── */}
       <section className="bg-white pt-12 sm:pt-16 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
-          <CarrosselEventos titulo="Próximos Eventos" eventos={proximos} carregando={carregando} />
+          <CarrosselEventos titulo="Próximas Edições" eventos={proximos} carregando={carregando} />
         </div>
       </section>
 
@@ -348,11 +462,64 @@ export default function OrcomaDayPage() {
         </div>
       </section>
 
+      {/* ── Nossos parceiros ── */}
+      <section
+        className="relative overflow-hidden flex items-center px-6 sm:px-12 py-24 sm:py-32 lg:py-40 min-h-[50svh] lg:min-h-[60svh]"
+        style={{
+          background:
+            'radial-gradient(circle at 50% 0%, #1e1e1d 0%, rgba(30, 30, 29, 0) 45%), radial-gradient(circle at 0% 100%, rgba(137, 99, 64, 0.95) 0%, rgba(137, 99, 64, 0) 55%), radial-gradient(circle at 100% 70%, #d2bf95 0%, rgba(210, 191, 149, 0) 55%), linear-gradient(135deg, #b9b1a6 0%, #6b6259 60%, #4a4540 100%)',
+        }}
+      >
+        <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+          <h2 className="text-white text-5xl sm:text-6xl lg:text-7xl font-normal leading-tight sm:pl-8 lg:pl-16" style={{ fontFamily: 'Montserrat' }}>
+            Nossos
+            <br />
+            parceiros
+          </h2>
+          <p className="text-white text-base sm:text-lg lg:text-xl leading-relaxed">
+            O Orcoma Day é construído com o apoio de marcas que compartilham o mesmo propósito: impulsionar empresas, desenvolver pessoas e promover conexões estratégicas para o futuro dos negócios.
+          </p>
+        </div>
+      </section>
+
       {/* ── Carrossel de fotos ── */}
       <section className="bg-white py-12 sm:py-16">
         <h2 className="text-center text-[3.75rem] sm:text-[4.875rem] font-bold mb-8" style={{ fontFamily: 'Montserrat', color: '#1e1e1d' }}>Nossa Galeria</h2>
         <div className="mx-4 sm:mx-6 rounded-3xl py-8 sm:py-10 overflow-hidden shadow-lg" style={{ background: 'linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), radial-gradient(circle farthest-corner at 7% 88%, rgba(137, 99, 64, 0.99) 0%, 25%, rgba(137, 99, 64, 0) 50%), radial-gradient(circle farthest-corner at 45.3125% 0%, #1e1e1d 0%, 42%, rgba(30, 30, 29, 0) 70%), radial-gradient(circle farthest-corner at 100% 73.958%, #d2bf95 0%, 42%, rgba(210, 191, 149, 0) 70%), radial-gradient(circle farthest-corner at 49% 50%, #ffffff 0%, 100%, rgba(255, 255, 255, 0) 100%)' }}>
           <CarrosselFotos fotos={FOTOS} />
+        </div>
+      </section>
+
+      {/* ── Trajetória ── */}
+      <section className="bg-white py-16 sm:py-24 px-6 sm:px-12">
+        <div className="max-w-[988px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-[44px] items-start">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-normal leading-tight" style={{ fontFamily: 'Montserrat', color: '#1e1e1d' }}>
+            A força de uma
+            <br />
+            trajetória que
+            <br />
+            gera confiança
+          </h2>
+          <p className="text-sm sm:text-base font-semibold leading-relaxed text-justify max-w-[34ch] lg:justify-self-end lg:pt-3" style={{ color: '#1e1e1d' }}>
+            A Orcoma Contabilidade carrega uma história construída com experiência, proximidade e compromisso com o crescimento dos seus clientes.
+          </p>
+        </div>
+
+        <div className="mt-16 origin-top lg:scale-[1.3] lg:mb-40">
+        <div className="max-w-[760px] mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-5">
+          <CartaoRevelar direcao="de-cima" className="rounded-2xl p-6 sm:p-8 min-h-[200px] flex flex-col justify-between text-white" style={{ background: DEGRADE_CARD }}>
+            <h3 className="text-5xl lg:text-6xl font-normal leading-tight" style={{ fontFamily: 'Montserrat' }}>39 Anos</h3>
+            <p className="text-xs sm:text-sm font-semibold leading-snug max-w-[30ch]">De experiência no mercado contábil e empresarial.</p>
+          </CartaoRevelar>
+          <CartaoRevelar direcao="de-baixo" className="rounded-2xl p-6 sm:p-8 min-h-[200px] flex flex-col justify-between text-white" style={{ background: DEGRADE_CARD }}>
+            <h3 className="text-5xl lg:text-6xl font-normal leading-tight" style={{ fontFamily: 'Montserrat' }}>+15 Unidades</h3>
+            <p className="text-xs sm:text-sm font-semibold leading-snug max-w-[36ch]">Presença regional para atender empresas com proximidade e estratégia. Uma estrutura formada por cerca de 300 colaboradores.</p>
+          </CartaoRevelar>
+        </div>
+        <CartaoRevelar direcao="esquerda" className="max-w-[760px] mx-auto mt-4 lg:mt-5 rounded-2xl p-6 sm:p-8 min-h-[200px] flex flex-col justify-between text-white" style={{ background: DEGRADE_CARD }}>
+          <h3 className="text-5xl lg:text-6xl font-normal leading-tight" style={{ fontFamily: 'Montserrat' }}>+50 Milhões</h3>
+          <p className="text-xs sm:text-sm font-semibold leading-snug max-w-[48ch]">Em impostos economizados para empresas através de planejamento e orientação estratégica.</p>
+        </CartaoRevelar>
         </div>
       </section>
 

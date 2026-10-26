@@ -194,7 +194,7 @@ export default function HomePage() {
           <div className="text-center mb-10 sm:mb-14">
             <h2 className="font-bold text-gray-900 mb-3 reveal" style={{ fontSize: 'clamp(1.6rem, 4vw, 2.8rem)' }}>Sobre Nós</h2>
             <p className="text-gray-500 text-sm leading-relaxed mb-6 max-w-xl mx-auto px-2 reveal" style={{ '--reveal-delay': '80ms' } as React.CSSProperties}>
-              O Grupo Orcoma Contabilidade Inteligente, atuante em segmentos como fiscal, contábil, pessoal, societário, consultoria e assessoria na gestão pública e privada, tem como princípio prestar serviços que atendam à legislação e previnam riscos de insolvência de negócios, objetivando crescimento e fortalecimento de sua imagem como uma organização confiável.
+              O Grupo Orcoma Contabilidade atua na contabilidade de gestão empresarial, gestão pública, consultorias e assessorias, tendo como princípio prestar serviços que atendam à legislação e previnam riscos de insolvência dos negócios, objetivando o crescimento e o fortalecimento de sua imagem como uma organização confiável.
             </p>
             <style>{`
               @keyframes saibaMaisPulse {

@@ -1,8 +1,8 @@
 export interface Unidade {
   nome: string;
   endereco: string;
-  telefone: string;
-  email: string;
+  telefone?: string;
+  email?: string;
   matriz?: boolean;
 }
 
@@ -39,6 +39,12 @@ export const unidades: Unidade[] = [
     email: 'jequie1leads@orcoma.com.br',
   },
   {
+    nome: 'Unidade Campo Formoso',
+    endereco: 'Praça Frei Lino Graflage, 108, Sala 108 – Centro, Campo Formoso – BA, CEP: 44.790-000',
+    telefone: '(75) 9241-4858',
+    email: 'rodrigo.santos@orcoma.com.br',
+  },
+  {
     nome: 'Unidade Itaberaba',
     endereco: 'Avenida Ruy Barbosa, 138, Centro, Itaberaba - BA. 46880-000.',
     telefone: '(75) 3251-1824',
@@ -61,12 +67,6 @@ export const unidades: Unidade[] = [
     endereco: 'Rua Coronel Durval de Matos, Jaguaquara - BA. 45345-000.',
     telefone: '(73) 3534-1558',
     email: 'jaguaquara@orcoma.com.br',
-  },
-  {
-    nome: 'Unidade Ruy Barbosa',
-    endereco: 'Avenida José Cerqueira Braga, Ruy Barbosa - BA. 46800-000.',
-    telefone: '(75) 3252-1467',
-    email: 'ruybarbosa@orcoma.com.br',
   },
   {
     nome: 'Unidade Maracás',

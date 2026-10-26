@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { apiUrl } from '../config/api';
 import { loadSiteData } from '../config/siteData';
-import { X } from 'lucide-react';
+import { ArrowUpRight, X } from 'lucide-react';
 import OrcomaLogo from './OrcomaLogo';
 import { Skeleton } from './Skeleton';
 import SlowLoadingHint from './SlowLoadingHint';
@@ -16,6 +16,7 @@ interface Ebook {
 export default function MaterialsSection() {
   const [expanded, setExpanded] = useState(false);
   const [showEbooks, setShowEbooks] = useState(false);
+  const [showTreinamentos, setShowTreinamentos] = useState(false);
   const [ebooks, setEbooks] = useState<Ebook[]>([]);
   const [loading, setLoading] = useState(true);
   const sectionRef = useRef<HTMLElement>(null);
@@ -107,6 +108,15 @@ export default function MaterialsSection() {
             text-underline-offset: 4px;
           }
 
+          /* Hover: aumenta o card sem mexer no transform (que controla a posição do leque) */
+          .card-stack .stack-card {
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), scale 0.3s ease-out;
+          }
+          .card-stack .stack-card:hover {
+            scale: 1.08;
+            z-index: 10;
+          }
+
           /* Tablet: reduz a escala e aproxima os cards laterais para caber sem cortar */
           @media (min-width: 641px) and (max-width: 1024px) {
             .card-stack {
@@ -181,17 +191,60 @@ export default function MaterialsSection() {
               className="stack-card treinamentos rounded-2xl p-6 sm:p-7 flex flex-col gap-3"
               style={{ background: '#ffffff' }}
             >
-              <a href="#treinamentos" className="material-link">
-                <h3 className="text-2xl font-bold text-black">Treinamentos</h3>
-              </a>
+              <h3 className="text-2xl font-bold text-black">Treinamentos</h3>
               <p className="text-sm leading-relaxed text-black/90">
-                Capacitação e conhecimento para você e sua equipe irem mais longe.
+                Com a{' '}
+                <button
+                  onClick={() => setShowTreinamentos(true)}
+                  className="font-bold underline underline-offset-2 hover:opacity-80 transition-opacity"
+                >
+                  Orcoma Academy
+                </button>
+                , você garante capacitação e conhecimento para você e a sua equipe irem mais longe!
               </p>
             </div>
           </div>
         </div>
 
       </div>
+
+      {/* Modal Treinamentos: prévia da Orcoma Academy */}
+      {showTreinamentos && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(6,6,96,0.5)' }}
+          onClick={() => setShowTreinamentos(false)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 pt-5 pb-3">
+              <h3 className="text-lg font-bold text-gray-900">Orcoma Academy</h3>
+              <button
+                onClick={() => setShowTreinamentos(false)}
+                className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors flex-shrink-0"
+                aria-label="Fechar"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            <img src="/academy-preview.png" alt="Prévia da Orcoma Academy" className="w-full h-auto block" />
+            <div className="p-5">
+              <a
+                href="https://academy.orcomacontabilidade.com.br/login"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-white text-sm font-bold transition hover:brightness-110"
+                style={{ background: '#2341d1' }}
+              >
+                Acessar a Orcoma Academy
+                <ArrowUpRight size={16} />
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal E-books */}
       {showEbooks && (
