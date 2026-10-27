@@ -4,7 +4,7 @@ import { useNav } from '../context/NavContext';
 
 type NavEntry = { label: string; page: 'contato' | 'solucoes' | 'sobre' | 'login' | 'eventos' | 'blog' } | { label: string; external: string };
 
-import { ERP_URL, NFE_URL } from '../config/links';
+import { CLASSIFICADOR_URL, ERP_URL, NFE_URL } from '../config/links';
 
 const navItems: NavEntry[] = [
   { label: 'Contato', page: 'contato' as const },
@@ -216,6 +216,12 @@ export default function Nav() {
                       className="sub-item w-full text-left px-5 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
                     >
                       NFE
+                    </button>
+                    <button
+                      onClick={() => { window.open(CLASSIFICADOR_URL, '_blank', 'noopener,noreferrer'); setLoginOpen(false); }}
+                      className="sub-item w-full text-left px-5 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
+                    >
+                      Classificador Tributário
                     </button>
                   </div>
                 )}

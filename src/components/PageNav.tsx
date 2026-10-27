@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { useNav, type Page } from '../context/NavContext';
-import { ERP_URL, NFE_URL } from '../config/links';
+import { CLASSIFICADOR_URL, ERP_URL, NFE_URL } from '../config/links';
 
 type PageNavEntry = { label: string; page: Page } | { label: string; external: string };
 
@@ -225,6 +225,12 @@ export default function PageNav({ activePage, showConsultor = true, stackConsult
                       className="sub-item w-full text-left px-5 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
                     >
                       NFE
+                    </button>
+                    <button
+                      onClick={() => { window.open(CLASSIFICADOR_URL, '_blank', 'noopener,noreferrer'); setLoginOpen(false); }}
+                      className="sub-item w-full text-left px-5 py-2.5 text-sm text-gray-700 hover:bg-blue-50 transition-colors font-medium"
+                    >
+                      Classificador Tributário
                     </button>
                   </div>
                 )}
