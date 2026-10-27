@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Instagram } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Youtube } from 'lucide-react';
 import { apiUrl } from '../config/api';
 import { useNav, type Page } from '../context/NavContext';
 
@@ -78,6 +78,46 @@ export default function Footer() {
                 style={{ background: 'rgba(6,6,96,0.08)' }}
               >
                 <Instagram size={15} color="#060660" />
+              </a>
+              <a
+                href="https://www.tiktok.com/@orcoma.contabilid"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:opacity-70"
+                style={{ background: 'rgba(6,6,96,0.08)' }}
+              >
+                <img src="/tiktok-icon.png" alt="" className="w-[15px] h-[15px] object-contain" />
+              </a>
+              <a
+                href="https://www.facebook.com/orcomacontabilidade"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:opacity-70"
+                style={{ background: 'rgba(6,6,96,0.08)' }}
+              >
+                <Facebook size={15} color="#060660" />
+              </a>
+              <a
+                href="https://br.linkedin.com/company/orcoma-contabilidade"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:opacity-70"
+                style={{ background: 'rgba(6,6,96,0.08)' }}
+              >
+                <Linkedin size={15} color="#060660" />
+              </a>
+              <a
+                href="https://youtube.com/@orcomacontabilidade2756"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YouTube"
+                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors hover:opacity-70"
+                style={{ background: 'rgba(6,6,96,0.08)' }}
+              >
+                <Youtube size={15} color="#060660" />
               </a>
             </div>
           </div>
