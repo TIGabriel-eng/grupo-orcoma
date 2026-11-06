@@ -568,8 +568,8 @@ Chegando para trazer ainda mais alegria, carisma e diversão, Bino conquistou se
           </div>
           <div className="w-full md:w-1/2 reveal" style={{ '--reveal-delay': '120ms' } as React.CSSProperties}>
             <img
-              src="/entrevista-vice-presidencia.jpg"
-              alt="Foto de entrevista"
+              src="/jacson-vice-presidencia.webp"
+              alt="Jacson Mascarenhas, vice-presidente do Grupo Orcoma, durante apresentação"
               loading="lazy"
               decoding="async"
               className="w-full h-auto rounded-2xl shadow-lg object-cover"
