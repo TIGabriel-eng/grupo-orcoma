@@ -73,7 +73,13 @@ async function localizaMidia(url) {
   return local;
 }
 
-const MEDIA_RE = new RegExp(`(?:${API_BASE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})?/media/[^\\s"'<>)]+`, 'g');
+// Só casa /media/ do próprio backend (URL completa ou caminho relativo que começa a string).
+// Sem o lookbehind, URLs do Supabase como .../object/public/media/blog/x.jpg eram
+// cortadas no meio e viravam URLs quebradas.
+const MEDIA_RE = new RegExp(
+  `${API_BASE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/media/[^\\s"'<>)]+|(?<![\\w:/.])/media/[^\\s"'<>)]+`,
+  'g',
+);
 
 async function localizaMidiasEm(value) {
   if (typeof value === 'string') {

@@ -6,7 +6,8 @@
       "local": "Amargosa",
       "data": "15 SET",
       "data_completa": "15 de setembro de 2026",
-      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/publichttps://dashboard-orcoma.onrender.com/media/eventos/BANNER_SITE_AMARGOSA.avif",
+      "data_inicio_iso": "2026-09-15T21:30:00+00:00",
+      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/media/eventos/BANNER_SITE_AMARGOSA.avif",
       "link_inscricao": "https://inscricoesday.orcomacontabilidade.com.br/inscricao/amargosa"
     },
     {
@@ -15,8 +16,29 @@
       "local": "Poções",
       "data": "30 SET",
       "data_completa": "30 de setembro de 2026",
-      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/publichttps://dashboard-orcoma.onrender.com/media/eventos/BANNER_SITE_POCOES.avif",
+      "data_inicio_iso": "2026-09-30T21:30:00+00:00",
+      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/media/eventos/BANNER_SITE_POCOES.avif",
       "link_inscricao": "https://inscricoesday.orcomacontabilidade.com.br/inscricao/pocoes"
+    },
+    {
+      "titulo": "Orcoma Day - Itaberaba",
+      "descricao": "Iremos abordar temas como Reforma Tributária, Contabilidade é Lucro, Gestão Empresarial, dentre outros assuntos da área empresarial.",
+      "local": "Itaberaba",
+      "data": "22 OUT",
+      "data_completa": "22 de outubro de 2026",
+      "data_inicio_iso": "2026-10-22T21:30:00+00:00",
+      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/media/eventos/BANNER_ITABERABA_SITE.avif",
+      "link_inscricao": "https://inscricoesday.orcomacontabilidade.com.br/inscricao/itaberaba"
+    },
+    {
+      "titulo": "ORCOMA DAY - Feira de Santana",
+      "descricao": "Iremos abordar temas como Reforma Tributária, Contabilidade é Lucro, Gestão Empresarial, dentre outros assuntos da área empresarial.",
+      "local": "Feira de Santana",
+      "data": "24 NOV",
+      "data_completa": "24 de novembro de 2026",
+      "data_inicio_iso": "2026-11-24T21:30:00+00:00",
+      "imagem": "https://jytqxtsomfdrbhxjtvpz.supabase.co/storage/v1/object/public/media/eventos/BANNER_SITE_FEIRA_DE_SANTANA_SITE.avif",
+      "link_inscricao": "https://inscricoesday.orcomacontabilidade.com.br/inscricao/feira-de-santana"
     }
   ]
 }
